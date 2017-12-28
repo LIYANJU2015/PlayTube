@@ -3,9 +3,9 @@
 
     <!-- Light Theme -->
     <color name="light_background_color">#EEEEEE</color>
-    <color name="light_youtube_primary_color">#e53935</color>
-    <color name="light_youtube_dark_color">#d32f2f</color>
-    <color name="light_youtube_accent_color">#000000</color>
+    <color name="light_youtube_primary_color">#F44336</color>
+    <color name="light_youtube_dark_color">#D32F2F</color>
+    <color name="light_youtube_accent_color">#FF5252</color>
     <color name="light_separator_color">#32000000</color>
     <color name="light_ripple_color">#48868686</color>
     <color name="light_contrast_background_color">#1fa6a6a6</color>
