@@ -32,7 +32,7 @@ public class ThemeHelper {
      * @param context context to get the preference
      */
     public static boolean isLightThemeSelected(Context context) {
-        return getSelectedTheme(context).equals(context.getResources().getString(R.string.light_theme_key));
+        return true;
     }
 
     public static String getSelectedTheme(Context context) {

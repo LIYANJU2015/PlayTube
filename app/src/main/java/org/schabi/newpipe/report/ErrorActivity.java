@@ -27,8 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.acra.ReportField;
-import org.acra.collector.CrashReportData;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.schabi.newpipe.ActivityCommunicator;
@@ -150,23 +149,6 @@ public class ErrorActivity extends AppCompatActivity {
                 reportError(context, el, returnActivity, rootView, errorInfo);
             }
         });
-    }
-
-    public static void reportError(final Context context, final CrashReportData report, final ErrorInfo errorInfo) {
-        // get key first (don't ask about this solution)
-        ReportField key = null;
-        for (ReportField k : report.keySet()) {
-            if (k.toString().equals("STACK_TRACE")) {
-                key = k;
-            }
-        }
-        String[] el = new String[]{report.get(key).toString()};
-
-        Intent intent = new Intent(context, ErrorActivity.class);
-        intent.putExtra(ERROR_INFO, errorInfo);
-        intent.putExtra(ERROR_LIST, el);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
     }
 
     private static String getStackTrace(final Throwable throwable) {

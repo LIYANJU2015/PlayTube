@@ -1,6 +1,7 @@
 package org.schabi.newpipe.fragments.detail;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,8 @@ public class SpinnerToolbarAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.resolutions_spinner_item, parent, false);
         }
+
+        convertView.setBackground(ContextCompat.getDrawable(context, R.drawable.spinner_item_selector));
 
         ImageView woSoundIcon = convertView.findViewById(R.id.wo_sound_icon);
         TextView text = convertView.findViewById(android.R.id.text1);

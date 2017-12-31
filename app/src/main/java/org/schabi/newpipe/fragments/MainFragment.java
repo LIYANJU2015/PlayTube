@@ -1,13 +1,17 @@
 package org.schabi.newpipe.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.preference.PreferenceManager;
@@ -88,15 +92,9 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         int channelIcon;
         int whatsHotIcon;
 
-        if (ThemeHelper.isLightThemeSelected(getActivity())) {
-            tabLayout.setBackgroundColor(getResources().getColor(R.color.light_youtube_primary_color));
-            channelIcon = R.drawable.ic_channel_black_24dp;
-            whatsHotIcon = R.drawable.ic_whatshot_black_24dp;
-        } else {
-            channelIcon = R.drawable.ic_channel_white_24dp;
-            whatsHotIcon = R.drawable.ic_whatshot_white_24dp;
-        }
-
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.light_youtube_primary_color));
+        channelIcon = R.drawable.ic_channel_white_24dp;
+        whatsHotIcon = R.drawable.ic_whatshot_white_24dp;
 
         if (PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(getString(R.string.main_page_content_key), getString(R.string.blank_page_key))
@@ -105,7 +103,26 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         } else {
             tabLayout.getTabAt(0).setIcon(whatsHotIcon);
             tabLayout.getTabAt(1).setIcon(channelIcon);
+            tabLayout.getTabAt(1).getIcon()
+                    .setColorFilter(ContextCompat.getColor(activity,
+                            R.color.tab_unselect_color),  PorterDuff.Mode.SRC_IN);
         }
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.WHITE,  PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(ContextCompat.getColor(activity, R.color.tab_unselect_color),  PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     /*//////////////////////////////////////////////////////////////////////////

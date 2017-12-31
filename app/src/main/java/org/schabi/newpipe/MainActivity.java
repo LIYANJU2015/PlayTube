@@ -20,6 +20,7 @@
 
 package org.schabi.newpipe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -74,18 +75,22 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
     // Activity's LifeCycle
     //////////////////////////////////////////////////////////////////////////*/
 
+    public static Activity sActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (DEBUG) Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         ThemeHelper.setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sActivity = this;
 
         if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
             initFragments();
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        Log.v("main", " toolbar:: " + toolbar);
         setSupportActionBar(toolbar);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
         if (!isChangingConfigurations()) {
             StateSaver.clearStateFiles();
         }
+        sActivity = null;
 
         disposeHistory();
     }

@@ -90,7 +90,7 @@ public abstract class MissionsFragment extends Fragment {
         // Bug: in api< 23 this is never called
         // so mActivity=null
         // so app crashes with nullpointer exception
-        mActivity = activity;
+        mActivity = getActivity();
     }
 
     /**

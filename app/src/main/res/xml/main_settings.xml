@@ -11,7 +11,7 @@
 
     <PreferenceScreen
         android:fragment="org.schabi.newpipe.settings.DownloadSettingsFragment"
-        android:icon="?attr/download"
+        android:icon="@drawable/ic_file_download_60_24dp"
         android:title="@string/settings_category_downloads_title"/>
 
     <PreferenceScreen

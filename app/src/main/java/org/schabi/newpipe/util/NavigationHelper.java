@@ -12,7 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tubewebplayer.YouTubePlayerActivity;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.about.AboutActivity;
@@ -24,6 +26,7 @@ import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.fragments.MainFragment;
+import org.schabi.newpipe.fragments.MainFragment2;
 import org.schabi.newpipe.fragments.detail.VideoDetailFragment;
 import org.schabi.newpipe.fragments.list.channel.ChannelFragment;
 import org.schabi.newpipe.fragments.list.feed.FeedFragment;
@@ -123,9 +126,16 @@ public class NavigationHelper {
         InfoCache.getInstance().trimCache();
 
         fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        Fragment fragment;
+        if (App.isSpecial()) {
+            fragment = new MainFragment();
+        } else {
+            fragment = new MainFragment2();
+        }
         fragmentManager.beginTransaction()
                 .setCustomAnimations(R.animator.custom_fade_in, R.animator.custom_fade_out, R.animator.custom_fade_in, R.animator.custom_fade_out)
-                .replace(R.id.fragment_holder, new MainFragment())
+                .replace(R.id.fragment_holder, fragment)
                 .addToBackStack(MAIN_FRAGMENT_TAG)
                 .commit();
     }
@@ -143,6 +153,15 @@ public class NavigationHelper {
     }
 
     public static void openVideoDetailFragment(FragmentManager fragmentManager, int serviceId, String url, String title, boolean autoPlay) {
+        if (!App.isSpecial()) {
+            if (MainActivity.sActivity != null) {
+                YouTubePlayerActivity.launch(MainActivity.sActivity, url, title);
+            } else {
+                YouTubePlayerActivity.launch(App.sContext, url, title);
+            }
+            return;
+        }
+
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_holder);
         if (title == null) title = "";
 

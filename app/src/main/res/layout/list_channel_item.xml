@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/itemTitleView"
+        android:textColor="@color/black_background_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

@@ -48,6 +48,9 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/play_all"
+            android:drawableLeft="?attr/popup"
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/ic_play_circle_filled_60_24dp"
             android:textSize="@dimen/channel_rss_title_size"
             android:textColor="?attr/colorAccent"/>
     </LinearLayout>

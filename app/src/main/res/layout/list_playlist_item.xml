@@ -43,6 +43,7 @@
         tools:text="314159"/>
 
     <TextView
+        android:textColor="@color/black_background_color"
         android:id="@+id/itemTitleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

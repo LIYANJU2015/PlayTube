@@ -2,6 +2,7 @@ package org.schabi.newpipe.fragments.detail;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.VideoStream;
@@ -77,6 +79,11 @@ class ActionBarHandler {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedVideoStream = position;
+                TextView text = view.findViewById(android.R.id.text1);
+                if (text != null) {
+                    text.setTextColor(ContextCompat.getColor(activity, R.color.white));
+                    view.setBackgroundColor(ContextCompat.getColor(activity, R.color.transparent_background_color));
+                }
             }
 
             @Override

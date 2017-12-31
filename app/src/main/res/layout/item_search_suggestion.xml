@@ -7,24 +7,25 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/suggestion_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center"
+        android:id="@+id/suggestion_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@id/suggestion_insert"
         android:layout_toStartOf="@id/suggestion_insert"
         android:layout_centerVertical="true"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp">
 
         <ImageView
             android:id="@+id/item_suggestion_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -32,6 +33,7 @@
             tools:src="?attr/history"/>
 
         <TextView
+            android:textColor="@color/black_background_color"
             android:id="@+id/item_suggestion_query"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +41,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:ignore="RtlHardcoded"
             tools:text="Search query"/>
     </LinearLayout>
@@ -56,16 +58,26 @@
         android:layout_centerVertical="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="10dp">
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:layout_gravity="center"
             android:src="?attr/search_add"
             tools:ignore="ContentDescription,RtlHardcoded"/>
     </LinearLayout>
 
+    <View
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_below="@id/suggestion_search"
+        android:background="@color/color_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.8px"/>
 
 </RelativeLayout>

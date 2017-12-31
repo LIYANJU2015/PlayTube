@@ -4,12 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/ic_screen_rotation_white"
+        android:icon="@drawable/ic_screen_rotation_black_24dp"
         android:id="@+id/toggleOrientation"
         android:title="Toggle orientation"
         app:showAsAction="always|withText" />
     <item
-        android:icon="@drawable/ic_fullscreen_exit_white"
+        android:icon="@drawable/ic_fullscreen_exit_black_24dp"
         android:id="@+id/switchPopup"
         android:title="Switch to popup"
         app:showAsAction="always|withText" />

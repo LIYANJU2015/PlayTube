@@ -4,22 +4,17 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import org.acra.ACRA;
-import org.acra.config.ACRAConfiguration;
-import org.acra.config.ACRAConfigurationException;
-import org.acra.config.ConfigurationBuilder;
-import org.acra.sender.ReportSenderFactory;
 import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.report.AcraReportSenderFactory;
-import org.schabi.newpipe.report.ErrorActivity;
-import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.settings.SettingsActivity;
+import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.StateSaver;
 
@@ -54,19 +49,25 @@ import io.reactivex.plugins.RxJavaPlugins;
 public class App extends Application {
     protected static final String TAG = App.class.toString();
 
-    @SuppressWarnings("unchecked")
-    private static final Class<? extends ReportSenderFactory>[] reportSenderFactoryClasses = new Class[]{AcraReportSenderFactory.class};
+
+
+    public static Context sContext;
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
 
-        initACRA();
+//        initACRA();
     }
+
+    private static SharedPreferences sPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sContext = this;
+        sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isSpecial = sPreferences.getBoolean(Constants.KEY_SPECIAL, false);
 
         // Initialize settings first because others inits can use its values
         SettingsActivity.initSettings(this);
@@ -81,6 +82,20 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
 
         configureRxJavaErrorHandler();
+
+        setSpecial();
+
+    }
+
+    private static boolean isSpecial = false;
+
+    public static void setSpecial() {
+        isSpecial = true;
+        sPreferences.edit().putBoolean(Constants.KEY_SPECIAL, true).apply();
+    }
+
+    public static boolean isSpecial() {
+        return isSpecial;
     }
 
     private void configureRxJavaErrorHandler() {
@@ -117,19 +132,19 @@ public class App extends Application {
     }
 
 
-    private void initACRA() {
-        try {
-            final ACRAConfiguration acraConfig = new ConfigurationBuilder(this)
-                    .setReportSenderFactoryClasses(reportSenderFactoryClasses)
-                    .setBuildConfigClass(BuildConfig.class)
-                    .build();
-            ACRA.init(this, acraConfig);
-        } catch (ACRAConfigurationException ace) {
-            ace.printStackTrace();
-            ErrorActivity.reportError(this, ace, null, null, ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
-                    "Could not initialize ACRA crash report", R.string.app_ui_crash));
-        }
-    }
+//    private void initACRA() {
+//        try {
+//            final ACRAConfiguration acraConfig = new ConfigurationBuilder(this)
+//                    .setReportSenderFactoryClasses(reportSenderFactoryClasses)
+//                    .setBuildConfigClass(BuildConfig.class)
+//                    .build();
+//            ACRA.init(this, acraConfig);
+//        } catch (ACRAConfigurationException ace) {
+//            ace.printStackTrace();
+//            ErrorActivity.reportError(this, ace, null, null, ErrorActivity.ErrorInfo.make(UserAction.SOMETHING_ELSE, "none",
+//                    "Could not initialize ACRA crash report", R.string.app_ui_crash));
+//        }
+//    }
 
     public void initNotificationChannel() {
         if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {

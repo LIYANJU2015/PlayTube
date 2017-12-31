@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -56,7 +57,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         mManager = manager;
         mBinder = binder;
 
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = LayoutInflater.from(context);
 
         mLayout = isLinear ? R.layout.mission_item_linear : R.layout.mission_item;
     }

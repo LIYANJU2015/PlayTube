@@ -7,28 +7,29 @@
         <item name="colorAccent">@color/light_youtube_accent_color</item>
         <item name="android:windowBackground">@color/light_background_color</item>
 
+
         <item name="thumbs_up">@drawable/ic_thumb_up_black_24dp</item>
         <item name="thumbs_down">@drawable/ic_thumb_down_black_24dp</item>
         <item name="audio">@drawable/ic_headset_black_24dp</item>
         <item name="clear_history">@drawable/ic_delete_sweep_white_24dp</item>
-        <item name="download">@drawable/ic_file_download_black_24dp</item>
-        <item name="share">@drawable/ic_share_black_24dp</item>
+        <item name="download">@drawable/ic_file_download_white_24dp</item>
+        <item name="share">@drawable/ic_share_white_24dp</item>
         <item name="cast">@drawable/ic_cast_black_24dp</item>
-        <item name="rss">@drawable/ic_rss_feed_black_24dp</item>
-        <item name="search">@drawable/ic_search_black_24dp</item>
-        <item name="close">@drawable/ic_close_black_24dp</item>
-        <item name="filter">@drawable/ic_filter_list_black_24dp</item>
+        <item name="rss">@drawable/ic_rss_feed_white_24dp</item>
+        <item name="search">@drawable/ic_search_white_24dp</item>
+        <item name="close">@drawable/ic_close_white_24dp</item>
+        <item name="filter">@drawable/ic_filter_list_white_24dp</item>
         <item name="popup">@drawable/ic_picture_in_picture_black_24dp</item>
         <item name="expand">@drawable/ic_expand_more_black_24dp</item>
         <item name="collapse">@drawable/ic_expand_less_black_24dp</item>
         <item name="volume_off">@drawable/ic_volume_off_black_24dp</item>
-        <item name="palette">@drawable/ic_palette_black_24dp</item>
-        <item name="language">@drawable/ic_language_black_24dp</item>
+        <item name="palette">@drawable/ic_palette_60_24dp</item>
+        <item name="language">@drawable/ic_language_60_24dp</item>
         <item name="history">@drawable/ic_history_black_24dp</item>
         <item name="drag_handle">@drawable/ic_drag_handle_black_24dp</item>
         <item name="selected">@drawable/ic_fiber_manual_record_black_24dp</item>
-        <item name="search_add">@drawable/ic_arrow_top_left_black_24dp</item>
-        <item name="options">@drawable/ic_more_vert_black_24dp</item>
+        <item name="search_add">@drawable/ic_arrow_top_left</item>
+        <item name="options">@drawable/ic_more_vert_white_24dp</item>
 
         <item name="separator_color">@color/light_separator_color</item>
         <item name="contrast_background_color">@color/light_contrast_background_color</item>
@@ -38,6 +39,10 @@
         <item name="colorControlHighlight">@color/light_ripple_color</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="windowIsTranslucen" parent="LightTheme">
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!-- Dark Theme-->
