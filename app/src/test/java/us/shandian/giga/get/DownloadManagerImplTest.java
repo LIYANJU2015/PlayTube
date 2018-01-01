@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import us.shandian.giga.get.DownloadDataSource;
@@ -36,13 +38,13 @@ public class DownloadManagerImplTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        downloadDataSource = mock(DownloadDataSource.class);
-        missions = new ArrayList<>();
-        for(int i = 0; i < 50; ++i){
-            missions.add(generateFinishedDownloadMission());
-        }
-        when(downloadDataSource.loadMissions()).thenReturn(new ArrayList<>(missions));
-        downloadManager = new DownloadManagerImpl(new ArrayList<String>(), downloadDataSource);
+//        downloadDataSource = mock(DownloadDataSource.class);
+//        missions = new ArrayList<>();
+//        for(int i = 0; i < 50; ++i){
+//            missions.add(generateFinishedDownloadMission());
+//        }
+//        when(downloadDataSource.loadMissions()).thenReturn(new ArrayList<>(missions));
+//        downloadManager = new DownloadManagerImpl(new ArrayList<String>(), downloadDataSource);
     }
 
     @Test(expected = NullPointerException.class)
@@ -74,24 +76,28 @@ public class DownloadManagerImplTest {
 
     @Test
     public void testThatMissionsAreLoaded() throws IOException {
-        ArrayList<DownloadMission> missions = new ArrayList<>();
-        long millis = System.currentTimeMillis();
-        for(int i = 0; i < 50; ++i){
-            DownloadMission  mission = generateFinishedDownloadMission();
-            mission.timestamp = millis - i; // reverse order by timestamp
-            missions.add(mission);
-        }
 
-        downloadDataSource = mock(DownloadDataSource.class);
-        when(downloadDataSource.loadMissions()).thenReturn(new ArrayList<>(missions));
-        downloadManager = new DownloadManagerImpl(new ArrayList<String>(), downloadDataSource);
-        verify(downloadDataSource, times(1)).loadMissions();
+       String url =  "https://play.google.com/store/apps/details?id=%20com.example.application&referrer=utm_source%3Dgoogle%26utm_medium%3Dcpc%26utm_campaign%3Dtube_player_recom%26anid%3Dadmob";
 
-        assertEquals(50, downloadManager.getCount());
-
-        for(int i = 0; i < 50; ++i) {
-            assertMissionEquals("mission " + i, missions.get(50 - 1 - i), downloadManager.getMission(i));
-        }
+       System.out.println(URLDecoder.decode(url, "UTF-8"));
+//        ArrayList<DownloadMission> missions = new ArrayList<>();
+//        long millis = System.currentTimeMillis();
+//        for(int i = 0; i < 50; ++i){
+//            DownloadMission  mission = generateFinishedDownloadMission();
+//            mission.timestamp = millis - i; // reverse order by timestamp
+//            missions.add(mission);
+//        }
+//
+//        downloadDataSource = mock(DownloadDataSource.class);
+//        when(downloadDataSource.loadMissions()).thenReturn(new ArrayList<>(missions));
+//        downloadManager = new DownloadManagerImpl(new ArrayList<String>(), downloadDataSource);
+//        verify(downloadDataSource, times(1)).loadMissions();
+//
+//        assertEquals(50, downloadManager.getCount());
+//
+//        for(int i = 0; i < 50; ++i) {
+//            assertMissionEquals("mission " + i, missions.get(50 - 1 - i), downloadManager.getMission(i));
+//        }
     }
 
     @Ignore

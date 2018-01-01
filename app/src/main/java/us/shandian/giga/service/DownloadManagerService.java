@@ -19,6 +19,9 @@ import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rating.RatingActivity;
+
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.download.DownloadActivity;
 import org.schabi.newpipe.settings.NewPipeSettings;
@@ -30,6 +33,7 @@ import us.shandian.giga.get.DownloadManager;
 import us.shandian.giga.get.DownloadManagerImpl;
 import us.shandian.giga.get.DownloadMission;
 import us.shandian.giga.get.sqlite.SQLiteDownloadDataSource;
+import us.shandian.giga.util.Utility;
 
 import static org.schabi.newpipe.BuildConfig.DEBUG;
 
@@ -231,6 +235,11 @@ public class DownloadManagerService extends Service {
         public void onFinish(DownloadMission downloadMission) {
             postUpdateMessage();
             notifyMediaScanner(downloadMission);
+
+            RatingActivity.setPopTotalCount(App.sContext, 2);
+            RatingActivity.launch(App.sContext);
+
+            Utility.showLongToastSafe(downloadMission.name + " " + App.sContext.getString(R.string.download_video_success));
         }
 
         @Override

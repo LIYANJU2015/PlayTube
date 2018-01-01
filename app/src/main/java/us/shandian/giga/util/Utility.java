@@ -3,11 +3,15 @@ package us.shandian.giga.util;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.widget.Toast;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 
 import java.io.BufferedInputStream;
@@ -25,6 +29,26 @@ public class Utility {
         VIDEO,
         MUSIC,
         UNKNOWN
+    }
+
+    private static Handler sHandler = new Handler(Looper.getMainLooper());
+
+    public static void showLongToastSafe(final @StringRes int resId) {
+        sHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(App.sContext, resId, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public static void showLongToastSafe(final String string) {
+        sHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(App.sContext, string, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public static String formatBytes(long bytes) {

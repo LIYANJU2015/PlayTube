@@ -17,7 +17,7 @@
         android:background="@null"
         android:focusable="false"/>
 
-    <ProgressBar android:id="@+id/play_video_progress_bar"
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar android:id="@+id/play_video_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"

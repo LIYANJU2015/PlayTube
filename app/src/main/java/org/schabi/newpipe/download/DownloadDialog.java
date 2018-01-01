@@ -19,12 +19,18 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
+import com.facebook.ads.NativeAd;
+
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.MediaFormat;
 import org.schabi.newpipe.extractor.stream.AudioStream;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.extractor.stream.VideoStream;
+import org.schabi.newpipe.fragments.MainFragment2;
 import org.schabi.newpipe.fragments.detail.SpinnerToolbarAdapter;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.util.FilenameUtils;
@@ -37,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.shandian.giga.service.DownloadManagerService;
+import us.shandian.giga.util.Utility;
 
 public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = "DialogFragment";
@@ -83,6 +90,8 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
             getDialog().dismiss();
             return;
         }
+
+        AdModule.getInstance().getAdMob().requestNewInterstitial();
 
         if (savedInstanceState != null) {
             Serializable serial = savedInstanceState.getSerializable(INFO_KEY);
@@ -271,5 +280,29 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
 
         DownloadManagerService.startMission(getContext(), url, location, fileName, isAudio, threadsSeekBar.getProgress() + 1);
         getDialog().dismiss();
+
+        AdModule.getInstance().getFacebookAd().setLoadListener(new IFacebookAd.FacebookAdListener() {
+            @Override
+            public void onLoadedAd(View view) {
+                AdModule.getInstance().getFacebookAd().setLoadListener(null);
+                AdModule.getInstance().createMaterialDialog().showAdDialog(getActivity(), view);
+
+            }
+
+            @Override
+            public void onStartLoadAd(View view) {
+            }
+
+            @Override
+            public void onLoadAdFailed(int i, String s) {
+                AdModule.getInstance().getFacebookAd().setLoadListener(null);
+                AdModule.getInstance().getAdMob().showInterstitialAd();
+            }
+        });
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+
+        if (currentInfo != null) {
+            Utility.showLongToastSafe(currentInfo.name + " " + App.sContext.getString(R.string.download_add_success));
+        }
     }
 }

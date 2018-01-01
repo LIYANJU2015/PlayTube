@@ -25,8 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.admodule.AdModule;
 import com.jakewharton.rxbinding2.view.RxView;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.subscription.SubscriptionEntity;
 import org.schabi.newpipe.extractor.ListExtractor;
@@ -143,10 +145,17 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         headerSubscribeButton = headerRootLayout.findViewById(R.id.channel_subscribe_button);
         playlistCtrl = headerRootLayout.findViewById(R.id.playlist_control);
 
-
         headerPlayAllButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_all_button);
         headerPopupButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_popup_button);
         headerBackgroundButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_bg_button);
+
+        if (!App.isSpecial()) {
+            playlistCtrl.setVisibility(View.GONE);
+            headerSubscribeButton.setVisibility(View.GONE);
+        } else {
+            playlistCtrl.setVisibility(View.VISIBLE);
+            headerSubscribeButton.setVisibility(View.VISIBLE);
+        }
 
         return headerRootLayout;
     }
@@ -445,17 +454,29 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
             headerSubscribersTextView.setVisibility(View.VISIBLE);
         } else headerSubscribersTextView.setVisibility(View.GONE);
 
-        if (menuRssButton != null) menuRssButton.setVisible(!TextUtils.isEmpty(result.getFeedUrl()));
-        playlistCtrl.setVisibility(View.VISIBLE);
+        if (menuRssButton != null) {
+            menuRssButton.setVisible(!TextUtils.isEmpty(result.getFeedUrl()));
+        }
+
+        if (!App.isSpecial()) {
+            playlistCtrl.setVisibility(View.GONE);
+            headerSubscribeButton.setVisibility(View.GONE);
+        } else {
+            playlistCtrl.setVisibility(View.VISIBLE);
+            headerSubscribeButton.setVisibility(View.VISIBLE);
+        }
 
         if (!result.errors.isEmpty()) {
             showSnackBarError(result.errors, UserAction.REQUESTED_CHANNEL, NewPipe.getNameOfService(result.getServiceId()), result.getUrl(), 0);
         }
 
         if (disposables != null) disposables.clear();
-        if (subscribeButtonMonitor != null) subscribeButtonMonitor.dispose();
-        updateSubscription(result);
-        monitorSubscription(result);
+
+        if (App.isSpecial()) {
+            if (subscribeButtonMonitor != null) subscribeButtonMonitor.dispose();
+            updateSubscription(result);
+            monitorSubscription(result);
+        }
 
         headerPlayAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -496,6 +517,12 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
                 infoListAdapter.getItemsList(),
                 index
         );
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
     }
 
     @Override

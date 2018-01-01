@@ -55,6 +55,14 @@
             android:launchMode="singleTask"
             android:label="@string/title_activity_popup_player"/>
 
+        <receiver
+            android:name=".util.InstallReferrerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".player.PopupVideoPlayer"
             android:exported="false"/>

@@ -14,4 +14,14 @@ public class Constants {
     public static final int NO_SERVICE_ID = -1;
 
     public static final String KEY_SPECIAL = "special_key";
+
+    public static final int HTTP_CACHE_SIZE = 20 * 1024 * 1024;
+    public static final int HTTP_CONNECT_TIMEOUT = 15 * 1000;
+    public static final int HTTP_READ_TIMEOUT = 20 * 1000;
+
+    public static final String BASE_API_URL_YOUTUBE = "https://www.googleapis.com/youtube/v3/";
+
+    public static final String SOURCE = "utm_source=";
+    public static final String CAMPAIGN = "utm_campaign=";
+
 }

@@ -1,14 +1,21 @@
 package org.schabi.newpipe;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.admodule.AdModule;
+import com.admodule.admob.AdMobBanner;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -27,6 +34,7 @@ import io.reactivex.exceptions.CompositeException;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
+import us.shandian.giga.util.SpecialVersions;
 
 /*
  * Copyright (C) Hans-Christoph Steiner 2016 <hans@eds.org>
@@ -53,21 +61,55 @@ public class App extends Application {
 
     public static Context sContext;
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+    public static final String UTM_SOURCES = "google";
+    public static final String UTM_CAMPAIGN = "tube_player_recom";
+    public static final String DEEPLINK = "tubeplayer://player/6666";
 
-//        initACRA();
+
+    public static SharedPreferences sPreferences;
+
+    public static boolean isCoolStart = false;
+
+    public static void addShortcut(Context context, Class clazz, String appName, int ic_launcher) {
+        // 安装的Intent
+        Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+
+        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+        shortcutIntent.putExtra("tName", appName);
+        shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, appName);
+        shortcutIntent.setClassName(context, clazz.getName());
+        //        shortcutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // 快捷名称
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getResources().getString(R.string.app_name));
+        // 快捷图标是否允许重复
+        shortcut.putExtra("duplicate", false);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        // 快捷图标
+        Intent.ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(context, ic_launcher);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
+        // 发送广播
+        context.sendBroadcast(shortcut);
     }
-
-    private static SharedPreferences sPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sContext = this;
+        isCoolStart = true;
         sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        isSpecial = sPreferences.getBoolean(Constants.KEY_SPECIAL, false);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+        SpecialVersions.initSpecial();
+        SpecialVersions.fetchDeferredAppLinkData(sContext);
+
+        if (!sPreferences.getBoolean("addShortcut", false)) {
+            sPreferences.edit().putBoolean("addShortcut", true).apply();
+            addShortcut(sContext, MainActivity.class, getString(R.string.app_name), R.mipmap.ic_launcher);
+        }
 
         // Initialize settings first because others inits can use its values
         SettingsActivity.initSettings(this);
@@ -83,19 +125,135 @@ public class App extends Application {
 
         configureRxJavaErrorHandler();
 
-        setSpecial();
+        AdModule.init(new AdModule.AdCallBack() {
+            @Override
+            public Application getApplication() {
+                return App.this;
+            }
+
+            @Override
+            public String getAppId() {
+                return "ca-app-pub-9880857526519562~1189686181";
+            }
+
+            @Override
+            public boolean isAdDebug() {
+                return false;
+            }
+
+            @Override
+            public boolean isLogDebug() {
+                return false;
+            }
+
+            @Override
+            public String getAdMobNativeAdId() {
+                return null;
+            }
+
+            @Override
+            public String getBannerAdId() {
+                return "ca-app-pub-9880857526519562/6119359485";
+            }
+
+            @Override
+            public String getInterstitialAdId() {
+                return "ca-app-pub-9880857526519562/3432706143";
+            }
+
+            @Override
+            public String getTestDevice() {
+                return null;
+            }
+
+            @Override
+            public String getRewardedVideoAdId() {
+                return null;
+            }
+
+            @Override
+            public String getFBNativeAdId() {
+                return "811681725685294_811682365685230";
+            }
+        });
+
+        initBannerView();
+
+        AdModule.getInstance().getAdMob().initInterstitialAd();
+        AdModule.getInstance().getAdMob().requestNewInterstitial();
+
+        registerActivityLifecycleCallbacks(callbacks);
 
     }
 
-    private static boolean isSpecial = false;
+    public static AdMobBanner adMobBanner;
+
+    private void initBannerView() {
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+    }
+
+    ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks() {
+        @Override
+        public void onActivityCreated(Activity activity, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+            try {
+                if (adMobBanner != null) {
+                    adMobBanner.resume();
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+            if (adMobBanner != null) {
+                adMobBanner.pause();
+            }
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
+    };
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Log.v("app", "onLowMemory>>");
+        if (App.adMobBanner != null) {
+            App.adMobBanner.destroy();
+            App.adMobBanner = null;
+        }
+    }
 
     public static void setSpecial() {
-        isSpecial = true;
-        sPreferences.edit().putBoolean(Constants.KEY_SPECIAL, true).apply();
+        SpecialVersions.setSpecial();
     }
 
     public static boolean isSpecial() {
-        return isSpecial;
+        return SpecialVersions.isSpecial();
     }
 
     private void configureRxJavaErrorHandler() {

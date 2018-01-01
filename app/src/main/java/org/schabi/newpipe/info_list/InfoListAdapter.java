@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.ads.Ad;
+
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem;
@@ -91,7 +93,15 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.useMiniVariant = useMiniVariant;
     }
 
+    public void addInfoItemList2(List<InfoItem> data) {
+        infoItemList.addAll(data);
+    }
+
     public void addInfoItemList(List<InfoItem> data) {
+        addInfoItemList(data, this);
+    }
+
+    public void addInfoItemList(List<InfoItem> data, RecyclerView.Adapter adapter) {
         if (data != null) {
             if (DEBUG) {
                 Log.d(TAG, "addInfoItemList() before > infoItemList.size() = " + infoItemList.size() + ", data.size() = " + data.size());
@@ -104,16 +114,18 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.d(TAG, "addInfoItemList() after > offsetStart = " + offsetStart + ", infoItemList.size() = " + infoItemList.size() + ", header = " + header + ", footer = " + footer + ", showFooter = " + showFooter);
             }
 
-            notifyItemRangeInserted(offsetStart, data.size());
+            adapter.notifyItemRangeInserted(offsetStart, data.size());
 
             if (footer != null && showFooter) {
                 int footerNow = sizeConsideringHeaderOffset();
-                notifyItemMoved(offsetStart, footerNow);
+                adapter.notifyItemMoved(offsetStart, footerNow);
 
                 if (DEBUG) Log.d(TAG, "addInfoItemList() footer from " + offsetStart + " to " + footerNow);
             }
         }
     }
+
+
 
     public void addInfoItem(InfoItem data) {
         if (data != null) {
@@ -167,6 +179,9 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     private int sizeConsideringHeaderOffset() {
+        if (parentAdapter != null) {
+            return parentAdapter.getItemCount();
+        }
         int i = infoItemList.size() + (header != null ? 1 : 0);
         if (DEBUG) Log.d(TAG, "sizeConsideringHeaderOffset() called → " + i);
         return i;
@@ -174,6 +189,12 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public ArrayList<InfoItem> getItemsList() {
         return infoItemList;
+    }
+
+    private RecyclerView.Adapter parentAdapter;
+
+    public void setParentAdapter(RecyclerView.Adapter adapter) {
+        parentAdapter = adapter;
     }
 
     @Override

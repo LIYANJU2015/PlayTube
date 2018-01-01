@@ -14,11 +14,22 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
+    signingConfigs {
+        release {
+            storeFile file("keystore")
+            storePassword "123456asdf"
+            keyAlias "asdf"
+            keyPassword "123456asdf"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             multiDexEnabled true
@@ -64,7 +75,17 @@ dependencies {
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'tubewebplayer-release2', ext: 'aar')
+    compile(name: 'admodule-release2', ext: 'aar')
+    compile(name: 'rating-release', ext: 'aar')
     compile 'ren.yale.android:cachewebviewlib:1.3.0'
+    compile 'q.rorbin:badgeview:1.1.3'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    compile 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+    compile 'com.facebook.android:audience-network-sdk:4.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+    compile 'com.google.android.gms:play-services-ads:11.6.2'
 
     implementation 'com.github.TeamNewPipe:NewPipeExtractor:2d191c4ca'
 
@@ -101,4 +122,6 @@ dependencies {
 
     implementation 'frankiesardo:icepick:3.2.0'
     annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
+
+    compile 'com.github.markomilos:paginate:0.5.1'
 }

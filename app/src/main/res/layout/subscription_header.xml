@@ -16,7 +16,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:src="?attr/rss"
+        android:src="@drawable/ic_rss_feed_60_24dp"
         tools:ignore="ContentDescription,RtlHardcoded"/>
 
     <TextView
@@ -33,7 +33,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_below="@+id/whatsNew"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"

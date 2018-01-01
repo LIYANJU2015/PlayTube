@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="general_preferences"
+    android:title="@string/settings">
+
+    <PreferenceScreen
+        android:fragment="org.schabi.newpipe.settings.HistorySettingsFragment"
+        android:icon="?attr/history"
+        android:title="@string/settings_category_history_title"/>
+
+</PreferenceScreen>

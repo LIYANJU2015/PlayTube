@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="5dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical">
+
+            <com.facebook.ads.MediaView
+                android:id="@+id/fb_half_mv"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <FrameLayout
+                android:id="@+id/fb_adChoices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:padding="@dimen/dp_5"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/fb_ad_title_bg"
+                android:minHeight="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_6">
+
+                <ImageView
+                    android:id="@+id/fb_half_icon"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_dusms_ad_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fb_banner_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_12"
+                        android:layout_marginRight="@dimen/dp_12"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:textColor="@color/C1_H2"
+                        android:textSize="@dimen/dp_14" />
+
+                    <TextView
+                        android:id="@+id/fb_banner_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_12"
+                        android:layout_marginRight="@dimen/dp_12"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="2"
+                        android:textColor="@color/C1_H5"
+                        android:textSize="@dimen/dp_12" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/fb_half_download"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_37"
+            android:layout_margin="@dimen/dp_6"
+            android:background="@drawable/fb_ad_download_selector"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dp_12" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+</FrameLayout>

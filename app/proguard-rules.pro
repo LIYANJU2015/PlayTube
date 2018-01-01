@@ -35,3 +35,6 @@
     @icepick.* <fields>;
 }
 -keepnames class * { @icepick.State *;}
+
+-dontwarn okio.**
+-dontwarn javax.annotation.**

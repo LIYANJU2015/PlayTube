@@ -3,14 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings_category_appearance_title">
 
-    <ListPreference
-        android:defaultValue="@string/default_theme_value"
-        android:entries="@array/theme_description_list"
-        android:entryValues="@array/theme_values_list"
-        android:key="@string/theme_key"
-        android:summary="%s"
-        android:title="@string/theme_title"/>
-
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/show_next_video_key"

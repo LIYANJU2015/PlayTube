@@ -65,7 +65,7 @@
             tools:text="Duis posuere arcu condimentum lobortis mattis."/>
     </LinearLayout>
 
-    <ProgressBar
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/notificationProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"

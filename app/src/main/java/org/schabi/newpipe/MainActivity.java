@@ -23,6 +23,8 @@ package org.schabi.newpipe;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +41,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
+import com.facebook.ads.NativeAd;
 
 import org.schabi.newpipe.database.AppDatabase;
 import org.schabi.newpipe.database.history.dao.HistoryDAO;
@@ -59,12 +66,15 @@ import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.StateSaver;
 import org.schabi.newpipe.util.ThemeHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 public class MainActivity extends AppCompatActivity implements HistoryListener {
     private static final String TAG = "MainActivity";
@@ -79,15 +89,28 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
+        if (DEBUG)
+            Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         ThemeHelper.setTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sActivity = this;
 
-        if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            initFragments();
-        }
+        initHomeAD();
+
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                            initFragments();
+                        }
+                    }
+                });
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         Log.v("main", " toolbar:: " + toolbar);
@@ -95,6 +118,36 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         initHistory();
+    }
+
+    private void initHomeAD() {
+        if (App.isCoolStart) {
+            App.isCoolStart = false;
+            AdModule.getInstance().getFacebookAd().setLoadListener(new IFacebookAd.FacebookAdListener() {
+                @Override
+                public void onLoadedAd(View view) {
+                    AdModule.getInstance().getFacebookAd().setLoadListener(null);
+                    AdModule.getInstance().createMaterialDialog().showAdDialog(MainActivity.this, view);
+                    AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+
+                }
+
+                @Override
+                public void onStartLoadAd(View view) {
+                }
+
+                @Override
+                public void onLoadAdFailed(int i, String s) {
+                    AdModule.getInstance().getFacebookAd().setLoadListener(null);
+                    AdModule.getInstance().getAdMob().showInterstitialAd();
+                    AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+                }
+            });
+            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682095685257");
+        } else {
+            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+            AdModule.getInstance().getAdMob().requestNewInterstitial();
+        }
     }
 
     @Override
@@ -126,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             });
         }
 
-        if(sharedPreferences.getBoolean(Constants.KEY_MAIN_PAGE_CHANGE, false)) {
+        if (sharedPreferences.getBoolean(Constants.KEY_MAIN_PAGE_CHANGE, false)) {
             if (DEBUG) Log.d(TAG, "main page has changed, recreating main fragment...");
             sharedPreferences.edit().putBoolean(Constants.KEY_MAIN_PAGE_CHANGE, false).apply();
             NavigationHelper.openMainActivity(this);
@@ -141,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             // Return if launched from a launcher (e.g. Nova Launcher, Pixel Launcher ...)
             // to not destroy the already created backstack
             String action = intent.getAction();
-            if ((action != null && action.equals(Intent.ACTION_MAIN)) && intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return;
+            if ((action != null && action.equals(Intent.ACTION_MAIN)) && intent.hasCategory(Intent.CATEGORY_LAUNCHER))
+                return;
         }
 
         super.onNewIntent(intent);
@@ -183,7 +237,15 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             findViewById(R.id.toolbar).findViewById(R.id.toolbar_search_container).setVisibility(View.GONE);
 
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.main_menu, menu);
+            if (App.isSpecial()) {
+                inflater.inflate(R.menu.main_menu, menu);
+            } else {
+                inflater.inflate(R.menu.main_menu2, menu);
+            }
+
+            if (App.isSpecial() && App.sPreferences.getBoolean("isShowMorePoint", true)) {
+                setToolbarMore(findViewById(R.id.toolbar));
+            }
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -191,6 +253,53 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         return true;
+    }
+
+    private Badge overflowBadge;
+
+    private void setToolbarMore(final View toolbar) {
+        final String overflowDesc = getString(R.string.accessibility_overflow);
+        toolbar.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isFinishing()) {
+                    return;
+                }
+
+                final ArrayList<View> outViews = new ArrayList<>();
+                if (toolbar != null) {
+                    toolbar.findViewsWithText(outViews, overflowDesc, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+                }
+                // Guard against any errors
+                if (outViews.isEmpty()) {
+                    return;
+                }
+                // Do something with the view
+                View overflow = outViews.get(0);
+
+                if (overflow != null) {
+                    overflowBadge = new QBadgeView(getApplicationContext())
+                            .bindTarget(overflow)
+                            .setShowShadow(true)
+                            .setGravityOffset(10, 5, true)
+                            .setBadgeBackgroundColor(Color.parseColor("#D32F2F"))
+                            .setBadgeNumber(-1);
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        Log.v("xx", "onMenuOpened>> featureId" + featureId);
+        if (App.sPreferences.getBoolean("isShowMorePoint", true)) {
+            if (overflowBadge != null) {
+                overflowBadge.hide(true);
+                overflowBadge = null;
+            }
+            App.sPreferences.edit().putBoolean("isShowMorePoint", false).apply();
+        }
+        return super.onMenuOpened(featureId, menu);
     }
 
     @Override
@@ -207,9 +316,9 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
                 return true;
             case R.id.action_show_downloads:
                 return NavigationHelper.openDownloads(this);
-            case R.id.action_about:
-                NavigationHelper.openAbout(this);
-                return true;
+//            case R.id.action_about:
+//                NavigationHelper.openAbout(this);
+//                return true;
             case R.id.action_history:
                 NavigationHelper.openHistory(this);
                 return true;

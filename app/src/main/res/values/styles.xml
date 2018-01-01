@@ -39,6 +39,12 @@
         <item name="colorControlHighlight">@color/light_ripple_color</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="actionOverflowButtonStyle">@style/app_actionOverflowButtonStyle</item>
+    </style>
+
+    <style name="app_actionOverflowButtonStyle" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:contentDescription">@string/accessibility_overflow</item>
     </style>
 
     <style name="windowIsTranslucen" parent="LightTheme">

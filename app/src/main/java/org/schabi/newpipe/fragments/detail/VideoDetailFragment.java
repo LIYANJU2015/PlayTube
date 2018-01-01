@@ -43,6 +43,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.admodule.AdModule;
+import com.facebook.ads.AdChoicesView;
+import com.facebook.ads.NativeAd;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -73,6 +76,7 @@ import org.schabi.newpipe.playlist.PlayQueue;
 import org.schabi.newpipe.playlist.SinglePlayQueue;
 import org.schabi.newpipe.report.ErrorActivity;
 import org.schabi.newpipe.report.UserAction;
+import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.InfoCache;
@@ -192,6 +196,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
         return inflater.inflate(R.layout.fragment_video_detail, container, false);
     }
 
@@ -237,6 +242,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         if (DEBUG) Log.d(TAG, "onDestroyView() called");
         spinnerToolbar.setOnItemSelectedListener(null);
         spinnerToolbar.setAdapter(null);
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
         super.onDestroyView();
     }
 
@@ -407,9 +413,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     // Init
     //////////////////////////////////////////////////////////////////////////*/
 
+    private FrameLayout adFrameLayout;
+
     @Override
     protected void initViews(View rootView, Bundle savedInstanceState) {
         super.initViews(rootView, savedInstanceState);
+        adFrameLayout = rootView.findViewById(R.id.ad_frame);
 
         spinnerToolbar = activity.findViewById(R.id.toolbar).findViewById(R.id.toolbar_spinner);
 
@@ -458,6 +467,35 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         setHeightThumbnail();
     }
 
+    private View setUpNativeAdView(NativeAd nativeAd) {
+        nativeAd.unregisterView();
+
+        View adView = LayoutInflater.from(activity).inflate(R.layout.home_list_ad_item2, null);
+
+        FrameLayout adChoicesFrame = (FrameLayout) adView.findViewById(R.id.fb_adChoices2);
+        ImageView nativeAdIcon = (ImageView) adView.findViewById(R.id.image_ad);
+        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.title);
+        TextView nativeAdBody = (TextView) adView.findViewById(R.id.text);
+        TextView nativeAdCallToAction = (TextView) adView.findViewById(R.id.call_btn_tv);
+
+        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+        nativeAdTitle.setText(nativeAd.getAdTitle());
+        nativeAdBody.setText(nativeAd.getAdBody());
+
+        // Downloading and setting the ad icon.
+        NativeAd.Image adIcon = nativeAd.getAdIcon();
+        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
+        // Add adChoices icon
+        AdChoicesView adChoicesView = new AdChoicesView(activity, nativeAd, true);
+        adChoicesFrame.addView(adChoicesView, 0);
+        adChoicesFrame.setVisibility(View.VISIBLE);
+
+        nativeAd.registerViewForInteraction(adView);
+
+        return adView;
+    }
+
     @Override
     protected void initListeners() {
         super.initListeners();
@@ -465,6 +503,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             @Override
             public void selected(StreamInfoItem selectedItem) {
                 selectAndLoadVideo(selectedItem.getServiceId(), selectedItem.getUrl(), selectedItem.getName());
+                AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
             }
 
             @Override
@@ -1099,6 +1138,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     @Override
     public void handleResult(@NonNull StreamInfo info) {
         super.handleResult(info);
+
+        NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
+        if (nativeAd != null && nativeAd.isAdLoaded()) {
+            adFrameLayout.removeAllViews();
+            adFrameLayout.addView(setUpNativeAdView(nativeAd));
+        }
 
         setInitialData(info.getServiceId(), info.getUrl(), info.getName());
         pushToStack(serviceId, url, name);

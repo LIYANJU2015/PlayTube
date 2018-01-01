@@ -17,8 +17,8 @@ public class AppearanceSettingsFragment extends BasePreferenceFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String themeKey = getString(R.string.theme_key);
-        startThemeKey = defaultPreferences.getString(themeKey, getString(R.string.default_theme_value));
-        findPreference(themeKey).setOnPreferenceChangeListener(themePreferenceChange);
+//        startThemeKey = defaultPreferences.getString(themeKey, getString(R.string.default_theme_value));
+//        findPreference(themeKey).setOnPreferenceChangeListener(themePreferenceChange);
     }
 
     @Override

@@ -9,7 +9,7 @@
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
 
-    <color name="color_divider">#BDBDBD</color>
+    <color name="color_divider">@color/light_separator_color</color>
 
     <color name="light_youtube_accent_color">#FF5252</color>
     <color name="light_separator_color">#32000000</color>
@@ -76,5 +76,8 @@
     <color name="gray">#616161</color>
 
     <color name="black">#000</color>
+
+    <color name="rating_btn_normal_color">#F44336</color>
+    <color name="rating_btn_press_color">#CCF44336</color>
 
 </resources>

@@ -2,12 +2,23 @@ package org.schabi.newpipe.fragments.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.admodule.AdModule;
+import com.facebook.ads.AdChoicesView;
+import com.facebook.ads.NativeAd;
+
+import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.ListInfo;
+import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.Constants;
 
 import java.util.Queue;
@@ -186,6 +197,45 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
     // Contract
     //////////////////////////////////////////////////////////////////////////*/
 
+
+    private AdViewWrapperAdapter adViewWrapperAdapter;
+
+    @Override
+    public RecyclerView.Adapter onGetAdapter() {
+        adViewWrapperAdapter = new AdViewWrapperAdapter(infoListAdapter);
+        infoListAdapter.setParentAdapter(adViewWrapperAdapter);
+        return adViewWrapperAdapter;
+    }
+
+    private View setUpNativeAdView(NativeAd nativeAd) {
+        nativeAd.unregisterView();
+
+        View adView = LayoutInflater.from(activity).inflate(R.layout.home_list_ad_item2, null);
+
+        FrameLayout adChoicesFrame = (FrameLayout) adView.findViewById(R.id.fb_adChoices2);
+        ImageView nativeAdIcon = (ImageView) adView.findViewById(R.id.image_ad);
+        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.title);
+        TextView nativeAdBody = (TextView) adView.findViewById(R.id.text);
+        TextView nativeAdCallToAction = (TextView) adView.findViewById(R.id.call_btn_tv);
+
+        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+        nativeAdTitle.setText(nativeAd.getAdTitle());
+        nativeAdBody.setText(nativeAd.getAdBody());
+
+        // Downloading and setting the ad icon.
+        NativeAd.Image adIcon = nativeAd.getAdIcon();
+        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
+        // Add adChoices icon
+        AdChoicesView adChoicesView = new AdChoicesView(activity, nativeAd, true);
+        adChoicesFrame.addView(adChoicesView, 0);
+        adChoicesFrame.setVisibility(View.VISIBLE);
+
+        nativeAd.registerViewForInteraction(adView);
+
+        return adView;
+    }
+
     @Override
     public void handleResult(@NonNull I result) {
         super.handleResult(result);
@@ -196,7 +246,15 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
 
         if (infoListAdapter.getItemsList().size() == 0) {
             if (result.related_streams.size() > 0) {
-                infoListAdapter.addInfoItemList(result.related_streams);
+                NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
+                if (nativeAd != null && nativeAd.isAdLoaded() && result.related_streams.size() > 4) {
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(setUpNativeAdView(nativeAd), 2));
+                    infoListAdapter.addInfoItemList2(result.related_streams);
+                    adViewWrapperAdapter.notifyDataSetChanged();
+                } else {
+                    infoListAdapter.addInfoItemList(result.related_streams);
+                }
                 showListFooter(hasMoreItems());
             } else {
                 infoListAdapter.clearStreamItemList();

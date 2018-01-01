@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.NewPipe;
@@ -87,6 +88,12 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
         headerPlayAllButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_all_button);
         headerPopupButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_popup_button);
         headerBackgroundButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_bg_button);
+
+        if (!App.isSpecial()) {
+            playlistCtrl.setVisibility(View.GONE);
+        } else {
+            playlistCtrl.setVisibility(View.VISIBLE);
+        }
 
         return headerRootLayout;
     }
@@ -193,7 +200,11 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
             }
         }
 
-        playlistCtrl.setVisibility(View.VISIBLE);
+        if (!App.isSpecial()) {
+            playlistCtrl.setVisibility(View.GONE);
+        } else {
+            playlistCtrl.setVisibility(View.VISIBLE);
+        }
 
         imageLoader.displayImage(result.getUploaderAvatarUrl(), headerUploaderAvatar, DISPLAY_AVATAR_OPTIONS);
         headerStreamCount.setText(getResources().getQuantityString(R.plurals.videos, (int) result.stream_count, (int) result.stream_count));

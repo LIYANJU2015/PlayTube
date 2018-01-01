@@ -28,8 +28,15 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.admodule.AdModule;
+import com.facebook.ads.AdChoicesView;
+import com.facebook.ads.NativeAd;
+
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.NewPipeDatabase;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.ReCaptchaActivity;
@@ -39,6 +46,7 @@ import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.StreamingService;
+import org.schabi.newpipe.extractor.exceptions.FoundAdException;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
 import org.schabi.newpipe.extractor.search.SearchEngine;
 import org.schabi.newpipe.extractor.search.SearchResult;
@@ -46,6 +54,7 @@ import org.schabi.newpipe.fragments.BackPressable;
 import org.schabi.newpipe.fragments.list.BaseListFragment;
 import org.schabi.newpipe.history.HistoryListener;
 import org.schabi.newpipe.report.UserAction;
+import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.ExtractorHelper;
@@ -238,6 +247,7 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
     public void onDestroyView() {
         if (DEBUG) Log.d(TAG, "onDestroyView() called");
         unsetSearchListeners();
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
         super.onDestroyView();
     }
 
@@ -848,9 +858,49 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         hideKeyboardSearch();
     }
 
+    private View setUpNativeAdView(NativeAd nativeAd) {
+        nativeAd.unregisterView();
+
+        View adView = LayoutInflater.from(activity).inflate(R.layout.home_list_ad_item2, null);
+
+        FrameLayout adChoicesFrame = (FrameLayout) adView.findViewById(R.id.fb_adChoices2);
+        ImageView nativeAdIcon = (ImageView) adView.findViewById(R.id.image_ad);
+        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.title);
+        TextView nativeAdBody = (TextView) adView.findViewById(R.id.text);
+        TextView nativeAdCallToAction = (TextView) adView.findViewById(R.id.call_btn_tv);
+
+        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+        nativeAdTitle.setText(nativeAd.getAdTitle());
+        nativeAdBody.setText(nativeAd.getAdBody());
+
+        // Downloading and setting the ad icon.
+        NativeAd.Image adIcon = nativeAd.getAdIcon();
+        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
+        // Add adChoices icon
+        AdChoicesView adChoicesView = new AdChoicesView(activity, nativeAd, true);
+        adChoicesFrame.addView(adChoicesView, 0);
+        adChoicesFrame.setVisibility(View.VISIBLE);
+
+        nativeAd.registerViewForInteraction(adView);
+
+        return adView;
+    }
+
+    private AdViewWrapperAdapter adViewWrapperAdapter;
+
+    @Override
+    public RecyclerView.Adapter onGetAdapter() {
+        adViewWrapperAdapter = new AdViewWrapperAdapter(infoListAdapter);
+        infoListAdapter.setParentAdapter(adViewWrapperAdapter);
+        return adViewWrapperAdapter;
+    }
+
     /*//////////////////////////////////////////////////////////////////////////
     // Search Results
     //////////////////////////////////////////////////////////////////////////*/
+
+    private boolean isAddAD = false;
 
     @Override
     public void handleResult(@NonNull SearchResult result) {
@@ -862,7 +912,26 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
 
         if (infoListAdapter.getItemsList().size() == 0) {
             if (!result.getResults().isEmpty()) {
-                infoListAdapter.addInfoItemList(result.getResults());
+                NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
+                if (!isAddAD && nativeAd != null && nativeAd.isAdLoaded() && result.getResults().size() > 4) {
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(setUpNativeAdView(nativeAd), 2));
+                    isAddAD = true;
+                    infoListAdapter.addInfoItemList2(result.getResults());
+                    adViewWrapperAdapter.notifyDataSetChanged();
+                } else if (!isAddAD && App.adMobBanner != null && App.adMobBanner.isLoaded()) {
+                    if (result.getResults().size()> 2) {
+                        App.adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                                RecyclerView.LayoutParams.WRAP_CONTENT));
+                        adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                                AdViewItem(App.adMobBanner.getAdView(), 2));
+                        isAddAD = true;
+                        infoListAdapter.addInfoItemList2(result.getResults());
+                        adViewWrapperAdapter.notifyDataSetChanged();
+                    }
+                }else {
+                    infoListAdapter.addInfoItemList(result.getResults());
+                }
             } else {
                 infoListAdapter.clearStreamItemList();
                 showEmptyState();
