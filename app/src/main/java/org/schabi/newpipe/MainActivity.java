@@ -62,6 +62,7 @@ import org.schabi.newpipe.fragments.detail.VideoDetailFragment;
 import org.schabi.newpipe.fragments.list.search.SearchFragment;
 import org.schabi.newpipe.history.HistoryListener;
 import org.schabi.newpipe.util.Constants;
+import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.StateSaver;
 import org.schabi.newpipe.util.ThemeHelper;
@@ -101,19 +102,19 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
-                new Handler().post(new Runnable() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        FacebookReport.logSendMainPage();
                         if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
                             initFragments();
                         }
                     }
-                });
+                }, 500);
             }
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        Log.v("main", " toolbar:: " + toolbar);
         setSupportActionBar(toolbar);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

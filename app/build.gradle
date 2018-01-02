@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.1'
 
     defaultConfig {
-        applicationId "org.schabi.newpipe"
+        applicationId "com.playtube.tubeplayer"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -13,6 +13,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     signingConfigs {
@@ -27,6 +32,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -86,6 +92,7 @@ dependencies {
     compile 'com.facebook.android:audience-network-sdk:4.+'
     compile 'com.facebook.android:facebook-android-sdk:4.11.0'
     compile 'com.google.android.gms:play-services-ads:11.6.2'
+    compile 'com.tencent.bugly:crashreport:latest.release'
 
     implementation 'com.github.TeamNewPipe:NewPipeExtractor:2d191c4ca'
 

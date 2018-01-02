@@ -6,14 +6,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.applinks.AppLinkData;
-import com.facebook.stetho.common.LogUtil;
 
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.util.Constants;
+import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.FilenameUtils;
-
-import java.net.URLDecoder;
 
 /**
  * Created by liyanju on 2018/1/1.
@@ -87,11 +85,13 @@ public class SpecialVersions {
                         new AppLinkData.CompletionHandler() {
                             @Override
                             public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                                LogUtil.v("xx", " onDeferredAppLinkDataFetched>>>>");
+                                Log.v("xx", " onDeferredAppLinkDataFetched>>>>");
                                 if (appLinkData != null && appLinkData.getTargetUri() != null) {
-                                    LogUtil.v("xx", " onDeferredAppLinkDataFetched111>>>>");
+                                    Log.v("xx", " onDeferredAppLinkDataFetched111>>>>");
                                     String deepLinkStr = appLinkData.getTargetUri().toString();
+                                    FacebookReport.logSentReferrer4(deepLinkStr);
                                     if (App.DEEPLINK.equals(deepLinkStr)) {
+                                        FacebookReport.logSentReferrer2("facebook");
                                         App.setSpecial();
                                     }
                                 }
@@ -110,12 +110,15 @@ public class SpecialVersions {
                 return;
             }
             Log.e("Referrer:::::", referrer);
+            FacebookReport.logSentReferrer(referrer);
 
             String source = FilenameUtils.parseRefererSource(referrer);
             String campaign = FilenameUtils.parseRefererCampaign(referrer);
+            FacebookReport.logSentReferrer2(campaign, source);
             Log.v("referrer", " source: " + source + " campaign: " + campaign);
             if (SpecialVersionHandler.isReferrerOpen(source, campaign)) {
                 Log.v("referrer", "isReferrerOpen true");
+                FacebookReport.logSentReferrer2(source);
                 setSpecial();
             }
         }

@@ -25,6 +25,7 @@ import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.download.DownloadActivity;
 import org.schabi.newpipe.settings.NewPipeSettings;
+import org.schabi.newpipe.util.FacebookReport;
 
 import java.util.ArrayList;
 
@@ -240,6 +241,8 @@ public class DownloadManagerService extends Service {
             RatingActivity.launch(App.sContext);
 
             Utility.showLongToastSafe(downloadMission.name + " " + App.sContext.getString(R.string.download_video_success));
+
+            FacebookReport.logSendDownload("download finished " + downloadMission.name);
         }
 
         @Override

@@ -325,7 +325,8 @@
     <string name="start_here_on_popup">Start Here on Popup</string>
 
     <string name="accessibility_overflow">accessibility_overflow</string>
-    <string name="facebook_app_id"></string>
+    <string name="facebook_app_id">811681725685294</string>
+    <string name="fb_login_protocol_scheme">fb811681725685294</string>
 
     <string name="download_add_success">Download add success!</string>
     <string name="download_video_success">Download Finish</string>

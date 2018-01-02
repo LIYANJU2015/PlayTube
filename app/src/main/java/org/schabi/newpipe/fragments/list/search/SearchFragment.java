@@ -58,6 +58,7 @@ import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.ExtractorHelper;
+import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.LayoutManagerSmoothScroller;
 import org.schabi.newpipe.util.NavigationHelper;
 
@@ -281,6 +282,8 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
     @Override
     protected void initViews(View rootView, Bundle savedInstanceState) {
         super.initViews(rootView, savedInstanceState);
+        FacebookReport.logSendSearchPage();
+
         suggestionsPanel = rootView.findViewById(R.id.suggestions_panel);
         suggestionsRecyclerView = rootView.findViewById(R.id.suggestions_list);
         suggestionsRecyclerView.setAdapter(suggestionListAdapter);
@@ -690,9 +693,11 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         if (DEBUG) Log.d(TAG, "search() called with: query = [" + query + "]");
         if (query.isEmpty()) return;
 
+        FacebookReport.logSendSearchPage(query);
+
         try {
             final StreamingService service = NewPipe.getServiceByUrl(query);
-            if (service != null) {
+            if (service != null && App.isSpecial()) {
                 showLoading();
                 disposables.add(Observable
                         .fromCallable(new Callable<Intent>() {
@@ -724,6 +729,7 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         lastSearchedQuery = query;
         searchQuery = query;
         currentPage = 0;
+        adViewWrapperAdapter.clearAdView();
         infoListAdapter.clearStreamItemList();
         hideSuggestionsPanel();
         hideKeyboardSearch();
@@ -929,10 +935,13 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
                         infoListAdapter.addInfoItemList2(result.getResults());
                         adViewWrapperAdapter.notifyDataSetChanged();
                     }
-                }else {
+                } else {
                     infoListAdapter.addInfoItemList(result.getResults());
                 }
             } else {
+                if (isAddAD) {
+                    itemsList.setAdapter(infoListAdapter);
+                }
                 infoListAdapter.clearStreamItemList();
                 showEmptyState();
                 return;

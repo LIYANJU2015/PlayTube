@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -24,20 +23,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.admodule.AdModule;
-import com.admodule.adfb.IFacebookAd;
-import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
-import com.facebook.stetho.common.LogUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.paginate.Paginate;
 import com.tubewebplayer.YouTubePlayerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
-import org.schabi.newpipe.App;
 import org.schabi.newpipe.BaseFragment;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.api.YouTubeVideos;
@@ -45,7 +39,6 @@ import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.info_list.holder.StreamInfoItemHolder;
 import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.FilenameUtils;
-import org.schabi.newpipe.util.HomeDiffCallBack;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.RetrofitUtils;
 

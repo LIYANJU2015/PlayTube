@@ -240,9 +240,17 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (DEBUG) Log.d(TAG, "onCreateViewHolder() called with: parent = [" + parent + "], type = [" + type + "]");
         switch (type) {
             case HEADER_TYPE:
-                return new HFHolder(header);
+                if (header != null) {
+                    return new HFHolder(header);
+                } else {
+                    return null;
+                }
             case FOOTER_TYPE:
-                return new HFHolder(footer);
+                if (footer != null) {
+                    return new HFHolder(footer);
+                } else {
+                    return null;
+                }
             case MINI_STREAM_HOLDER_TYPE:
                 return new StreamMiniInfoItemHolder(infoItemBuilder, parent);
             case STREAM_HOLDER_TYPE:

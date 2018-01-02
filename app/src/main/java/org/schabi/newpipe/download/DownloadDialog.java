@@ -33,6 +33,7 @@ import org.schabi.newpipe.extractor.stream.VideoStream;
 import org.schabi.newpipe.fragments.MainFragment2;
 import org.schabi.newpipe.fragments.detail.SpinnerToolbarAdapter;
 import org.schabi.newpipe.settings.NewPipeSettings;
+import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.FilenameUtils;
 import org.schabi.newpipe.util.ListHelper;
 import org.schabi.newpipe.util.PermissionHelper;
@@ -90,6 +91,8 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
             getDialog().dismiss();
             return;
         }
+
+        FacebookReport.logSendDownload("show");
 
         AdModule.getInstance().getAdMob().requestNewInterstitial();
 
@@ -304,5 +307,7 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
         if (currentInfo != null) {
             Utility.showLongToastSafe(currentInfo.name + " " + App.sContext.getString(R.string.download_add_success));
         }
+
+        FacebookReport.logSendDownload("download " + currentInfo.name);
     }
 }

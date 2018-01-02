@@ -79,6 +79,7 @@ import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
+import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.InfoCache;
 import org.schabi.newpipe.util.ListHelper;
 import org.schabi.newpipe.util.Localization;
@@ -418,6 +419,8 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     @Override
     protected void initViews(View rootView, Bundle savedInstanceState) {
         super.initViews(rootView, savedInstanceState);
+        FacebookReport.logSendVideoDetail();
+
         adFrameLayout = rootView.findViewById(R.id.ad_frame);
 
         spinnerToolbar = activity.findViewById(R.id.toolbar).findViewById(R.id.toolbar_spinner);

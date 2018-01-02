@@ -38,6 +38,11 @@ public class RouterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (!App.isSpecial()) {
+            finish();
+            return;
+        }
+
         String videoUrl = getUrl(getIntent());
         handleUrl(videoUrl);
     }

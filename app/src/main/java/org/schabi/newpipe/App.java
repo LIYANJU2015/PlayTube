@@ -18,6 +18,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
@@ -184,6 +185,8 @@ public class App extends Application {
 
         registerActivityLifecycleCallbacks(callbacks);
 
+        CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
+
     }
 
     public static AdMobBanner adMobBanner;
@@ -252,6 +255,10 @@ public class App extends Application {
         SpecialVersions.setSpecial();
     }
 
+    /**
+     * 默认false
+     * @return
+     */
     public static boolean isSpecial() {
         return SpecialVersions.isSpecial();
     }
