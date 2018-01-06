@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -272,18 +273,23 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     }
 
     private void viewFileWithFileProvider(File file, String mimetype) {
-        String ourPackage = mContext.getApplicationContext().getPackageName();
-        Uri uri = FileProvider.getUriForFile(mContext, ourPackage + ".provider", file);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, mimetype);
-        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.addFlags(FLAG_GRANT_PREFIX_URI_PERMISSION);
+        try {
+            String ourPackage = mContext.getApplicationContext().getPackageName();
+            // Uri uri = FileProvider.getUriForFile(mContext, ourPackage + ".provider", file);
+            Uri uri = Uri.parse(file.getPath());
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, mimetype);
+            intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                intent.addFlags(FLAG_GRANT_PREFIX_URI_PERMISSION);
+            }
+            //mContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Log.v(TAG, "Starting intent: " + intent);
+            mContext.startActivity(intent);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-        //mContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Log.v(TAG, "Starting intent: " + intent);
-        mContext.startActivity(intent);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
