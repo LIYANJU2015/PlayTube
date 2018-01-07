@@ -26,7 +26,7 @@
     <string name="download_path_audio_title">Шлях для завантаження аудіо</string>
     <string name="download_path_audio_summary">Шлях де будуть зберігатись завантажені аудіо файли</string>
     <string name="autoplay_by_calling_app_title">Автоматично відтворювати при виклику з іншого додатку</string>
-    <string name="autoplay_by_calling_app_summary">Автоматично відтворювати відео коли NewPipe викликано з іншого додатку.</string>
+    <string name="autoplay_by_calling_app_summary">Автоматично відтворювати відео коли TubePlayer викликано з іншого додатку.</string>
     <string name="default_resolution_title">Типова роздільна здатність</string>
     <string name="play_with_kodi_title">Відтворювати за допомогою Kodi</string>
     <string name="kore_not_found">Додаток Kore не знайдено. Встановити?</string>
@@ -119,7 +119,7 @@
     <string name="msg_error">Помилка</string>
     <string name="msg_server_unsupported">Сервер не підтримується</string>
     <string name="msg_exists">Файл вже існує</string>
-    <string name="msg_running">NewPipe завантажує</string>
+    <string name="msg_running">TubePlayer завантажує</string>
     <string name="msg_running_detail">Натисніть для подробиць</string>
     <string name="msg_wait">Будь ласка, зачекайте…</string>
     <string name="msg_copied">Скопійовано до буферу обміну.</string>

@@ -74,7 +74,7 @@
     <string name="light_parsing_error">Impossible d\'analyser le site complètement</string>
     <string name="live_streams_not_supported">Il s\'agit d\'un direct, non supporté pour le moment.</string>
     <string name="sorry_string">Désolé, une erreur inattendue s\'est produite.</string>
-    <string name="autoplay_by_calling_app_summary">Lire automatiquement la vidéo lorsque NewPipe est appelée par une autre application</string>
+    <string name="autoplay_by_calling_app_summary">Lire automatiquement la vidéo lorsque TubePlayer est appelée par une autre application</string>
     <string name="error_report_button_text">Signaler l\'erreur par e-mail</string>
     <string name="what_device_headline">Information :</string>
     <string name="what_happened_headline">Ce qui s\'est passé :</string>
@@ -114,7 +114,7 @@
     <string name="msg_server_unsupported">Serveur non supporté</string>
     <string name="msg_exists">Fichier déjà existant</string>
     <string name="msg_url_malform">URL malformée ou internet indisponible</string>
-    <string name="msg_running">Téléchargement NewPipe</string>
+    <string name="msg_running">Téléchargement TubePlayer</string>
     <string name="msg_running_detail">Toucher pour plus de détails</string>
     <string name="msg_wait">Veuillez patienter…</string>
     <string name="msg_copied">Copié dans le presse-papier</string>
@@ -134,7 +134,7 @@
     <string name="recaptcha_request_toast">Test reCAPTCHA demandé</string>
 
     <string name="open_in_popup_mode">Ouvrir dans le lecteur pop-up</string>
-    <string name="popup_mode_share_menu_title">Lecteur pop-up de NewPipe</string>
+    <string name="popup_mode_share_menu_title">Lecteur pop-up de TubePlayer</string>
 
     <string name="popup_playing_toast">Lire dans le lecteur pop-up</string>
     <string name="yes">Oui</string>
@@ -195,11 +195,11 @@
     <string name="tab_licenses">Licences</string>
     <string name="app_description">Une interface YouTube libre et légère pour Android.</string>
     <string name="view_on_github">Voir sur GitHub</string>
-    <string name="app_license_title">Licence de NewPipe</string>
+    <string name="app_license_title">Licence de TubePlayer</string>
     <string name="read_full_license">Lire la licence</string>
     <string name="contribution_title">Contribuer</string>
 <string name="charset_letters_and_digits">Lettres et chiffres</string>
-    <string name="title_activity_about">À propos de NewPipe</string>
+    <string name="title_activity_about">À propos de TubePlayer</string>
     <string name="copyright" formatted="true">© %1$s par %2$s sous %3$s</string>
     <string name="contribution_encouragement">Que ce soit pour des idées, traductions, changements de design, nettoyage ou gros changements de code, l\'aide est toujours la bienvenue. Plus on contribue, meilleur il devient !</string>
     <string name="subscription_change_failed">Incapable de changer l\'abonnement</string>
@@ -222,7 +222,7 @@
     <string name="history_empty">L\'historique est vide</string>
     <string name="history_cleared">Historique supprimé</string>
 
-<string name="notification_channel_name">Notification NewPipe</string>
+<string name="notification_channel_name">Notification TubePlayer</string>
     <string name="undo">Annuler</string>
 
     <string name="enable_watch_history_summary">Conserver les vidéos vues</string>
@@ -231,7 +231,7 @@
     <string name="settings_category_player_behavior_title">Comportement</string>
     <string name="settings_category_history_title">Historique</string>
     <string name="playlist">Liste de lecture</string>
-    <string name="notification_channel_description">Notifications pour les lecteurs \"Arrière-plan\" et \"Pop-up\" de NewPipe</string>
+    <string name="notification_channel_description">Notifications pour les lecteurs \"Arrière-plan\" et \"Pop-up\" de TubePlayer</string>
 
     <string name="search_no_results">Aucun résultat</string>
     <string name="empty_subscription_feed_subtitle">Rien à voir ici</string>
@@ -296,8 +296,8 @@
     <string name="start_here_on_background">Démarrer ici en fond</string>
     <string name="start_here_on_popup">Démarrer dans le lecteur pop-up</string>
 <string name="donation_title">Donner</string>
-    <string name="donation_encouragement">NewPipe est développé par des volontaires sur leur temps libre afin de vous proposer la meilleur expérience. Maintenant il est temps de leurs offrir un café pour les soutenir dans leurs efforts et rendre NewPipe encore meilleur !</string>
+    <string name="donation_encouragement">TubePlayer est développé par des volontaires sur leur temps libre afin de vous proposer la meilleur expérience. Maintenant il est temps de leurs offrir un café pour les soutenir dans leurs efforts et rendre TubePlayer encore meilleur !</string>
     <string name="website_title">Site</string>
-    <string name="website_encouragement">Pour obtenir plus d\'informations et les dernières nouvelles à propos de NewPipe, visitez notre site Internet.</string>
+    <string name="website_encouragement">Pour obtenir plus d\'informations et les dernières nouvelles à propos de TubePlayer, visitez notre site Internet.</string>
     <string name="give_back">Donner en retour</string>
     </resources>

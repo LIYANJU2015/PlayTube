@@ -93,7 +93,7 @@
     <string name="retry">再試行</string>
     <string name="storage_permission_denied">記録領域への接続要求が拒否されました</string>
     <string name="autoplay_by_calling_app_title">呼び出し</string>
-    <string name="autoplay_by_calling_app_summary">NewPipeが他のｱﾌﾟﾘｹｰｼｮﾝから呼び出された際に､自動的に動画を再生します｡</string>
+    <string name="autoplay_by_calling_app_summary">TubePlayerが他のｱﾌﾟﾘｹｰｼｮﾝから呼び出された際に､自動的に動画を再生します｡</string>
     <string name="report_error">不具合を報告</string>
     <string name="user_report">利用者報告</string>
 
@@ -115,7 +115,7 @@
     <string name="msg_server_unsupported">ｻｰﾊﾞｰが対応していません</string>
     <string name="msg_exists">ﾌｧｲﾙが既に存在します</string>
     <string name="msg_url_malform">URL の形式が正しくないか､通信が利用できません</string>
-    <string name="msg_running">NewPipeの保存中</string>
+    <string name="msg_running">TubePlayerの保存中</string>
     <string name="msg_running_detail">詳細はﾀｯﾌﾟ</string>
     <string name="msg_wait">暫くお待ち下さい</string>
     <string name="msg_copied">ｸﾘｯﾌﾟﾎﾞｰﾄﾞに複製しました</string>
@@ -152,7 +152,7 @@
     <string name="msg_popup_permission">ポップアップモードで開くには
 このアクセス許可が必要です</string>
 
-    <string name="popup_mode_share_menu_title">NewPipe ポップアップモード</string>
+    <string name="popup_mode_share_menu_title">TubePlayer ポップアップモード</string>
 
     <string name="popup_playing_toast">ポップアップモードで再生中</string>
     <string name="use_old_player_title">古いプレーヤーを使用する</string>
@@ -185,7 +185,7 @@
 
 <string name="best_resolution">最適な解像度</string>
 
-    <string name="title_activity_about">NewPipe について</string>
+    <string name="title_activity_about">TubePlayer について</string>
     <string name="action_settings">設定</string>
     <string name="action_about">アプリについて</string>
     <string name="title_licenses">サードパーティー ライセンス</string>
@@ -197,7 +197,7 @@
     <string name="tab_licenses">ライセンス</string>
     <string name="app_description">Android 用の無料で軽量な Youtube フロントエンド。</string>
     <string name="view_on_github">Github で表示</string>
-    <string name="app_license_title">NewPipe のライセンス</string>
+    <string name="app_license_title">TubePlayer のライセンス</string>
     <string name="contribution_encouragement">アイデア、翻訳、デザインの変更、コードのクリーニング、または本当に重いコードの変更がありますか。ヘルプは常に歓迎します。さらに良いものになりますように!</string>
     <string name="read_full_license">ライセンスを読む</string>
     <string name="contribution_title">貢献</string>

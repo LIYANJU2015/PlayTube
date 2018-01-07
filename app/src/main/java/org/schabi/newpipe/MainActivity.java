@@ -35,6 +35,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         ThemeHelper.setTheme(this);
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_main);
         sActivity = this;
 

@@ -178,77 +178,11 @@ public class App extends Application {
             }
         });
 
-        initBannerView();
-
         AdModule.getInstance().getAdMob().initInterstitialAd();
         AdModule.getInstance().getAdMob().requestNewInterstitial();
 
-        registerActivityLifecycleCallbacks(callbacks);
-
         CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
 
-    }
-
-    public static AdMobBanner adMobBanner;
-
-    private void initBannerView() {
-        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
-        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
-    }
-
-    ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks() {
-        @Override
-        public void onActivityCreated(Activity activity, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            try {
-                if (adMobBanner != null) {
-                    adMobBanner.resume();
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-            if (adMobBanner != null) {
-                adMobBanner.pause();
-            }
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-
-        }
-    };
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        Log.v("app", "onLowMemory>>");
-        if (App.adMobBanner != null) {
-            App.adMobBanner.destroy();
-            App.adMobBanner = null;
-        }
     }
 
     public static void setSpecial() {

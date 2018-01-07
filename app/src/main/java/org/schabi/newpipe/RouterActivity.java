@@ -3,6 +3,7 @@ package org.schabi.newpipe;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.widget.Toast;
 
 import org.schabi.newpipe.util.NavigationHelper;
@@ -37,7 +38,7 @@ public class RouterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (!App.isSpecial()) {
             finish();
             return;

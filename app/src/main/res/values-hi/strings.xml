@@ -12,7 +12,7 @@
     <string name="settings">सेटिंग</string>
     <string name="choose_browser">ब्राउज़र चुनें</string>
     <string name="screen_rotation">स्क्रीन रोटेशन</string>
-    <string name="popup_mode_share_menu_title">NewPipe पॉपअप मोड</string>
+    <string name="popup_mode_share_menu_title">TubePlayer पॉपअप मोड</string>
     <string name="subscribe_button_title">सदस्य बनें</string>
     <string name="subscribed_button_title">सदस्यता ली</string>
     <string name="channel_unsubscribed">सदस्यता निकाली गई</string>
@@ -137,8 +137,8 @@
     <string name="undo">वापस जाए</string>
     <string name="play_all">सारे प्ले करे</string>
 
-    <string name="notification_channel_name">NewPipe की अधिसूचना</string>
-    <string name="notification_channel_description">NewPipe के बैकग्राउंड में चल रहे विडियो और पॉपअप विडियो के लिए अधिसूचना</string>
+    <string name="notification_channel_name">TubePlayer की अधिसूचना</string>
+    <string name="notification_channel_description">TubePlayer के बैकग्राउंड में चल रहे विडियो और पॉपअप विडियो के लिए अधिसूचना</string>
 
     <string name="unknown_content">[नहीं जानते]</string>
 

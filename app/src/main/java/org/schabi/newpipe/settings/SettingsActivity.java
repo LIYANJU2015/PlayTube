@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity implements BasePreferenc
     @Override
     protected void onCreate(Bundle savedInstanceBundle) {
         ThemeHelper.setTheme(this);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         super.onCreate(savedInstanceBundle);
         setContentView(R.layout.settings_layout);
 

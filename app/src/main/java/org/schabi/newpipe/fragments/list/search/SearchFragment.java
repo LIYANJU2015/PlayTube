@@ -33,8 +33,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.admodule.AdModule;
+import com.admodule.admob.AdMobBanner;
+import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
+import com.google.android.gms.ads.AdListener;
 
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.NewPipeDatabase;
@@ -199,11 +202,15 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         super.onViewCreated(rootView, savedInstanceState);
         showSearchOnStart();
         initSearchListeners();
+        initAdMobBanner();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (adMobBanner != null) {
+            adMobBanner.pause();
+        }
 
         wasSearchFocused = searchEditText.hasFocus();
 
@@ -217,6 +224,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume() called");
         super.onResume();
+
+        if (adMobBanner != null) {
+            adMobBanner.resume();
+        }
 
         if (!TextUtils.isEmpty(searchQuery)) {
             if (wasLoading.getAndSet(false)) {
@@ -250,6 +261,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         unsetSearchListeners();
         AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
         super.onDestroyView();
+        if (adMobBanner != null) {
+            adMobBanner.destroy();
+            adMobBanner = null;
+        }
     }
 
     @Override
@@ -906,7 +921,31 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
     // Search Results
     //////////////////////////////////////////////////////////////////////////*/
 
-    private boolean isAddAD = false;
+    private AdMobBanner adMobBanner;
+
+    private void initAdMobBanner() {
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+        adMobBanner.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (activity == null || !isAdded()
+                        || activity.isFinishing()
+                        || adMobBanner == null) {
+                    return;
+                }
+                if (adViewWrapperAdapter != null && !adViewWrapperAdapter.isAddAdView()
+                        && adViewWrapperAdapter.getItemCount() > 3) {
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), 2));
+                    adViewWrapperAdapter.notifyItemInserted(2);
+                }
+            }
+        });
+    }
 
     @Override
     public void handleResult(@NonNull SearchResult result) {
@@ -919,27 +958,16 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         if (infoListAdapter.getItemsList().size() == 0) {
             if (!result.getResults().isEmpty()) {
                 NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
-                if (!isAddAD && nativeAd != null && nativeAd.isAdLoaded() && result.getResults().size() > 4) {
+                if (nativeAd != null && nativeAd.isAdLoaded() && !adViewWrapperAdapter.isAddAdView() && result.getResults().size() > 4) {
                     adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
                             AdViewItem(setUpNativeAdView(nativeAd), 2));
-                    isAddAD = true;
                     infoListAdapter.addInfoItemList2(result.getResults());
                     adViewWrapperAdapter.notifyDataSetChanged();
-                } else if (!isAddAD && App.adMobBanner != null && App.adMobBanner.isLoaded()) {
-                    if (result.getResults().size()> 2) {
-                        App.adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                                RecyclerView.LayoutParams.WRAP_CONTENT));
-                        adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
-                                AdViewItem(App.adMobBanner.getAdView(), 2));
-                        isAddAD = true;
-                        infoListAdapter.addInfoItemList2(result.getResults());
-                        adViewWrapperAdapter.notifyDataSetChanged();
-                    }
                 } else {
                     infoListAdapter.addInfoItemList(result.getResults());
                 }
             } else {
-                if (isAddAD) {
+                if (adViewWrapperAdapter.isAddAdView()) {
                     itemsList.setAdapter(infoListAdapter);
                 }
                 infoListAdapter.clearStreamItemList();

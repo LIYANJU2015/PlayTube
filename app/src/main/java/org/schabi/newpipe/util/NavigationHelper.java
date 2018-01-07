@@ -116,10 +116,14 @@ public class NavigationHelper {
     //////////////////////////////////////////////////////////////////////////*/
 
     public static void gotoMainFragment(FragmentManager fragmentManager) {
-        ImageLoader.getInstance().clearMemoryCache();
+        try {
+            ImageLoader.getInstance().clearMemoryCache();
 
-        boolean popped = fragmentManager.popBackStackImmediate(MAIN_FRAGMENT_TAG, 0);
-        if (!popped) openMainFragment(fragmentManager);
+            boolean popped = fragmentManager.popBackStackImmediate(MAIN_FRAGMENT_TAG, 0);
+            if (!popped) openMainFragment(fragmentManager);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     public static void openMainFragment(FragmentManager fragmentManager) {

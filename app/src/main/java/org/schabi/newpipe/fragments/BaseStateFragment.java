@@ -220,7 +220,7 @@ public abstract class BaseStateFragment<I> extends BaseFragment implements ViewC
         if (serviceName == null) serviceName = "none";
         if (request == null) request = "none";
 
-        ErrorActivity.reportError(getContext(), exception, MainActivity.class, null, ErrorActivity.ErrorInfo.make(userAction, serviceName, request, errorId));
+//        ErrorActivity.reportError(getContext(), exception, MainActivity.class, null, ErrorActivity.ErrorInfo.make(userAction, serviceName, request, errorId));
     }
 
     public void showSnackBarError(Throwable exception, UserAction userAction, String serviceName, String request, @StringRes int errorId) {

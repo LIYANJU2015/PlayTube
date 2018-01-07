@@ -68,7 +68,7 @@
     <string name="info_dir_created">Adresár na preberanie bol vytvorený \'%1$s\'</string>
     <string name="main_bg_subtitle">Začnite vyhľadaním obsahu</string>
     <string name="autoplay_by_calling_app_title">Automaticky prehrať video pri zavolaní</string>
-    <string name="autoplay_by_calling_app_summary">Video bude automaticky prehrané pri zavolaní NewPipe inou aplikáciou</string>
+    <string name="autoplay_by_calling_app_summary">Video bude automaticky prehrané pri zavolaní TubePlayer inou aplikáciou</string>
     <string name="content">Obsah</string>
     <string name="show_age_restricted_content_title">Zobraziť vekovo obmedzený obsah</string>
     <string name="video_is_age_restricted">Toto video je vekovo obmedzené. Povoľte zobrazenie obsahu v nastavení.</string>
@@ -111,7 +111,7 @@
     <string name="msg_server_unsupported">Nepodporovaný server</string>
     <string name="msg_exists">Súbor už existuje</string>
     <string name="msg_url_malform">Neplatná URL alebo bez pripojenia na Internet</string>
-    <string name="msg_running">NewPipe Preberanie</string>
+    <string name="msg_running">TubePlayer Preberanie</string>
     <string name="msg_running_detail">Dotykom zobraziť detaily</string>
     <string name="msg_wait">Čakajte prosím…</string>
     <string name="msg_copied">Skopírované do schránky.</string>
@@ -148,7 +148,7 @@
     <string name="msg_popup_permission">Tieto práva vyžaduje
 otvorenie okna na popredí</string>
 
-    <string name="popup_mode_share_menu_title">NewPipe v okne</string>
+    <string name="popup_mode_share_menu_title">TubePlayer v okne</string>
 
     <string name="default_video_format_title">Preferovaný fromát videa</string>
     <string name="popup_playing_toast">Prehrávanie v okne</string>
@@ -198,8 +198,8 @@ otvorenie okna na popredí</string>
     <string name="resume_on_audio_focus_gain_summary">Pokračovať po prerušeniach (napr. hlasový hovor)</string>
 
 
-    <string name="notification_channel_name">NewPipe notifikácie</string>
-    <string name="notification_channel_description">Notifikácie pre NewPipe na pozadí a v Okne navrchu</string>
+    <string name="notification_channel_name">TubePlayer notifikácie</string>
+    <string name="notification_channel_description">Notifikácie pre TubePlayer na pozadí a v Okne navrchu</string>
 
     <string name="settings_category_downloads_title">Preberanie</string>
     <string name="settings_file_charset_title">Povolené znaky v názvoch súborov</string>
@@ -209,7 +209,7 @@ otvorenie okna na popredí</string>
     <string name="charset_letters_and_digits">Písmená a čislice</string>
     <string name="charset_most_special_characters">Väčšina špeciálnych znakov</string>
 
-    <string name="title_activity_about">O NewPipe</string>
+    <string name="title_activity_about">O TubePlayer</string>
     <string name="action_settings">Nastavenia</string>
     <string name="action_about">O</string>
     <string name="title_licenses">Licencie tretích strán</string>
@@ -221,7 +221,7 @@ otvorenie okna na popredí</string>
     <string name="tab_licenses">Licencie</string>
     <string name="app_description">Ľahké a bezplatné rozhranie Youtube pre Android.</string>
     <string name="view_on_github">Pozrieť na Githube</string>
-    <string name="app_license_title">Licencia NewPipe</string>
+    <string name="app_license_title">Licencia TubePlayer</string>
     <string name="contribution_encouragement">Či už máte nápady, prekladáte, spravíte zmenu dizajnu, čistenie kódu alebo skutočné ťažké zmeny v kóde, pomoc je vždy vítaná. Čím viac, tým lepšie!</string>
     <string name="read_full_license">Prečítať licencie</string>
     <string name="contribution_title">Príspevok</string>

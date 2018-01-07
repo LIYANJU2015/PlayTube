@@ -23,9 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.admodule.AdModule;
+import com.admodule.LogUtils;
+import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
+import com.google.android.gms.ads.AdListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.paginate.Paginate;
 import com.tubewebplayer.YouTubePlayerActivity;
@@ -50,7 +53,7 @@ import retrofit2.Response;
  * Created by liyanju on 2017/12/28.
  */
 
-public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, Paginate.Callbacks{
+public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, Paginate.Callbacks {
 
     private static ArrayList<YouTubeVideos.Snippet> mDatas = new ArrayList<>();
 
@@ -142,7 +145,7 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
-        currentAdapter = null;
+
         activity.getSupportActionBar().setTitle(R.string.app_name);
 
         emptyView = rootView.findViewById(R.id.empty_state_view);
@@ -198,7 +201,7 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                     timeTV.setText("");
                 }
 
-                holder.setOnClickListener(R.id.card_view, new View.OnClickListener(){
+                holder.setOnClickListener(R.id.card_view, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         YouTubePlayerActivity.launch(activity,
@@ -208,16 +211,18 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
             }
         };
 
+        setAapter();
+
         if (mDatas.size() == 0) {
             progressBar.setVisibility(View.VISIBLE);
             requestYoutubeData();
-        } else {
-            setAapter();
         }
+
+        initAdMobBanner();
     }
 
     private void requestYoutubeData() {
-        new AsyncTask<Void, Void, YouTubeVideos>(){
+        new AsyncTask<Void, Void, YouTubeVideos>() {
             @Override
             protected YouTubeVideos doInBackground(Void... voids) {
                 try {
@@ -237,6 +242,11 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
             protected void onPostExecute(YouTubeVideos youTubeVideos) {
                 super.onPostExecute(youTubeVideos);
                 Log.v(TAG, "requestYoutubeData onPostExecute " + youTubeVideos);
+                if (youTubeVideos == null) {
+                    showEmptyView();
+                    return;
+                }
+
                 if (activity == null || activity.isFinishing()) {
                     return;
                 }
@@ -249,24 +259,52 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                 mIsLoadingMore = false;
                 mIsLoadedAll = TextUtils.isEmpty(youTubeVideos.nextPageToken);
 
-                setAapter();
+                NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
+                if (nativeAd != null && nativeAd.isAdLoaded() && currentAdapter != null
+                        && !currentAdapter.isAddAdView()) {
+                    Log.v("main", "setadpter>>>>");
+                    if (currentAdapter.getItemCount() > 3) {
+                        currentAdapter.addAdView(22, new AdViewWrapperAdapter.
+                                AdViewItem(setUpNativeAdView(activity, nativeAd), 1));
+                    }
+                }
 
-                int positionStart = currentAdapter.getItemCount();
-                mDatas.addAll(youTubeVideos.items);
-                int itemCount = youTubeVideos.items.size();
+                if (!isAddPaginte) {
+                    isAddPaginte = true;
+                    mPaginate = Paginate.with(mRecyclerView, MainFragment2.this)
+                            .setLoadingTriggerThreshold(2)
+                            .build();
+                    mPaginate.setHasMoreDataToLoad(true);
+                }
 
-                currentAdapter.notifyItemRangeInserted(positionStart, itemCount);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    mDatas.clear();
+                    mDatas.addAll(youTubeVideos.items);
+                    currentAdapter.notifyDataSetChanged();
+                } else {
+                    int positionStart = currentAdapter.getItemCount();
+                    mDatas.addAll(youTubeVideos.items);
+                    int itemCount = youTubeVideos.items.size();
+
+                    currentAdapter.notifyItemRangeInserted(positionStart, itemCount);
+                }
             }
         }.executeOnExecutor(RetrofitUtils.sSingleThread);
     }
 
-    private RecyclerView.Adapter currentAdapter;
-    private AdViewWrapperAdapter adViewWrapperAdapter;
+    private boolean isAddPaginte;
+
+    private AdViewWrapperAdapter currentAdapter;
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+        if (adMobBanner != null) {
+            adMobBanner.destroy();
+            adMobBanner = null;
+        }
     }
 
     public static View setUpNativeAdView(Activity activity, NativeAd nativeAd) {
@@ -303,27 +341,53 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         return adView;
     }
 
-    public void setAapter() {
-        if (currentAdapter == null) {
-            NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
-            if (nativeAd != null && nativeAd.isAdLoaded()) {
-                adViewWrapperAdapter = new AdViewWrapperAdapter(mCommonAdapter);
-                if (mCommonAdapter.getItemCount() > 3) {
-                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
-                            AdViewItem(setUpNativeAdView(activity, nativeAd), 1));
-                }
-                currentAdapter = adViewWrapperAdapter;
-            } else {
-                currentAdapter = mCommonAdapter;
-            }
-
-            mRecyclerView.setAdapter(currentAdapter);
-
-            mPaginate = Paginate.with(mRecyclerView, this)
-                    .setLoadingTriggerThreshold(2)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(true);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adMobBanner != null) {
+            adMobBanner.resume();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (adMobBanner != null) {
+            adMobBanner.pause();
+        }
+    }
+
+    private AdMobBanner adMobBanner;
+
+    private void initAdMobBanner() {
+        Log.v("main", "initAdMobBanner");
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+        adMobBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.v("main", "initAdMobBanner onAdLoaded");
+                if (activity == null || !isAdded()
+                        || activity.isFinishing()
+                        || adMobBanner == null) {
+                    return;
+                }
+                if (currentAdapter != null && !currentAdapter.isAddAdView()
+                        && currentAdapter.getItemCount() > 3) {
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    currentAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), 1));
+                    currentAdapter.notifyItemInserted(1);
+                }
+            }
+        });
+    }
+
+    public void setAapter() {
+        currentAdapter = new AdViewWrapperAdapter(mCommonAdapter);
+        mRecyclerView.setAdapter(currentAdapter);
     }
 
     @Override
@@ -335,6 +399,7 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         if (mIsLoadingMore) {
             return;
         }
+        sNextPageToken = "";
         mSwipeRefreshLayout.setRefreshing(true);
         requestYoutubeData();
     }

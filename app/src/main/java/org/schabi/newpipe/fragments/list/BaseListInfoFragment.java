@@ -12,8 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.admodule.AdModule;
+import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
+import com.google.android.gms.ads.AdListener;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.ListExtractor;
@@ -48,11 +50,25 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
         super.initViews(rootView, savedInstanceState);
         setTitle(name);
         showListFooter(hasMoreItems());
+        initAdMobBanner();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (adMobBanner != null) {
+            adMobBanner.destroy();
+            adMobBanner = null;
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (adMobBanner != null) {
+            adMobBanner.pause();
+        }
+
         if (currentWorker != null) currentWorker.dispose();
     }
 
@@ -66,6 +82,10 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
             } else {
                 doInitialLoadLogic();
             }
+        }
+
+        if (adMobBanner != null) {
+            adMobBanner.resume();
         }
     }
 
@@ -234,6 +254,32 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
         nativeAd.registerViewForInteraction(adView);
 
         return adView;
+    }
+
+    private AdMobBanner adMobBanner;
+
+    private void initAdMobBanner() {
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+        adMobBanner.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (activity == null || !isAdded()
+                        || activity.isFinishing()
+                        || adMobBanner == null) {
+                    return;
+                }
+                if (adViewWrapperAdapter != null && !adViewWrapperAdapter.isAddAdView()
+                        && adViewWrapperAdapter.getItemCount() > 4) {
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), 2));
+                    adViewWrapperAdapter.notifyItemInserted(2);
+                }
+            }
+        });
     }
 
     @Override
