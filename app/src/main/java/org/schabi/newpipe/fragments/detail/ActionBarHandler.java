@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.VideoStream;
 import org.schabi.newpipe.util.ListHelper;
@@ -100,7 +101,12 @@ class ActionBarHandler {
         // appcompat itemsinflater.inflate(R.menu.videoitem_detail, menu);
 
         defaultPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        inflater.inflate(R.menu.video_detail_menu, menu);
+
+        if (App.isSpecial()) {
+            inflater.inflate(R.menu.video_detail_menu, menu);
+        } else {
+            inflater.inflate(R.menu.video_detail_menu2, menu);
+        }
 
         updateItemsVisibility();
     }
@@ -161,10 +167,14 @@ class ActionBarHandler {
     }
 
     public void showDownloadAction(boolean visible) {
-        menu.findItem(R.id.menu_item_download).setVisible(visible);
+        if (menu.findItem(R.id.menu_item_download) != null) {
+            menu.findItem(R.id.menu_item_download).setVisible(visible);
+        }
     }
 
     public void showPlayWithKodiAction(boolean visible) {
-        menu.findItem(R.id.action_play_with_kodi).setVisible(visible);
+        if (menu.findItem(R.id.action_play_with_kodi) != null) {
+            menu.findItem(R.id.action_play_with_kodi).setVisible(visible);
+        }
     }
 }

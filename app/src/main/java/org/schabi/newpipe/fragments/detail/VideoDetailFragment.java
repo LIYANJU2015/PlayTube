@@ -46,12 +46,17 @@ import android.widget.Toast;
 import com.admodule.AdModule;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
+import com.facebook.stetho.common.LogUtil;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.tubewebplayer.WebViewPlayerActivity;
+import com.tubewebplayer.YouTubePlayerActivity;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.ReCaptchaActivity;
+import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.download.DownloadDialog;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.MediaFormat;
@@ -468,6 +473,14 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         actionBarHandler = new ActionBarHandler(activity);
         infoItemBuilder = new InfoItemBuilder(activity);
         setHeightThumbnail();
+
+        if (!App.isSpecial()) {
+            detailControlsPopup.setVisibility(View.GONE);
+            detailControlsBackground.setVisibility(View.GONE);
+        } else {
+            detailControlsPopup.setVisibility(View.VISIBLE);
+            detailControlsBackground.setVisibility(View.VISIBLE);
+        }
     }
 
     private View setUpNativeAdView(NativeAd nativeAd) {
@@ -886,8 +899,41 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         }
     }
 
+    private static final String VID_STR = "v=";
+
+    private String parseUrlGetVid(String url) {
+        Log.v("player", "parseUrlGetVid url " + url);
+        try {
+            if (url != null && url.contains(VID_STR)) {
+                url = url.substring(url.indexOf(VID_STR) + VID_STR.length(), url.length());
+                Log.v("player", "substring url " + url);
+                int index = url.indexOf("&");
+                if (index > 0) {
+                    url = url.substring(0, index);
+                } else {
+                    url = url.substring(0, url.length());
+                }
+                Log.v("player", "return url " + url);
+                return url;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void openVideoPlayer() {
         VideoStream selectedVideoStream = getSelectedVideoStream();
+
+        if (!App.isSpecial()) {
+            String vid = parseUrlGetVid(this.url);
+            if (vid != null) {
+                YouTubePlayerActivity.launch(activity, vid);
+            } else {
+                WebViewPlayerActivity.launch(activity, this.url, this.name);
+            }
+            return;
+        }
 
         if (activity instanceof HistoryListener) {
             ((HistoryListener) activity).onVideoPlayed(currentInfo, selectedVideoStream);
@@ -1207,7 +1253,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         }
         prepareDescription(info.getDescription());
 
-        animateView(spinnerToolbar, true, 500);
+        if (!App.isSpecial()) {
+            spinnerToolbar.setVisibility(View.GONE);
+        } else {
+            animateView(spinnerToolbar, true, 500);
+        }
+
         setupActionBarHandler(info);
         initThumbnailViews(info);
         initRelatedVideos(info);
@@ -1246,6 +1297,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             int errorId = exception instanceof YoutubeStreamExtractor.DecryptException ? R.string.youtube_signature_decryption_error :
                     exception instanceof ParsingException ? R.string.parsing_error : R.string.general_error;
             onUnrecoverableError(exception, UserAction.REQUESTED_STREAM, NewPipe.getNameOfService(serviceId), url, errorId);
+        }
+
+
+        if (!App.isSpecial()) {
+            spinnerToolbar.setVisibility(View.GONE);
         }
 
         return true;

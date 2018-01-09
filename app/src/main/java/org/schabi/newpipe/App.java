@@ -19,7 +19,9 @@ import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tubewebplayer.YouTubePlayerActivity;
 
+import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
 import org.schabi.newpipe.util.Constants;
@@ -183,6 +185,7 @@ public class App extends Application {
 
         CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
 
+        YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
     }
 
     public static void setSpecial() {

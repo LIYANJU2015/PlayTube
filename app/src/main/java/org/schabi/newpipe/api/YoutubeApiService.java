@@ -10,6 +10,8 @@ import retrofit2.http.Query;
 
 public interface YoutubeApiService {
 
-    @GET("videos?part=snippet,contentDetails,statistics&chart=mostPopular&maxResults=15&key=AIzaSyBUgQUzZJTZrdW9LAY0-hr__UYnKoQRRNU")
+    String DEVOTE_KEY = "AIzaSyBUgQUzZJTZrdW9LAY0-hr__UYnKoQRRNU";
+
+    @GET("videos?part=snippet,contentDetails,statistics&chart=mostPopular&maxResults=15&key=" + DEVOTE_KEY)
     Call<YouTubeVideos> getYoutubeVideos(@Query("pageToken") String pageToken);
 }

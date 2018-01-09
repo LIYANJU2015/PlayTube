@@ -31,6 +31,7 @@ import com.facebook.ads.NativeAd;
 import com.google.android.gms.ads.AdListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.paginate.Paginate;
+import com.tubewebplayer.WebViewPlayerActivity;
 import com.tubewebplayer.YouTubePlayerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -204,8 +205,10 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                 holder.setOnClickListener(R.id.card_view, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        YouTubePlayerActivity.launch(activity,
-                                "https://www.youtube.com/watch?v=" + snippet.vid, snippet.title);
+                        NavigationHelper.openVideoDetailFragment(getFragmentManager()
+                        , 0, "https://www.youtube.com/watch?v=" + snippet.vid, snippet.title);
+//                        WebViewPlayerActivity.launch(activity,
+//                                "https://www.youtube.com/watch?v=" + snippet.vid, snippet.title);
                     }
                 });
             }

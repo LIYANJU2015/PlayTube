@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tubewebplayer.WebViewPlayerActivity;
 import com.tubewebplayer.YouTubePlayerActivity;
 
 import org.schabi.newpipe.App;
@@ -157,14 +158,14 @@ public class NavigationHelper {
     }
 
     public static void openVideoDetailFragment(FragmentManager fragmentManager, int serviceId, String url, String title, boolean autoPlay) {
-        if (!App.isSpecial()) {
-            if (MainActivity.sActivity != null) {
-                YouTubePlayerActivity.launch(MainActivity.sActivity, url, title);
-            } else {
-                YouTubePlayerActivity.launch(App.sContext, url, title);
-            }
-            return;
-        }
+//        if (!App.isSpecial()) {
+//            if (MainActivity.sActivity != null) {
+//                WebViewPlayerActivity.launch(MainActivity.sActivity, url, title);
+//            } else {
+//                WebViewPlayerActivity.launch(App.sContext, url, title);
+//            }
+//            return;
+//        }
 
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_holder);
         if (title == null) title = "";
