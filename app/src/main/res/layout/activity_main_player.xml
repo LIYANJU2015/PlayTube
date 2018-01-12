@@ -87,7 +87,7 @@
                 android:focusable="true"
                 android:scaleType="fitXY"
                 android:tint="?attr/colorAccent"
-                android:src="@drawable/exo_controls_repeat_off"
+                android:src="@drawable/exo_controls_repeat_off2"
                 android:background="?android:selectableItemBackground"
                 tools:ignore="ContentDescription,RtlHardcoded"/>
 
@@ -321,7 +321,7 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitXY"
-            android:src="@drawable/exo_controls_previous"
+            android:src="@drawable/exo_controls_previous2"
             tools:ignore="ContentDescription"/>
 
         <ImageButton
@@ -337,7 +337,7 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:scaleType="fitXY"
-            android:src="@drawable/exo_controls_next"
+            android:src="@drawable/exo_controls_next2"
             tools:ignore="ContentDescription"/>
 
     </RelativeLayout>

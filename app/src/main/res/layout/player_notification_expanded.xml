@@ -130,7 +130,7 @@
             android:focusable="true"
             android:padding="2dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/exo_controls_previous"
+            android:src="@drawable/exo_controls_previous2"
             tools:ignore="ContentDescription"/>
 
         <ImageButton
@@ -160,7 +160,7 @@
             android:focusable="true"
             android:padding="2dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/exo_controls_next"
+            android:src="@drawable/exo_controls_next2"
             tools:ignore="ContentDescription"/>
     </RelativeLayout>
 </RelativeLayout>

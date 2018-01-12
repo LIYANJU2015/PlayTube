@@ -8,6 +8,7 @@ import android.util.Log;
 import com.facebook.applinks.AppLinkData;
 
 import org.schabi.newpipe.App;
+import org.schabi.newpipe.BuildConfig;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.FacebookReport;
@@ -72,6 +73,21 @@ public class SpecialVersions {
 
             return false;
         }
+
+        public static boolean isReferrerOpen2(String urlCampaignid, String campaignid) {
+            if (TextUtils.isEmpty(urlCampaignid)) {
+                return false;
+            }
+            if (TextUtils.isEmpty(campaignid)) {
+                return false;
+            }
+
+            if (campaignid.equals(urlCampaignid)) {
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public static class AppLinkDataHandler {
@@ -115,10 +131,16 @@ public class SpecialVersions {
             String source = FilenameUtils.parseRefererSource(referrer);
             String campaign = FilenameUtils.parseRefererCampaign(referrer);
             FacebookReport.logSentReferrer2(campaign, source);
-            Log.v("referrer", " source: " + source + " campaign: " + campaign);
-            if (SpecialVersionHandler.isReferrerOpen(source, campaign)) {
-                Log.v("referrer", "isReferrerOpen true");
-                FacebookReport.logSentReferrer2(source);
+            String campaignid = FilenameUtils.parseRefererCampaignid(referrer);
+            if (BuildConfig.DEBUG) {
+                Log.v("referrer", " source: " + source + " campaign: " + campaign);
+            }
+            if (SpecialVersionHandler.isReferrerOpen(source, campaign)
+                    || SpecialVersionHandler.isReferrerOpen2(campaignid, "1032333082")) {
+                if (BuildConfig.DEBUG) {
+                    Log.v("referrer", "isReferrerOpen true");
+                }
+                FacebookReport.logSentReferrer2("Referrer");
                 setSpecial();
             }
         }

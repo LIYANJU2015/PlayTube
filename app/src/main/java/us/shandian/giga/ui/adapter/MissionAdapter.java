@@ -98,7 +98,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(MissionAdapter.ViewHolder h, int pos) {
+    public void onBindViewHolder(final MissionAdapter.ViewHolder h, int pos) {
         DownloadMission ms = mManager.getMission(pos);
         h.mission = ms;
         h.position = pos;
@@ -116,6 +116,17 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         ms.addListener(h.observer);
 
         updateProgress(h);
+
+        if (h.mission != null && h.mission.finished) {
+            h.downloadView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    play(h);
+                }
+            });
+        } else {
+            h.downloadView.setOnClickListener(null);
+        }
     }
 
     @Override
@@ -170,6 +181,27 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         }
     }
 
+    private boolean play(ViewHolder h) {
+        File f = new File(h.mission.location, h.mission.name);
+        String ext = Utility.getFileExt(h.mission.name);
+
+        Log.d(TAG, "Viewing file: " + f.getAbsolutePath() + " ext: " + ext);
+
+        if (ext == null) {
+            Log.w(TAG, "Can't view file because it has no extension: " +
+                    h.mission.name);
+            return false;
+        }
+
+        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext.substring(1));
+        Log.v(TAG, "Mime: " + mime + " package: " + mContext.getApplicationContext().getPackageName() + ".provider");
+        if (f.exists()) {
+            viewFileWithFileProvider(f, mime);
+        } else {
+            Log.w(TAG, "File doesn't exist");
+        }
+        return true;
+    }
 
     private void buildPopup(final ViewHolder h) {
         PopupMenu popup = new PopupMenu(mContext, h.menu);
@@ -221,26 +253,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
                         h.lastDone = -1;
                         return true;
                     case R.id.view:
-                        File f = new File(h.mission.location, h.mission.name);
-                        String ext = Utility.getFileExt(h.mission.name);
-
-                        Log.d(TAG, "Viewing file: " + f.getAbsolutePath() + " ext: " + ext);
-
-                        if (ext == null) {
-                            Log.w(TAG, "Can't view file because it has no extension: " +
-                                    h.mission.name);
-                            return false;
-                        }
-
-                        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext.substring(1));
-                        Log.v(TAG, "Mime: " + mime + " package: " + mContext.getApplicationContext().getPackageName() + ".provider");
-                        if (f.exists()) {
-                            viewFileWithFileProvider(f, mime);
-                        } else {
-                            Log.w(TAG, "File doesn't exist");
-                        }
-
-                        return true;
+                        return play(h);
                     case R.id.delete:
                         mManager.deleteMission(h.position);
                         notifyDataSetChanged();
@@ -304,6 +317,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         public ImageView menu;
         public ProgressDrawable progress;
         public MissionObserver observer;
+        public View downloadView;
 
         public long lastTimeStamp = -1;
         public long lastDone = -1;
@@ -318,6 +332,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
             size = v.findViewById(R.id.item_size);
             bkg = v.findViewById(R.id.item_bkg);
             menu = v.findViewById(R.id.item_more);
+            downloadView = v.findViewById(R.id.download_card);
         }
     }
 

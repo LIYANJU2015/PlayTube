@@ -387,13 +387,13 @@ public final class PopupVideoPlayer extends Service {
 
         switch (repeatMode) {
             case Player.REPEAT_MODE_OFF:
-                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_off);
+                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_off2);
                 break;
             case Player.REPEAT_MODE_ONE:
-                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_one);
+                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_one2);
                 break;
             case Player.REPEAT_MODE_ALL:
-                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_all);
+                remoteViews.setInt(R.id.notificationRepeat, methodName, R.drawable.exo_controls_repeat_all2);
                 break;
         }
     }

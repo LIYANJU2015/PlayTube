@@ -21,9 +21,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.admodule.AdModule;
 import com.admodule.LogUtils;
+import com.admodule.Utils;
 import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.MediaView;
@@ -36,6 +38,7 @@ import com.tubewebplayer.YouTubePlayerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.BaseFragment;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.api.YouTubeVideos;
@@ -117,11 +120,12 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
 
         if (mDatas.size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.INVISIBLE);
         } else {
+            Toast.makeText(App.sContext, R.string.network_error, Toast.LENGTH_LONG).show();
             emptyView.setVisibility(View.GONE);
         }
 
-        mRecyclerView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -219,6 +223,12 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         if (mDatas.size() == 0) {
             progressBar.setVisibility(View.VISIBLE);
             requestYoutubeData();
+        } else {
+            isAddPaginte = true;
+            mPaginate = Paginate.with(mRecyclerView, MainFragment2.this)
+                    .setLoadingTriggerThreshold(2)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(true);
         }
 
         initAdMobBanner();
@@ -270,6 +280,12 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                         currentAdapter.addAdView(22, new AdViewWrapperAdapter.
                                 AdViewItem(setUpNativeAdView(activity, nativeAd), 1));
                     }
+                } else if (adMobBanner != null && adMobBanner.isLoaded()
+                        && !currentAdapter.isAddAdView() && currentAdapter.getItemCount() > 3) {
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    currentAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), 1));
                 }
 
                 if (!isAddPaginte) {

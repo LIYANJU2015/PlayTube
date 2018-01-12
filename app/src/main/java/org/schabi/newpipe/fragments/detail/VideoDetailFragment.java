@@ -17,6 +17,7 @@ import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -44,9 +45,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admodule.AdModule;
+import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
 import com.facebook.stetho.common.LogUtil;
+import com.google.android.gms.ads.AdListener;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -81,6 +84,7 @@ import org.schabi.newpipe.playlist.PlayQueue;
 import org.schabi.newpipe.playlist.SinglePlayQueue;
 import org.schabi.newpipe.report.ErrorActivity;
 import org.schabi.newpipe.report.UserAction;
+import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
@@ -209,12 +213,20 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     @Override
     public void onPause() {
         super.onPause();
+        if (adMobBanner != null) {
+            adMobBanner.pause();
+        }
+
         if (currentWorker != null) currentWorker.dispose();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (adMobBanner != null) {
+            adMobBanner.resume();
+        }
 
         if (updateFlags != 0) {
             if (!isLoading.get() && currentInfo != null) {
@@ -245,6 +257,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     @Override
     public void onDestroyView() {
+        if (adMobBanner != null) {
+            adMobBanner.destroy();
+            adMobBanner = null;
+        }
         if (DEBUG) Log.d(TAG, "onDestroyView() called");
         spinnerToolbar.setOnItemSelectedListener(null);
         spinnerToolbar.setAdapter(null);
@@ -421,6 +437,31 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     private FrameLayout adFrameLayout;
 
+    private AdMobBanner adMobBanner;
+
+    private void initAdMobBanner() {
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+        adMobBanner.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (activity == null || !isAdded()
+                        || activity.isFinishing()
+                        || adMobBanner == null) {
+                    return;
+                }
+
+                adMobBanner.getAdView().setLayoutParams(new FrameLayout
+                        .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT));
+                adFrameLayout.removeAllViews();
+                adFrameLayout.addView(adMobBanner.getAdView());
+
+            }
+        });
+    }
+
     @Override
     protected void initViews(View rootView, Bundle savedInstanceState) {
         super.initViews(rootView, savedInstanceState);
@@ -481,6 +522,8 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             detailControlsPopup.setVisibility(View.VISIBLE);
             detailControlsBackground.setVisibility(View.VISIBLE);
         }
+
+        initAdMobBanner();
     }
 
     private View setUpNativeAdView(NativeAd nativeAd) {
@@ -1188,10 +1231,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     public void handleResult(@NonNull StreamInfo info) {
         super.handleResult(info);
 
-        NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
-        if (nativeAd != null && nativeAd.isAdLoaded()) {
+        if (adMobBanner != null && adMobBanner.isLoaded() && adFrameLayout.getChildCount() == 0) {
             adFrameLayout.removeAllViews();
-            adFrameLayout.addView(setUpNativeAdView(nativeAd));
+            adMobBanner.getAdView().setLayoutParams(new FrameLayout
+                    .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT));
+            adFrameLayout.addView(adMobBanner.getAdView());
         }
 
         setInitialData(info.getServiceId(), info.getUrl(), info.getName());

@@ -581,13 +581,13 @@ public abstract class ServicePlayerActivity extends AppCompatActivity
     private void onPlayModeChanged(final int repeatMode, final boolean shuffled) {
         switch (repeatMode) {
             case Player.REPEAT_MODE_OFF:
-                repeatButton.setImageResource(R.drawable.exo_controls_repeat_off);
+                repeatButton.setImageResource(R.drawable.exo_controls_repeat_off2);
                 break;
             case Player.REPEAT_MODE_ONE:
-                repeatButton.setImageResource(R.drawable.exo_controls_repeat_one);
+                repeatButton.setImageResource(R.drawable.exo_controls_repeat_one2);
                 break;
             case Player.REPEAT_MODE_ALL:
-                repeatButton.setImageResource(R.drawable.exo_controls_repeat_all);
+                repeatButton.setImageResource(R.drawable.exo_controls_repeat_all2);
                 break;
         }
 

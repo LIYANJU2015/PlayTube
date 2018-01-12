@@ -126,29 +126,8 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
     private void initHomeAD() {
         if (App.isCoolStart) {
             App.isCoolStart = false;
-            AdModule.getInstance().getFacebookAd().setLoadListener(new IFacebookAd.FacebookAdListener() {
-                @Override
-                public void onLoadedAd(View view) {
-                    AdModule.getInstance().getFacebookAd().setLoadListener(null);
-                    AdModule.getInstance().createMaterialDialog().showAdDialog(MainActivity.this, view);
-                    AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
-
-                }
-
-                @Override
-                public void onStartLoadAd(View view) {
-                }
-
-                @Override
-                public void onLoadAdFailed(int i, String s) {
-                    AdModule.getInstance().getFacebookAd().setLoadListener(null);
-                    AdModule.getInstance().getAdMob().showInterstitialAd();
-                    AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
-                }
-            });
-            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682095685257");
+            AdModule.getInstance().getAdMob().showInterstitialAd();
         } else {
-            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
             AdModule.getInstance().getAdMob().requestNewInterstitial();
         }
     }

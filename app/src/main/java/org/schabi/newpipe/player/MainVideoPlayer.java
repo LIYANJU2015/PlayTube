@@ -238,13 +238,13 @@ public final class MainVideoPlayer extends Activity {
     protected void setRepeatModeButton(final ImageButton imageButton, final int repeatMode) {
         switch (repeatMode) {
             case Player.REPEAT_MODE_OFF:
-                imageButton.setImageResource(R.drawable.exo_controls_repeat_off);
+                imageButton.setImageResource(R.drawable.exo_controls_repeat_off2);
                 break;
             case Player.REPEAT_MODE_ONE:
-                imageButton.setImageResource(R.drawable.exo_controls_repeat_one);
+                imageButton.setImageResource(R.drawable.exo_controls_repeat_one2);
                 break;
             case Player.REPEAT_MODE_ALL:
-                imageButton.setImageResource(R.drawable.exo_controls_repeat_all);
+                imageButton.setImageResource(R.drawable.exo_controls_repeat_all2);
                 break;
         }
     }

@@ -939,9 +939,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
                         && adViewWrapperAdapter.getItemCount() > 3) {
                     adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                             RecyclerView.LayoutParams.WRAP_CONTENT));
+                    int postion = adViewWrapperAdapter.getItemCount() > 6 ? 5 : 2;
                     adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
-                            AdViewItem(adMobBanner.getAdView(), 2));
-                    adViewWrapperAdapter.notifyItemInserted(2);
+                            AdViewItem(adMobBanner.getAdView(), postion));
+                    adViewWrapperAdapter.notifyItemInserted(postion);
                 }
             }
         });
@@ -958,9 +959,19 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
         if (infoListAdapter.getItemsList().size() == 0) {
             if (!result.getResults().isEmpty()) {
                 NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
-                if (nativeAd != null && nativeAd.isAdLoaded() && !adViewWrapperAdapter.isAddAdView() && result.getResults().size() > 4) {
+                if (nativeAd != null && nativeAd.isAdLoaded() && !adViewWrapperAdapter.isAddAdView()
+                        && result.getResults().size() > 4) {
                     adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
                             AdViewItem(setUpNativeAdView(nativeAd), 2));
+                    infoListAdapter.addInfoItemList2(result.getResults());
+                    adViewWrapperAdapter.notifyDataSetChanged();
+                } else if (adMobBanner != null && adMobBanner.isLoaded()
+                        && !adViewWrapperAdapter.isAddAdView() && result.getResults().size() > 4) {
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    int postion = result.getResults().size() > 6 ? 5 : 2;
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), postion));
                     infoListAdapter.addInfoItemList2(result.getResults());
                     adViewWrapperAdapter.notifyDataSetChanged();
                 } else {

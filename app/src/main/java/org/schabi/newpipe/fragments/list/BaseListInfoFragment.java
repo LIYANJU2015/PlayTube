@@ -298,6 +298,14 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
                             AdViewItem(setUpNativeAdView(nativeAd), 2));
                     infoListAdapter.addInfoItemList2(result.related_streams);
                     adViewWrapperAdapter.notifyDataSetChanged();
+                } else if(adMobBanner != null && adMobBanner.isLoaded()
+                        && !adViewWrapperAdapter.isAddAdView() && result.related_streams.size() > 4){
+                    adMobBanner.getAdView().setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.WRAP_CONTENT));
+                    adViewWrapperAdapter.addAdView(22, new AdViewWrapperAdapter.
+                            AdViewItem(adMobBanner.getAdView(), 2));
+                    infoListAdapter.addInfoItemList2(result.related_streams);
+                    adViewWrapperAdapter.notifyDataSetChanged();
                 } else {
                     infoListAdapter.addInfoItemList(result.related_streams);
                 }

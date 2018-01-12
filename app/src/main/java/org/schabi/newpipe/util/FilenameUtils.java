@@ -51,6 +51,19 @@ public class FilenameUtils {
         return "";
     }
 
+    public static String parseRefererCampaignid(String referer) {
+        try {
+            String newreferer = URLDecoder.decode(referer, "UTF-8");
+            String target = "campaignid=";
+            newreferer = newreferer.substring(newreferer.indexOf(target) + target.length(), newreferer.length());
+            String source = newreferer.substring(0, newreferer.indexOf("&"));
+            return source;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static String parseRefererCampaign(String referer) {
         try {
             String newreferer = URLDecoder.decode(referer, "UTF-8");

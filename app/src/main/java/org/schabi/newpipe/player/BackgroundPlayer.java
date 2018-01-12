@@ -201,15 +201,15 @@ public final class BackgroundPlayer extends Service {
                 PendingIntent.getBroadcast(this, NOTIFICATION_ID, new Intent(ACTION_REPEAT), PendingIntent.FLAG_UPDATE_CURRENT));
 
         if (basePlayerImpl.playQueue != null && basePlayerImpl.playQueue.size() > 1) {
-            remoteViews.setInt(R.id.notificationFRewind, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_previous);
-            remoteViews.setInt(R.id.notificationFForward, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_next);
+            remoteViews.setInt(R.id.notificationFRewind, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_previous2);
+            remoteViews.setInt(R.id.notificationFForward, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_next2);
             remoteViews.setOnClickPendingIntent(R.id.notificationFRewind,
                     PendingIntent.getBroadcast(this, NOTIFICATION_ID, new Intent(ACTION_PLAY_PREVIOUS), PendingIntent.FLAG_UPDATE_CURRENT));
             remoteViews.setOnClickPendingIntent(R.id.notificationFForward,
                     PendingIntent.getBroadcast(this, NOTIFICATION_ID, new Intent(ACTION_PLAY_NEXT), PendingIntent.FLAG_UPDATE_CURRENT));
         } else {
-            remoteViews.setInt(R.id.notificationFRewind, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_rewind);
-            remoteViews.setInt(R.id.notificationFForward, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_fastforward);
+            remoteViews.setInt(R.id.notificationFRewind, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_rewind2);
+            remoteViews.setInt(R.id.notificationFForward, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_fastforward2);
             remoteViews.setOnClickPendingIntent(R.id.notificationFRewind,
                     PendingIntent.getBroadcast(this, NOTIFICATION_ID, new Intent(ACTION_FAST_REWIND), PendingIntent.FLAG_UPDATE_CURRENT));
             remoteViews.setOnClickPendingIntent(R.id.notificationFForward,
@@ -251,13 +251,13 @@ public final class BackgroundPlayer extends Service {
     private void setRepeatModeIcon(final RemoteViews remoteViews, final int repeatMode) {
         switch (repeatMode) {
             case Player.REPEAT_MODE_OFF:
-                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_off);
+                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_off2);
                 break;
             case Player.REPEAT_MODE_ONE:
-                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_one);
+                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_one2);
                 break;
             case Player.REPEAT_MODE_ALL:
-                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_all);
+                remoteViews.setInt(R.id.notificationRepeat, SET_IMAGE_RESOURCE_METHOD, R.drawable.exo_controls_repeat_all2);
                 break;
         }
     }

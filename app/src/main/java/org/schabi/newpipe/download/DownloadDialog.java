@@ -284,25 +284,7 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
         DownloadManagerService.startMission(getContext(), url, location, fileName, isAudio, threadsSeekBar.getProgress() + 1);
         getDialog().dismiss();
 
-        AdModule.getInstance().getFacebookAd().setLoadListener(new IFacebookAd.FacebookAdListener() {
-            @Override
-            public void onLoadedAd(View view) {
-                AdModule.getInstance().getFacebookAd().setLoadListener(null);
-                AdModule.getInstance().createMaterialDialog().showAdDialog(getActivity(), view);
-
-            }
-
-            @Override
-            public void onStartLoadAd(View view) {
-            }
-
-            @Override
-            public void onLoadAdFailed(int i, String s) {
-                AdModule.getInstance().getFacebookAd().setLoadListener(null);
-                AdModule.getInstance().getAdMob().showInterstitialAd();
-            }
-        });
-        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+        AdModule.getInstance().getAdMob().showInterstitialAd();
 
         if (currentInfo != null) {
             Utility.showLongToastSafe(currentInfo.name + " " + App.sContext.getString(R.string.download_add_success));

@@ -7,10 +7,9 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="8dp">
+    android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/time"
@@ -20,8 +19,15 @@
 
     <TextView
         android:id="@+id/search"
+        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         tools:text="Search query"/>
+
+    <View
+        android:background="@color/divider_color"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 </LinearLayout>
