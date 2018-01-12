@@ -531,6 +531,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         }
 
         initAdMobBanner();
+
+        AdModule.getInstance().getAdMob().requestNewInterstitial();
+        AdModule.getInstance().getAdMob().requestNewInterstitial2();
     }
 
     private View setUpNativeAdView(NativeAd nativeAd) {

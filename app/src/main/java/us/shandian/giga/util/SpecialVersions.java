@@ -2,6 +2,7 @@ package us.shandian.giga.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import org.schabi.newpipe.R;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.FilenameUtils;
+
+import java.util.Locale;
 
 /**
  * Created by liyanju on 2018/1/1.
@@ -48,6 +51,34 @@ public class SpecialVersions {
         public static void setSpecial() {
             isSpecial = true;
             App.sPreferences.edit().putBoolean(Constants.KEY_SPECIAL, true).apply();
+        }
+
+        public static String getCountry(Context context) {
+            String country = "";
+            try {
+                TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                String simCountry = telephonyManager.getSimCountryIso();
+                if (simCountry != null && simCountry.length() == 2) {
+                    country = simCountry.toUpperCase(Locale.ENGLISH);
+                    if (TextUtils.isEmpty(country)) {
+                        country = Locale.getDefault().getCountry();
+                    }
+                } else if (telephonyManager.getPhoneType()
+                        != TelephonyManager.PHONE_TYPE_CDMA) {
+                    country = telephonyManager.getNetworkCountryIso();
+                    if (TextUtils.isEmpty(country)) {
+                        country = Locale.getDefault().getCountry();
+                    }
+                } else {
+                    country = Locale.getDefault().getCountry();
+                    if (!TextUtils.isEmpty(country)) {
+                        country = country.toUpperCase(Locale.ENGLISH);
+                    }
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            return country;
         }
 
         public static void initSpecial() {
@@ -143,6 +174,8 @@ public class SpecialVersions {
                 FacebookReport.logSentReferrer2("Referrer");
                 setSpecial();
             }
+
+            FacebookReport.logSentCountry(SpecialVersionHandler.getCountry(context));
         }
     }
 }
