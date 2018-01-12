@@ -183,6 +183,10 @@ public class App extends Application {
         AdModule.getInstance().getAdMob().initInterstitialAd();
         AdModule.getInstance().getAdMob().requestNewInterstitial();
 
+        AdModule.getInstance().getAdMob().initInterstitialAd2("ca-app-pub-9880857526519562/2152197880");
+        AdModule.getInstance().getAdMob().requestNewInterstitial2();
+
+
         CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
 
         YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);

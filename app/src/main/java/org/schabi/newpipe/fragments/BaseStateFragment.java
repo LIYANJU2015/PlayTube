@@ -177,6 +177,7 @@ public abstract class BaseStateFragment<I> extends BaseFragment implements ViewC
      * @return if the exception was handled
      */
     protected boolean onError(Throwable exception) {
+        exception.printStackTrace();
         if (DEBUG) Log.d(TAG, "onError() called with: exception = [" + exception + "]");
         isLoading.set(false);
 
@@ -238,6 +239,6 @@ public abstract class BaseStateFragment<I> extends BaseFragment implements ViewC
         if (rootView == null && getView() != null) rootView = getView();
         if (rootView == null) return;
 
-        ErrorActivity.reportError(getContext(), exception, MainActivity.class, rootView, ErrorActivity.ErrorInfo.make(userAction, serviceName, request, errorId));
+//        ErrorActivity.reportError(getContext(), exception, MainActivity.class, rootView, ErrorActivity.ErrorInfo.make(userAction, serviceName, request, errorId));
     }
 }

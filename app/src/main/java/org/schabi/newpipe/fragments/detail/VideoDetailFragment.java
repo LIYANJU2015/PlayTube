@@ -265,6 +265,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         spinnerToolbar.setOnItemSelectedListener(null);
         spinnerToolbar.setAdapter(null);
         AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+
+        AdModule.getInstance().getAdMob().showInterstitialAd2();
+
         super.onDestroyView();
     }
 
@@ -285,6 +288,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (!isAdded()) {
+            return;
+        }
+
         if (key.equals(getString(R.string.show_next_video_key))) {
             showRelatedStreams = sharedPreferences.getBoolean(key, true);
             updateFlags |= RELATED_STREAMS_UPDATE_FLAG;
@@ -1230,6 +1237,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     @Override
     public void handleResult(@NonNull StreamInfo info) {
         super.handleResult(info);
+
+        if (!isAdded()) {
+            return;
+        }
 
         if (adMobBanner != null && adMobBanner.isLoaded() && adFrameLayout.getChildCount() == 0) {
             adFrameLayout.removeAllViews();

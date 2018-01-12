@@ -52,7 +52,7 @@ public class FacebookReport {
         logger.logEvent("AppSearchPage",bundle);
     }
 
-    public static void logSentReferrer2(String campaign, String source)  {
+    public static void logSentReferrer2(String campaign, String source) {
         AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
         Bundle bundle = new Bundle();
         bundle.putString("utm_campaign", campaign);
@@ -60,14 +60,14 @@ public class FacebookReport {
         logger.logEvent("ReferrerReceiver2",bundle);
     }
 
-    public static void logSentReferrer4(String linkData)  {
+    public static void logSentReferrer4(String linkData) {
         AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
         Bundle bundle = new Bundle();
         bundle.putString("linkData", linkData);
         logger.logEvent("ReferrerReceiver4",bundle);
     }
 
-    public static void logSentReferrer2(String from)  {
+    public static void logSentReferrer2(String from) {
         AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
         Bundle bundle = new Bundle();
         bundle.putString("special", "success " + from);

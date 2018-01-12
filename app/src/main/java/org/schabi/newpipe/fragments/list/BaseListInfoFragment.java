@@ -60,6 +60,10 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
             adMobBanner.destroy();
             adMobBanner = null;
         }
+
+        if (adViewWrapperAdapter != null && !adViewWrapperAdapter.isAddAdView()) {
+            AdModule.getInstance().getAdMob().showInterstitialAd();
+        }
     }
 
     @Override
@@ -285,6 +289,10 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
     @Override
     public void handleResult(@NonNull I result) {
         super.handleResult(result);
+
+        if (!isAdded()) {
+            return;
+        }
 
         url = result.getUrl();
         name = result.getName();

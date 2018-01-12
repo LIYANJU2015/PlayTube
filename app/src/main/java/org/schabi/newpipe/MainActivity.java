@@ -80,7 +80,7 @@ import q.rorbin.badgeview.QBadgeView;
 
 public class MainActivity extends AppCompatActivity implements HistoryListener {
     private static final String TAG = "MainActivity";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     private SharedPreferences sharedPreferences;
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
             AdModule.getInstance().getAdMob().showInterstitialAd();
         } else {
             AdModule.getInstance().getAdMob().requestNewInterstitial();
+            AdModule.getInstance().getAdMob().requestNewInterstitial2();
         }
     }
 

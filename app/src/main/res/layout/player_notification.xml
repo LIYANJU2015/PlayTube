@@ -113,7 +113,7 @@
             tools:ignore="ContentDescription,RtlHardcoded"/>
     </LinearLayout>
 
-    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+    <ProgressBar
         android:id="@+id/notificationProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"

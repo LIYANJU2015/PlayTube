@@ -80,6 +80,9 @@ class ActionBarHandler {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedVideoStream = position;
+                if (view == null) {
+                    return;
+                }
                 TextView text = view.findViewById(android.R.id.text1);
                 if (text != null) {
                     text.setTextColor(ContextCompat.getColor(activity, R.color.white));

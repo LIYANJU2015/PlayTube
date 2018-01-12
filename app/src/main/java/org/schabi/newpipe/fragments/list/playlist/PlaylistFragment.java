@@ -185,6 +185,10 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
     public void handleResult(@NonNull final PlaylistInfo result) {
         super.handleResult(result);
 
+        if (!isAdded()) {
+            return;
+        }
+
         animateView(headerRootLayout, true, 100);
         animateView(headerUploaderLayout, true, 300);
         headerUploaderLayout.setOnClickListener(null);

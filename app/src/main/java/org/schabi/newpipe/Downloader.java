@@ -111,10 +111,15 @@ public class Downloader implements org.schabi.newpipe.extractor.Downloader {
      */
     @Override
     public String download(String siteUrl) throws IOException, ReCaptchaException {
-        URL url = new URL(siteUrl);
-        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-        //HttpsURLConnection con = NetCipher.getHttpsURLConnection(url);
-        return dl(con);
+        try {
+            URL url = new URL(siteUrl);
+            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+            //HttpsURLConnection con = NetCipher.getHttpsURLConnection(url);
+            return dl(con);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**
@@ -141,21 +146,21 @@ public class Downloader implements org.schabi.newpipe.extractor.Downloader {
             }
         } catch (Exception e) {
             Log.e("Downloader", "dl() ----- Exception thrown → " + e.getClass().getName());
+             e.printStackTrace();
+//            if (ExtractorHelper.isInterruptedCaused(e)) {
+//                throw new InterruptedIOException(e.getMessage());
+//            }
+//
+//            /*
+//             * HTTP 429 == Too Many Request
+//             * Receive from Youtube.com = ReCaptcha challenge request
+//             * See : https://github.com/rg3/youtube-dl/issues/5138
+//             */
+//            if (con.getResponseCode() == 429) {
+//                throw new ReCaptchaException("reCaptcha Challenge requested");
+//            }
 
-            if (ExtractorHelper.isInterruptedCaused(e)) {
-                throw new InterruptedIOException(e.getMessage());
-            }
-
-            /*
-             * HTTP 429 == Too Many Request
-             * Receive from Youtube.com = ReCaptcha challenge request
-             * See : https://github.com/rg3/youtube-dl/issues/5138
-             */
-            if (con.getResponseCode() == 429) {
-                throw new ReCaptchaException("reCaptcha Challenge requested");
-            }
-
-            throw new IOException(con.getResponseCode() + " " + con.getResponseMessage(), e);
+            //throw new IOException(con.getResponseCode() + " " + con.getResponseMessage(), e);
         } finally {
             if (in != null) {
                 in.close();

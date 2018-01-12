@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
@@ -103,15 +104,18 @@ public class ReCaptchaActivity extends AppCompatActivity {
             String cookies = CookieManager.getInstance().getCookie(url);
 
             // TODO: Stop Loader
+            try {
+                // find cookies : s_gl & goojf and Add cookies to Downloader
+                if (find_access_cookies(cookies)) {
+                    // Give cookies to Downloader class
+                    Downloader.setCookies(mCookies);
 
-            // find cookies : s_gl & goojf and Add cookies to Downloader
-            if (find_access_cookies(cookies)) {
-                // Give cookies to Downloader class
-                Downloader.setCookies(mCookies);
-
-                // Closing activity and return to parent
-                setResult(RESULT_OK);
-                finish();
+                    // Closing activity and return to parent
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
 
@@ -119,7 +123,9 @@ public class ReCaptchaActivity extends AppCompatActivity {
             boolean ret = false;
             String c_s_gl = "";
             String c_goojf = "";
-
+            if (TextUtils.isEmpty(cookies)) {
+                return false;
+            }
             String[] parts = cookies.split("; ");
             for (String part : parts) {
                 if (part.trim().startsWith("s_gl")) {

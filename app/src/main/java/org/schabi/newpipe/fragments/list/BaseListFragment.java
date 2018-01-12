@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
@@ -28,6 +29,8 @@ import org.schabi.newpipe.util.StateSaver;
 
 import java.util.List;
 import java.util.Queue;
+
+import us.shandian.giga.util.SpecialVersions;
 
 import static org.schabi.newpipe.util.AnimationUtils.animateView;
 
@@ -149,7 +152,9 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I> implem
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-                showStreamDialog(selectedItem);
+                if (App.isSpecial()) {
+                    showStreamDialog(selectedItem);
+                }
             }
         });
 

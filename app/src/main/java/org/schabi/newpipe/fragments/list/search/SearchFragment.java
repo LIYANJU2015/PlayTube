@@ -265,6 +265,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
             adMobBanner.destroy();
             adMobBanner = null;
         }
+
+        if (adViewWrapperAdapter != null && !adViewWrapperAdapter.isAddAdView()) {
+            AdModule.getInstance().getAdMob().showInterstitialAd();
+        }
     }
 
     @Override
@@ -652,7 +656,9 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
                                     @Override
                                     public List<SuggestionItem> apply(@io.reactivex.annotations.NonNull List<String> strings) throws Exception {
                                         List<SuggestionItem> result = new ArrayList<>();
-                                        for (String entry : strings) result.add(new SuggestionItem(false, entry));
+                                        if (strings != null) {
+                                            for (String entry : strings) result.add(new SuggestionItem(false, entry));
+                                        }
                                         return result;
                                     }
                                 });
@@ -695,6 +701,11 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
                                 onSuggestionError(error);
                             }
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
                     }
                 });
     }
@@ -840,6 +851,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
     //////////////////////////////////////////////////////////////////////////*/
 
     public void handleSuggestions(@NonNull final List<SuggestionItem> suggestions) {
+        if (!isAdded()) {
+            return;
+        }
+
         if (DEBUG) Log.d(TAG, "handleSuggestions() called with: suggestions = [" + suggestions + "]");
         suggestionsRecyclerView.smoothScrollToPosition(0);
         suggestionsRecyclerView.post(new Runnable() {
@@ -950,6 +965,10 @@ public class SearchFragment extends BaseListFragment<SearchResult, ListExtractor
 
     @Override
     public void handleResult(@NonNull SearchResult result) {
+        if (!isAdded()) {
+            return;
+        }
+
         if (!result.errors.isEmpty()) {
             showSnackBarError(result.errors, UserAction.SEARCHED, NewPipe.getNameOfService(serviceId), searchQuery, 0);
         }

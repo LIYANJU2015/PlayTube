@@ -94,18 +94,18 @@ public class ErrorActivity extends AppCompatActivity {
 
     public static void reportError(final Context context, final List<Throwable> el,
                                    final Class returnActivity, View rootView, final ErrorInfo errorInfo) {
-        if (rootView != null) {
-            Snackbar.make(rootView, R.string.error_snackbar_message, 15 * 1000)
-                    .setActionTextColor(Color.YELLOW)
-                    .setAction(R.string.error_snackbar_action, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startErrorActivity(returnActivity, context, errorInfo, el);
-                        }
-                    }).show();
-        } else {
-            startErrorActivity(returnActivity, context, errorInfo, el);
-        }
+//        if (rootView != null) {
+//            Snackbar.make(rootView, R.string.error_snackbar_message, 15 * 1000)
+//                    .setActionTextColor(Color.YELLOW)
+//                    .setAction(R.string.error_snackbar_action, new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            startErrorActivity(returnActivity, context, errorInfo, el);
+//                        }
+//                    }).show();
+//        } else {
+//            startErrorActivity(returnActivity, context, errorInfo, el);
+//        }
     }
 
     private static void startErrorActivity(Class returnActivity, Context context, ErrorInfo errorInfo, List<Throwable> el) {
@@ -120,24 +120,24 @@ public class ErrorActivity extends AppCompatActivity {
 
     public static void reportError(final Context context, final Throwable e,
                                    final Class returnActivity, View rootView, final ErrorInfo errorInfo) {
-        List<Throwable> el = null;
-        if (e != null) {
-            el = new Vector<>();
-            el.add(e);
-        }
-        reportError(context, el, returnActivity, rootView, errorInfo);
+//        List<Throwable> el = null;
+//        if (e != null) {
+//            el = new Vector<>();
+//            el.add(e);
+//        }
+//        reportError(context, el, returnActivity, rootView, errorInfo);
     }
 
     // async call
     public static void reportError(Handler handler, final Context context, final Throwable e,
                                    final Class returnActivity, final View rootView, final ErrorInfo errorInfo) {
 
-        List<Throwable> el = null;
-        if (e != null) {
-            el = new Vector<>();
-            el.add(e);
-        }
-        reportError(handler, context, el, returnActivity, rootView, errorInfo);
+//        List<Throwable> el = null;
+//        if (e != null) {
+//            el = new Vector<>();
+//            el.add(e);
+//        }
+//        reportError(handler, context, el, returnActivity, rootView, errorInfo);
     }
 
     // async call
