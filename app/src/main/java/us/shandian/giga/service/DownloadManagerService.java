@@ -237,7 +237,18 @@ public class DownloadManagerService extends Service {
             postUpdateMessage();
             notifyMediaScanner(downloadMission);
 
-            RatingActivity.setPopTotalCount(App.sContext, 2);
+            RatingActivity.setPopTotalCount(App.sContext, 3);
+            RatingActivity.setRatingClickListener(new RatingActivity.RatingClickListener() {
+                @Override
+                public void onClickFiveStart() {
+                    FacebookReport.logSendAppRating("five");
+                }
+
+                @Override
+                public void onClickReject() {
+                    FacebookReport.logSendAppRating("no");
+                }
+            });
             RatingActivity.launch(App.sContext);
 
             Utility.showLongToastSafe(downloadMission.name + " " + App.sContext.getString(R.string.download_video_success));

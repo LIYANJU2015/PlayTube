@@ -23,6 +23,7 @@ public class FacebookReport {
         AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
         Bundle bundle = new Bundle();
         bundle.putString("country", country);
+        bundle.putString("phone", android.os.Build.MODEL);
         logger.logEvent("ReferrerReceiverCountry",bundle);
     }
 
@@ -50,6 +51,13 @@ public class FacebookReport {
         Bundle bundle = new Bundle();
         bundle.putString("action", action);
         logger.logEvent("AppDownloadPage",bundle);
+    }
+
+    public static void logSendAppRating(String star) {
+        AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
+        Bundle bundle = new Bundle();
+        bundle.putString("start", star);
+        logger.logEvent("AppRating",bundle);
     }
 
     public static void logSendSearchPage(String search) {

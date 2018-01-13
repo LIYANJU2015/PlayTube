@@ -298,7 +298,7 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
         name = result.getName();
         setTitle(name);
 
-        if (infoListAdapter.getItemsList().size() == 0) {
+        if (infoListAdapter.getItemsList() != null && infoListAdapter.getItemsList().size() == 0) {
             if (result.related_streams.size() > 0) {
                 NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
                 if (nativeAd != null && nativeAd.isAdLoaded() && result.related_streams.size() > 4) {
