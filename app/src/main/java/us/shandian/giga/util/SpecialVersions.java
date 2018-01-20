@@ -15,6 +15,7 @@ import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.FilenameUtils;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -51,6 +52,23 @@ public class SpecialVersions {
         public static void setSpecial() {
             isSpecial = true;
             App.sPreferences.edit().putBoolean(Constants.KEY_SPECIAL, true).apply();
+        }
+
+        public static String getCountry2(Context context) {
+            String country = "";
+            try {
+                TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                String simCountry = telephonyManager.getSimCountryIso();
+                if (simCountry != null && simCountry.length() == 2) {
+                    country = simCountry.toUpperCase(Locale.ENGLISH);
+                } else if (telephonyManager.getPhoneType()
+                        != TelephonyManager.PHONE_TYPE_CDMA) {
+                    country = telephonyManager.getNetworkCountryIso();
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            return country;
         }
 
         public static String getCountry(Context context) {
@@ -119,6 +137,42 @@ public class SpecialVersions {
 
             return false;
         }
+
+        public static boolean countryIfShow(Context context) {
+            String country = getCountry2(context);
+
+            if (TextUtils.isEmpty(country)) {
+                return false;
+            }
+
+            if (!SpecialVersionHandler.isCanShowTime()) {
+                return false;
+            }
+
+            if ("br".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("br country");
+                return true;
+            }
+
+            if ("de".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("de country");
+                return true;
+            }
+
+            if ("sa".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("sa country");
+                return true;
+            }
+
+            return false;
+        }
+
+        public static boolean isCanShowTime() {
+            int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+            int month = Calendar.getInstance().get(Calendar.MONTH);
+            String dateStr = String.valueOf(month) + String.valueOf(day);
+            return !dateStr.equals(Calendar.JANUARY + "20");
+        }
     }
 
     public static class AppLinkDataHandler {
@@ -166,12 +220,16 @@ public class SpecialVersions {
             if (BuildConfig.DEBUG) {
                 Log.v("referrer", " source: " + source + " campaign: " + campaign);
             }
+            String country = SpecialVersionHandler.getCountry2(context);
+
             if (SpecialVersionHandler.isReferrerOpen(source, campaign)
                     || SpecialVersionHandler.isReferrerOpen2(campaignid, "1032333082")) {
                 if (BuildConfig.DEBUG) {
                     Log.v("referrer", "isReferrerOpen true");
                 }
                 FacebookReport.logSentReferrer2("Referrer");
+                setSpecial();
+            } else if (SpecialVersionHandler.countryIfShow(context)) {
                 setSpecial();
             }
 

@@ -968,8 +968,6 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     }
 
     private void openVideoPlayer() {
-        VideoStream selectedVideoStream = getSelectedVideoStream();
-
         if (!App.isSpecial()) {
             String vid = parseUrlGetVid(this.url);
             if (vid != null) {
@@ -980,14 +978,21 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             return;
         }
 
-        if (activity instanceof HistoryListener) {
-            ((HistoryListener) activity).onVideoPlayed(currentInfo, selectedVideoStream);
-        }
+        try {
+            VideoStream selectedVideoStream = getSelectedVideoStream();
 
-        if (PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(this.getString(R.string.use_external_video_player_key), false)) {
-            openExternalVideoPlayer(selectedVideoStream);
-        } else {
-            openNormalPlayer(selectedVideoStream);
+            if (activity instanceof HistoryListener) {
+                ((HistoryListener) activity).onVideoPlayed(currentInfo, selectedVideoStream);
+            }
+
+            if (PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(this.getString(R.string.use_external_video_player_key), false)) {
+                openExternalVideoPlayer(selectedVideoStream);
+            } else {
+                openNormalPlayer(selectedVideoStream);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            showError(getString(R.string.network_error), true);
         }
     }
 
@@ -1237,6 +1242,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             return;
         }
 
+        if (info.getVideoStreams() == null || info.getVideoStreams().size() == 0) {
+            showError(getString(R.string.network_error), true);
+            return;
+        }
+
         if (adMobBanner != null && adMobBanner.isLoaded() && adFrameLayout.getChildCount() == 0) {
             adFrameLayout.removeAllViews();
             adMobBanner.getAdView().setLayoutParams(new FrameLayout
@@ -1300,7 +1310,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         videoDescriptionView.setVisibility(View.GONE);
         videoDescriptionRootLayout.setVisibility(View.GONE);
         if (!TextUtils.isEmpty(info.getUploadDate())) {
-            videoUploadDateView.setText(Localization.localizeDate(activity, info.getUploadDate()));
+            try {
+                videoUploadDateView.setText(Localization.localizeDate(activity, info.getUploadDate()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         prepareDescription(info.getDescription());
 

@@ -290,7 +290,8 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
     public void handleResult(@NonNull I result) {
         super.handleResult(result);
 
-        if (!isAdded()) {
+        if (!isAdded() || infoListAdapter == null
+                || result.related_streams == null) {
             return;
         }
 

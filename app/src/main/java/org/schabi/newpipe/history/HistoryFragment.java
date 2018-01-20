@@ -85,7 +85,9 @@ public abstract class HistoryFragment<E extends HistoryEntry> extends BaseFragme
                 .subscribe(new Consumer<Collection<E>>() {
                     @Override
                     public void accept(Collection<E> historyEntries) throws Exception {
-                        mHistoryDataSource.delete(historyEntries);
+                        if (mHistoryDataSource != null) {
+                            mHistoryDataSource.delete(historyEntries);
+                        }
                     }
                 });
 
@@ -95,7 +97,9 @@ public abstract class HistoryFragment<E extends HistoryEntry> extends BaseFragme
                 .subscribe(new Consumer<Collection<E>>() {
                     @Override
                     public void accept(Collection<E> historyEntries) throws Exception {
-                        mHistoryDataSource.insertAll(historyEntries);
+                        if (mHistoryDataSource != null) {
+                            mHistoryDataSource.insertAll(historyEntries);
+                        }
                     }
                 });
 
