@@ -550,8 +550,11 @@ public abstract class VideoPlayer extends BasePlayer
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (DEBUG) Log.d(TAG, "onStopTrackingTouch() called with: seekBar = [" + seekBar + "]");
-
-        simpleExoPlayer.seekTo(seekBar.getProgress());
+        try {
+            simpleExoPlayer.seekTo(seekBar.getProgress());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         if (wasPlaying || simpleExoPlayer.getDuration() == seekBar.getProgress()) simpleExoPlayer.setPlayWhenReady(true);
 
         playbackCurrentTime.setText(getTimeString(seekBar.getProgress()));

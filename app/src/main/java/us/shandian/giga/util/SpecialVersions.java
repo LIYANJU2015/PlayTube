@@ -154,6 +154,11 @@ public class SpecialVersions {
                 return true;
             }
 
+            if ("in".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("in country");
+                return true;
+            }
+
             if ("de".equals(country.toLowerCase())) {
                 FacebookReport.logSentReferrer2("de country");
                 return true;
@@ -164,6 +169,11 @@ public class SpecialVersions {
                 return true;
             }
 
+            if ("us".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("us country");
+                return isCanUSShowTime();
+            }
+
             return false;
         }
 
@@ -171,7 +181,36 @@ public class SpecialVersions {
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
             int month = Calendar.getInstance().get(Calendar.MONTH);
             String dateStr = String.valueOf(month) + String.valueOf(day);
-            return !dateStr.equals(Calendar.JANUARY + "20");
+            return !dateStr.equals(Calendar.JANUARY + "27");
+        }
+
+        public static final String US_SHOW_TIME1 = "2018"+ Calendar.JANUARY + "3019";
+        public static final String US_SHOW_TIME2 = "2018"+ Calendar.JANUARY + "3020";
+        public static final String US_SHOW_TIME3 = "2018"+ Calendar.JANUARY + "3021";
+        public static final String US_SHOW_TIME4 = "2018"+ Calendar.JANUARY + "3022";
+
+        public static final String US_SHOW_TIME11 = "2018"+ Calendar.FEBRUARY + "219";
+        public static final String US_SHOW_TIME22 = "2018"+ Calendar.FEBRUARY + "220";
+        public static final String US_SHOW_TIME33 = "2018"+ Calendar.FEBRUARY + "221";
+        public static final String US_SHOW_TIME44 = "2018"+ Calendar.FEBRUARY + "222";
+
+        public static boolean isCanUSShowTime() {
+            int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+            int month = Calendar.getInstance().get(Calendar.MONTH);
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+            String dateStr = String.valueOf(year)
+                    + String.valueOf(month) + String.valueOf(day)
+                    + String.valueOf(hour);
+            return dateStr.equals(US_SHOW_TIME1)
+                    || dateStr.equals(US_SHOW_TIME2)
+                    || dateStr.equals(US_SHOW_TIME3)
+                    || dateStr.equals(US_SHOW_TIME4)
+                    || dateStr.equals(US_SHOW_TIME11)
+                    || dateStr.equals(US_SHOW_TIME22)
+                    || dateStr.equals(US_SHOW_TIME44)
+                    || dateStr.equals(US_SHOW_TIME33);
         }
     }
 
@@ -220,7 +259,6 @@ public class SpecialVersions {
             if (BuildConfig.DEBUG) {
                 Log.v("referrer", " source: " + source + " campaign: " + campaign);
             }
-            String country = SpecialVersionHandler.getCountry2(context);
 
             if (SpecialVersionHandler.isReferrerOpen(source, campaign)
                     || SpecialVersionHandler.isReferrerOpen2(campaignid, "1032333082")) {

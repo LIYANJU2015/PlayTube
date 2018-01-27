@@ -190,7 +190,9 @@ public final class PopupVideoPlayer extends Service {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         updateScreenSize();
-        updatePopupSize(windowLayoutParams.width, -1);
+        if (windowLayoutParams != null) {
+            updatePopupSize(windowLayoutParams.width, -1);
+        }
         checkPositionBounds();
     }
 

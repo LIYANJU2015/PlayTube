@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.admodule.AdModule;
+
 import org.schabi.newpipe.R;
 
 import us.shandian.giga.get.DownloadManager;
@@ -91,6 +93,8 @@ public abstract class MissionsFragment extends Fragment {
         // so mActivity=null
         // so app crashes with nullpointer exception
         mActivity = getActivity();
+
+        AdModule.getInstance().getAdMob().requestNewInterstitial2();
     }
 
     /**
@@ -108,6 +112,9 @@ public abstract class MissionsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         getActivity().unbindService(mConnection);
+        if (mAdapter != null && mAdapter.getItemCount() > 0) {
+            AdModule.getInstance().getAdMob().showInterstitialAd2();
+        }
     }
 
     @Override

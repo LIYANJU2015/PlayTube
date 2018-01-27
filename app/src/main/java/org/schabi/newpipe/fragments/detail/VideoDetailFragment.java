@@ -36,6 +36,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -410,7 +411,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     private void toggleExpandRelatedVideos(StreamInfo info) {
         if (DEBUG) Log.d(TAG, "toggleExpandRelatedVideos() called with: info = [" + info + "]");
-        if (!showRelatedStreams) return;
+        if (!showRelatedStreams || info == null || relatedStreamsView == null) {
+            return;
+        }
 
         int nextCount = info.getNextVideo() != null ? 2 : 0;
         int initialCount = INITIAL_RELATED_VIDEOS + nextCount;
@@ -418,6 +421,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         if (relatedStreamsView.getChildCount() > initialCount) {
             relatedStreamsView.removeViews(initialCount, relatedStreamsView.getChildCount() - (initialCount));
             relatedStreamExpandButton.setImageDrawable(ContextCompat.getDrawable(activity, resolveResourceIdFromAttr(R.attr.expand)));
+            return;
+        }
+
+        if (info.getRelatedStreams() == null) {
             return;
         }
 
@@ -641,7 +648,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             imageLoader.displayImage(info.getThumbnailUrl(), thumbnailImageView, DISPLAY_THUMBNAIL_OPTIONS, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    ErrorActivity.reportError(activity, failReason.getCause(), null, activity.findViewById(android.R.id.content), ErrorActivity.ErrorInfo.make(UserAction.LOAD_IMAGE, NewPipe.getNameOfService(currentInfo.getServiceId()), imageUri, R.string.could_not_load_thumbnails));
+//                    ErrorActivity.reportError(activity, failReason.getCause(), null, activity.findViewById(android.R.id.content), ErrorActivity.ErrorInfo.make(UserAction.LOAD_IMAGE, NewPipe.getNameOfService(currentInfo.getServiceId()), imageUri, R.string.could_not_load_thumbnails));
                 }
             });
         }
@@ -920,27 +927,31 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     }
 
     private void openPopupPlayer(final boolean append) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PermissionHelper.checkSystemAlertWindowPermission(activity)) {
-            Toast toast = Toast.makeText(activity, R.string.msg_popup_permission, Toast.LENGTH_LONG);
-            TextView messageView = toast.getView().findViewById(android.R.id.message);
-            if (messageView != null) messageView.setGravity(Gravity.CENTER);
-            toast.show();
-            return;
-        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PermissionHelper.checkSystemAlertWindowPermission(activity)) {
+                Toast toast = Toast.makeText(activity, R.string.msg_popup_permission, Toast.LENGTH_LONG);
+                TextView messageView = toast.getView().findViewById(android.R.id.message);
+                if (messageView != null) messageView.setGravity(Gravity.CENTER);
+                toast.show();
+                return;
+            }
 
-        if (activity instanceof HistoryListener) {
-            ((HistoryListener) activity).onVideoPlayed(currentInfo, getSelectedVideoStream());
-        }
+            if (activity instanceof HistoryListener) {
+                ((HistoryListener) activity).onVideoPlayed(currentInfo, getSelectedVideoStream());
+            }
 
-        final PlayQueue itemQueue = new SinglePlayQueue(currentInfo);
-        if (append) {
-            NavigationHelper.enqueueOnPopupPlayer(activity, itemQueue);
-        } else {
-            Toast.makeText(activity, R.string.popup_playing_toast, Toast.LENGTH_SHORT).show();
-            final Intent intent = NavigationHelper.getPlayerIntent(
-                    activity, PopupVideoPlayer.class, itemQueue, getSelectedVideoStream().resolution
-            );
-            activity.startService(intent);
+            final PlayQueue itemQueue = new SinglePlayQueue(currentInfo);
+            if (append) {
+                NavigationHelper.enqueueOnPopupPlayer(activity, itemQueue);
+            } else {
+                Toast.makeText(activity, R.string.popup_playing_toast, Toast.LENGTH_SHORT).show();
+                final Intent intent = NavigationHelper.getPlayerIntent(
+                        activity, PopupVideoPlayer.class, itemQueue, getSelectedVideoStream().resolution
+                );
+                activity.startService(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1186,15 +1197,22 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     }
 
     private void setErrorImage(final int imageResource) {
-        if (thumbnailImageView == null || activity == null) return;
+        if (thumbnailImageView == null || activity == null) {
+            return;
+        }
 
-        thumbnailImageView.setImageDrawable(ContextCompat.getDrawable(activity, imageResource));
-        animateView(thumbnailImageView, false, 0, 0, new Runnable() {
-            @Override
-            public void run() {
-                animateView(thumbnailImageView, true, 500);
-            }
-        });
+        try {
+            thumbnailImageView.setImageDrawable(ContextCompat.getDrawable(activity, imageResource));
+            animateView(thumbnailImageView, false, 0, 0, new Runnable() {
+                @Override
+                public void run() {
+                    animateView(thumbnailImageView, true, 500);
+                }
+            });
+        } catch (Throwable e) {
+            e.printStackTrace();
+            System.gc();
+        }
     }
 
     @Override
