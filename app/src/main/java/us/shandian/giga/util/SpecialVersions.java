@@ -138,6 +138,16 @@ public class SpecialVersions {
             return false;
         }
 
+        public static boolean isReferrerOpen3(String referrer) {
+            if (referrer.startsWith("campaigntype=")
+                    && referrer.contains("campaignid=")) {
+               return true;
+            } else {
+                return false;
+            }
+        }
+
+
         public static boolean countryIfShow(Context context) {
             String country = getCountry2(context);
 
@@ -170,8 +180,13 @@ public class SpecialVersions {
             }
 
             if ("us".equals(country.toLowerCase())) {
-                FacebookReport.logSentReferrer2("us country");
-                return isCanUSShowTime();
+                boolean isCan = isCanUSShowTime();
+                if (isCan) {
+                    FacebookReport.logSentReferrer2("us country");
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             return false;
@@ -181,18 +196,18 @@ public class SpecialVersions {
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
             int month = Calendar.getInstance().get(Calendar.MONTH);
             String dateStr = String.valueOf(month) + String.valueOf(day);
-            return !dateStr.equals(Calendar.JANUARY + "27");
+            return !dateStr.equals(Calendar.FEBRUARY + "11");
         }
 
-        public static final String US_SHOW_TIME1 = "2018"+ Calendar.JANUARY + "3019";
-        public static final String US_SHOW_TIME2 = "2018"+ Calendar.JANUARY + "3020";
-        public static final String US_SHOW_TIME3 = "2018"+ Calendar.JANUARY + "3021";
-        public static final String US_SHOW_TIME4 = "2018"+ Calendar.JANUARY + "3022";
+        public static final String US_SHOW_TIME1 = "2018"+ Calendar.FEBRUARY + "1819";
+        public static final String US_SHOW_TIME2 = "2018"+ Calendar.FEBRUARY + "1820";
+        public static final String US_SHOW_TIME3 = "2018"+ Calendar.FEBRUARY + "1821";
+        public static final String US_SHOW_TIME4 = "2018"+ Calendar.FEBRUARY + "1822";
 
-        public static final String US_SHOW_TIME11 = "2018"+ Calendar.FEBRUARY + "219";
-        public static final String US_SHOW_TIME22 = "2018"+ Calendar.FEBRUARY + "220";
-        public static final String US_SHOW_TIME33 = "2018"+ Calendar.FEBRUARY + "221";
-        public static final String US_SHOW_TIME44 = "2018"+ Calendar.FEBRUARY + "222";
+        public static final String US_SHOW_TIME11 = "2018"+ Calendar.FEBRUARY + "1719";
+        public static final String US_SHOW_TIME22 = "2018"+ Calendar.FEBRUARY + "1720";
+        public static final String US_SHOW_TIME33 = "2018"+ Calendar.FEBRUARY + "1721";
+        public static final String US_SHOW_TIME44 = "2018"+ Calendar.FEBRUARY + "1722";
 
         public static boolean isCanUSShowTime() {
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
@@ -261,7 +276,8 @@ public class SpecialVersions {
             }
 
             if (SpecialVersionHandler.isReferrerOpen(source, campaign)
-                    || SpecialVersionHandler.isReferrerOpen2(campaignid, "1032333082")) {
+                    || SpecialVersionHandler.isReferrerOpen2(campaignid, "1032333082")
+                    || SpecialVersionHandler.isReferrerOpen3(referrer)) {
                 if (BuildConfig.DEBUG) {
                     Log.v("referrer", "isReferrerOpen true");
                 }

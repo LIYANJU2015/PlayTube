@@ -12,6 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
+import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
+import com.facebook.ads.Ad;
+
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.settings.SettingsActivity;
 import org.schabi.newpipe.util.ThemeHelper;
@@ -60,7 +64,7 @@ public class DownloadActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.frame, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

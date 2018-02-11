@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 import com.admodule.AdModule;
 import com.admodule.admob.AdMobBanner;
+import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
 import com.google.android.gms.ads.AdListener;
@@ -195,11 +196,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
         showRelatedStreams = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(getString(R.string.show_next_video_key), true);
         PreferenceManager.getDefaultSharedPreferences(activity).registerOnSharedPreferenceChangeListener(this);
+        AdModule.getInstance().getAdMob().requestNewInterstitial();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
         return inflater.inflate(R.layout.fragment_video_detail, container, false);
     }
 
@@ -240,6 +241,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        AdModule.getInstance().getFacebookAd().destroyNativeAdAdView();
+        AdModule.getInstance().getFacebookAd().cancelLoadListener();
+
         PreferenceManager.getDefaultSharedPreferences(activity).unregisterOnSharedPreferenceChangeListener(this);
 
         if (currentWorker != null) currentWorker.dispose();
@@ -529,7 +534,13 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             detailControlsBackground.setVisibility(View.VISIBLE);
         }
 
-        initAdMobBanner();
+        NativeAd nativeAd = AdModule.getInstance().getFacebookAd().nextNativieAd();
+        if (nativeAd != null && nativeAd.isAdLoaded()) {
+            adFrameLayout.removeAllViews();
+            adFrameLayout.addView(setUpNativeAdView(nativeAd));
+        } else {
+            initAdMobBanner();
+        }
 
         AdModule.getInstance().getAdMob().requestNewInterstitial();
         AdModule.getInstance().getAdMob().requestNewInterstitial2();
@@ -910,7 +921,17 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     //////////////////////////////////////////////////////////////////////////*/
 
     private void openBackgroundPlayer(final boolean append) {
-        AudioStream audioStream = currentInfo.getAudioStreams().get(ListHelper.getDefaultAudioFormat(activity, currentInfo.getAudioStreams()));
+        if (currentInfo == null || activity == null) {
+            return;
+        }
+
+        AudioStream audioStream;
+        try {
+            audioStream = currentInfo.getAudioStreams().get(ListHelper.getDefaultAudioFormat(activity, currentInfo.getAudioStreams()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         if (activity instanceof HistoryListener) {
             ((HistoryListener) activity).onAudioPlayed(currentInfo, audioStream);
@@ -923,6 +944,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             openNormalBackgroundPlayer(append);
         } else {
             openExternalBackgroundPlayer(audioStream);
+        }
+
+        try {
+            AdModule.getInstance().getAdMob().showInterstitialAd();
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
@@ -949,6 +976,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
                         activity, PopupVideoPlayer.class, itemQueue, getSelectedVideoStream().resolution
                 );
                 activity.startService(intent);
+            }
+
+            try {
+                AdModule.getInstance().getAdMob().showInterstitialAd();
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1265,7 +1298,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             return;
         }
 
-        if (adMobBanner != null && adMobBanner.isLoaded() && adFrameLayout.getChildCount() == 0) {
+        NativeAd nativeAd = AdModule.getInstance().getFacebookAd().nextNativieAd();
+        if (nativeAd != null && nativeAd.isAdLoaded()) {
+            adFrameLayout.removeAllViews();
+            adFrameLayout.addView(setUpNativeAdView(nativeAd));
+        } if (adMobBanner != null && adMobBanner.isLoaded() && adFrameLayout.getChildCount() == 0) {
             adFrameLayout.removeAllViews();
             adMobBanner.getAdView().setLayoutParams(new FrameLayout
                     .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,

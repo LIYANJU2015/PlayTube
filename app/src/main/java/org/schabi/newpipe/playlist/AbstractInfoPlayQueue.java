@@ -96,6 +96,9 @@ abstract class AbstractInfoPlayQueue<T extends ListInfo, U extends InfoItem> ext
 
             @Override
             public void onSuccess(@NonNull ListExtractor.NextItemsResult result) {
+                if (result == null) {
+                    return;
+                }
                 if (!result.hasMoreStreams()) isComplete = true;
                 nextUrl = result.nextItemsUrl;
 

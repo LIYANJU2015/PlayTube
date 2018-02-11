@@ -139,7 +139,12 @@ public final class ExtractorHelper {
         return Single.fromCallable(new Callable<NextItemsResult>() {
             @Override
             public NextItemsResult call() throws Exception {
-                return ChannelInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
+                try {
+                    return ChannelInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
         });
     }

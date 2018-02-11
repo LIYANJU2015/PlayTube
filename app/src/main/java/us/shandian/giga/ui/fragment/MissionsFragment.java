@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
+import com.facebook.ads.Ad;
 
 import org.schabi.newpipe.R;
 
@@ -95,6 +97,14 @@ public abstract class MissionsFragment extends Fragment {
         mActivity = getActivity();
 
         AdModule.getInstance().getAdMob().requestNewInterstitial2();
+        AdModule.getInstance().getFacebookAd().interstitialLoad("811681725685294_833112496875550",
+                new IFacebookAd.FBInterstitialAdListener() {
+                    @Override
+                    public void onInterstitialDismissed(Ad ad) {
+                        super.onInterstitialDismissed(ad);
+                        AdModule.getInstance().getFacebookAd().destoryInterstitial();
+                    }
+                });
     }
 
     /**
@@ -113,7 +123,11 @@ public abstract class MissionsFragment extends Fragment {
         super.onDestroyView();
         getActivity().unbindService(mConnection);
         if (mAdapter != null && mAdapter.getItemCount() > 0) {
-            AdModule.getInstance().getAdMob().showInterstitialAd2();
+            if (AdModule.getInstance().getFacebookAd().isInterstitialLoaded()) {
+                AdModule.getInstance().getFacebookAd().showInterstitial();
+            } else {
+                AdModule.getInstance().getAdMob().showInterstitialAd2();
+            }
         }
     }
 

@@ -161,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        AdModule.getInstance().getFacebookAd().destroyNativeAdAdView();
+        AdModule.getInstance().getFacebookAd().cancelLoadListener();
+
         if (!isChangingConfigurations()) {
             StateSaver.clearStateFiles();
         }

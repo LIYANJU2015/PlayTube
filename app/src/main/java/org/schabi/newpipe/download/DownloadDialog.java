@@ -1,5 +1,7 @@
 package org.schabi.newpipe.download;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -77,6 +79,13 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
         this.currentInfo = info;
         this.selectedVideoIndex = selectedVideoIndex;
         this.sortedStreamVideosList = sortedStreamVideosList;
+    }
+
+    private Activity activity;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = getActivity();
     }
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -300,7 +309,7 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
                 public void onLoadedAd(View view) {
                     AdModule.getInstance().getFacebookAd().setLoadListener(null);
                     AdModule.getInstance().createMaterialDialog()
-                            .showAdDialog(getActivity(), view);
+                            .showAdDialog(activity, view);
                 }
 
                 @Override

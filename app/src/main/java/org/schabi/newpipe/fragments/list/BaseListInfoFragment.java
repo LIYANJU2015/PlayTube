@@ -191,6 +191,10 @@ public abstract class BaseListInfoFragment<I extends ListInfo> extends BaseListF
                 .subscribe(new Consumer<ListExtractor.NextItemsResult>() {
                     @Override
                     public void accept(@io.reactivex.annotations.NonNull ListExtractor.NextItemsResult nextItemsResult) throws Exception {
+                        if (nextItemsResult == null) {
+                            return;
+                        }
+
                         isLoading.set(false);
                         handleNextItems(nextItemsResult);
                     }

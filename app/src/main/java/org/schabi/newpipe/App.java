@@ -190,6 +190,8 @@ public class App extends Application {
         CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
 
         YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
+
+        AdModule.getInstance().getFacebookAd().loadAds("811681725685294_811682365685230");
     }
 
     public static void setSpecial() {
