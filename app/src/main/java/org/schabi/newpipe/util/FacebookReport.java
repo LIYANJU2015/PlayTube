@@ -88,4 +88,9 @@ public class FacebookReport {
         bundle.putString("special", "success " + from);
         logger.logEvent("ReferrerReceiver3",bundle);
     }
+
+    public static void logSentUSOpen() {
+        AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
+        logger.logEvent("us open");
+    }
 }

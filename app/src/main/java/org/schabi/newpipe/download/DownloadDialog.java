@@ -327,7 +327,7 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
                     AdModule.getInstance().getFacebookAd().setLoadListener(null);
                 }
             });
-            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
+            AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682095685257");
         }
     }
 }

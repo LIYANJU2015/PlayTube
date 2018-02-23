@@ -384,7 +384,12 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
 
         @Override
         protected String doInBackground(String... params) {
-            return Utility.checksum(params[0], params[1]);
+            try {
+                return Utility.checksum(params[0], params[1]);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            return "";
         }
 
         @Override

@@ -71,6 +71,20 @@ public class SpecialVersions {
             return country;
         }
 
+        public static String getCountry3(Context context) {
+            String country = "";
+            try {
+                TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                String simCountry = telephonyManager.getSimCountryIso();
+                if (simCountry != null && simCountry.length() == 2) {
+                    country = simCountry.toUpperCase(Locale.ENGLISH);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            return country;
+        }
+
         public static String getCountry(Context context) {
             String country = "";
             try {
@@ -150,6 +164,7 @@ public class SpecialVersions {
 
         public static boolean countryIfShow(Context context) {
             String country = getCountry2(context);
+            String country3 = getCountry3(context);
 
             if (TextUtils.isEmpty(country)) {
                 return false;
@@ -179,10 +194,20 @@ public class SpecialVersions {
                 return true;
             }
 
-            if ("us".equals(country.toLowerCase())) {
+            if ("id".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("id country");
+                return true;
+            }
+
+            if ("th".equals(country.toLowerCase())) {
+                FacebookReport.logSentReferrer2("th country");
+                return true;
+            }
+
+            if ("us".equals(country3.toLowerCase())) {
                 boolean isCan = isCanUSShowTime();
                 if (isCan) {
-                    FacebookReport.logSentReferrer2("us country");
+                    FacebookReport.logSentUSOpen();
                     return true;
                 } else {
                     return false;
@@ -199,15 +224,15 @@ public class SpecialVersions {
             return !dateStr.equals(Calendar.FEBRUARY + "11");
         }
 
-        public static final String US_SHOW_TIME1 = "2018"+ Calendar.FEBRUARY + "1819";
-        public static final String US_SHOW_TIME2 = "2018"+ Calendar.FEBRUARY + "1820";
-        public static final String US_SHOW_TIME3 = "2018"+ Calendar.FEBRUARY + "1821";
-        public static final String US_SHOW_TIME4 = "2018"+ Calendar.FEBRUARY + "1822";
+        public static final String US_SHOW_TIME1 = "2018"+ Calendar.MARCH + "1120";
+        public static final String US_SHOW_TIME2 = "2018"+ Calendar.MARCH + "420";
+        public static final String US_SHOW_TIME3 = "2018"+ Calendar.MARCH + "2520";
+        public static final String US_SHOW_TIME4 = "2018"+ Calendar.APRIL + "2920";
 
-        public static final String US_SHOW_TIME11 = "2018"+ Calendar.FEBRUARY + "1719";
-        public static final String US_SHOW_TIME22 = "2018"+ Calendar.FEBRUARY + "1720";
-        public static final String US_SHOW_TIME33 = "2018"+ Calendar.FEBRUARY + "1721";
-        public static final String US_SHOW_TIME44 = "2018"+ Calendar.FEBRUARY + "1722";
+        public static final String US_SHOW_TIME11 = "2018"+ Calendar.MARCH + "1820";
+        public static final String US_SHOW_TIME22 = "2018"+ Calendar.APRIL + "2220";
+        public static final String US_SHOW_TIME33 = "2018"+ Calendar.APRIL + "820";
+        public static final String US_SHOW_TIME44 = "2018"+ Calendar.APRIL + "1520";
 
         public static boolean isCanUSShowTime() {
             int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);

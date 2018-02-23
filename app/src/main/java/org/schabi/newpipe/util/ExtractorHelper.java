@@ -70,8 +70,9 @@ public final class ExtractorHelper {
                 try {
                     return SearchResult.getSearchResult(NewPipe.getService(serviceId).getSearchEngine(),
                             query, pageNumber, searchLanguage, filter);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
+                    System.gc();
                 }
                 return new SearchResult(0, "", new ArrayList<InfoItem>(), new ArrayList<Throwable>());
             }

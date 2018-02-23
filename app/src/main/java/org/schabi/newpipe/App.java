@@ -1,6 +1,5 @@
 package org.schabi.newpipe;
 
-import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,12 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.admodule.AdModule;
-import com.admodule.admob.AdMobBanner;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,7 +22,6 @@ import com.tubewebplayer.YouTubePlayerActivity;
 import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
-import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.StateSaver;
 
@@ -72,6 +69,12 @@ public class App extends Application {
     public static SharedPreferences sPreferences;
 
     public static boolean isCoolStart = false;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
 
     public static void addShortcut(Context context, Class clazz, String appName, int ic_launcher) {
         // 安装的Intent

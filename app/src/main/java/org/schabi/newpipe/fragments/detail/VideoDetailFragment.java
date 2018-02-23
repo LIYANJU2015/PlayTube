@@ -43,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
 import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
@@ -197,6 +198,19 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         showRelatedStreams = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(getString(R.string.show_next_video_key), true);
         PreferenceManager.getDefaultSharedPreferences(activity).registerOnSharedPreferenceChangeListener(this);
         AdModule.getInstance().getAdMob().requestNewInterstitial();
+
+        AdModule.getInstance().getFacebookAd().interstitialLoad("811681725685294_833112496875550",
+                new IFacebookAd.FBInterstitialAdListener() {
+                    @Override
+                    public void onInterstitialDismissed(Ad ad) {
+                        super.onInterstitialDismissed(ad);
+                        try {
+                            AdModule.getInstance().getFacebookAd().destoryInterstitial();
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -264,7 +278,20 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         spinnerToolbar.setAdapter(null);
         AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
 
-        AdModule.getInstance().getAdMob().showInterstitialAd2();
+        try {
+            if (AdModule.getInstance().getFacebookAd().isInterstitialLoaded()) {
+                try {
+                    AdModule.getInstance().getFacebookAd().showInterstitial();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    AdModule.getInstance().getAdMob().showInterstitialAd2();
+                }
+            } else {
+                AdModule.getInstance().getAdMob().showInterstitialAd2();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
 
         super.onDestroyView();
     }

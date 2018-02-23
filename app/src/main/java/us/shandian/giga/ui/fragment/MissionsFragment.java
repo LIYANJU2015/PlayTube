@@ -17,10 +17,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.admodule.AdModule;
 import com.admodule.adfb.IFacebookAd;
+import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.Ad;
+import com.facebook.ads.AdChoicesView;
+import com.facebook.ads.NativeAd;
+import com.google.android.gms.ads.AdListener;
 
 import org.schabi.newpipe.R;
 
@@ -59,6 +67,37 @@ public abstract class MissionsFragment extends Fragment {
 
     };
 
+    private View setUpNativeAdView(NativeAd nativeAd) {
+        nativeAd.unregisterView();
+
+        View adView = LayoutInflater.from(mActivity).inflate(R.layout.home_list_ad_item2, null);
+
+        FrameLayout adChoicesFrame = (FrameLayout) adView.findViewById(R.id.fb_adChoices2);
+        ImageView nativeAdIcon = (ImageView) adView.findViewById(R.id.image_ad);
+        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.title);
+        TextView nativeAdBody = (TextView) adView.findViewById(R.id.text);
+        TextView nativeAdCallToAction = (TextView) adView.findViewById(R.id.call_btn_tv);
+
+        nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+        nativeAdTitle.setText(nativeAd.getAdTitle());
+        nativeAdBody.setText(nativeAd.getAdBody());
+
+        // Downloading and setting the ad icon.
+        NativeAd.Image adIcon = nativeAd.getAdIcon();
+        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+
+        // Add adChoices icon
+        AdChoicesView adChoicesView = new AdChoicesView(mActivity, nativeAd, true);
+        adChoicesFrame.addView(adChoicesView, 0);
+        adChoicesFrame.setVisibility(View.VISIBLE);
+
+        nativeAd.registerViewForInteraction(adView);
+
+        return adView;
+    }
+
+    private FrameLayout mAdFramelayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.missions, container, false);
@@ -81,7 +120,38 @@ public abstract class MissionsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        mAdFramelayout = v.findViewById(R.id.ad_frame);
+        NativeAd nativeAd = AdModule.getInstance().getFacebookAd().nextNativieAd();
+        if (nativeAd != null && nativeAd.isAdLoaded()) {
+            mAdFramelayout.removeAllViews();
+            mAdFramelayout.addView(setUpNativeAdView(nativeAd));
+        } else {
+            initAdMobBanner();
+        }
+
         return v;
+    }
+
+    private AdMobBanner adMobBanner;
+
+    private void initAdMobBanner() {
+        adMobBanner = AdModule.getInstance().getAdMob().createBannerAdView();
+        adMobBanner.setAdRequest(AdModule.getInstance().getAdMob().createAdRequest());
+        adMobBanner.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (mActivity == null || !isAdded()
+                        || adMobBanner == null) {
+                    return;
+                }
+
+                adMobBanner.getAdView().setLayoutParams(new LinearLayout.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                mAdFramelayout.removeAllViews();
+                mAdFramelayout.addView(adMobBanner.getAdView());
+            }
+        });
     }
 
     /**
@@ -102,7 +172,11 @@ public abstract class MissionsFragment extends Fragment {
                     @Override
                     public void onInterstitialDismissed(Ad ad) {
                         super.onInterstitialDismissed(ad);
-                        AdModule.getInstance().getFacebookAd().destoryInterstitial();
+                        try {
+                            AdModule.getInstance().getFacebookAd().destoryInterstitial();
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -119,15 +193,45 @@ public abstract class MissionsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (adMobBanner != null) {
+            adMobBanner.resume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (adMobBanner != null) {
+            adMobBanner.pause();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         getActivity().unbindService(mConnection);
         if (mAdapter != null && mAdapter.getItemCount() > 0) {
-            if (AdModule.getInstance().getFacebookAd().isInterstitialLoaded()) {
-                AdModule.getInstance().getFacebookAd().showInterstitial();
-            } else {
-                AdModule.getInstance().getAdMob().showInterstitialAd2();
+            try {
+                if (AdModule.getInstance().getFacebookAd().isInterstitialLoaded()) {
+                    try {
+                        AdModule.getInstance().getFacebookAd().showInterstitial();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        AdModule.getInstance().getAdMob().showInterstitialAd2();
+                    }
+                } else {
+                    AdModule.getInstance().getAdMob().showInterstitialAd2();
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
+        }
+
+        if (adMobBanner != null) {
+            adMobBanner.destroy();
+            adMobBanner = null;
         }
     }
 
