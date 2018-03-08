@@ -16,6 +16,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tubewebplayer.YouTubePlayerActivity;
 
@@ -195,6 +196,13 @@ public class App extends Application {
         YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
 
         AdModule.getInstance().getFacebookAd().loadAds("811681725685294_811682365685230");
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     public static void setSpecial() {

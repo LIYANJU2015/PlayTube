@@ -234,8 +234,10 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         initAdMobBanner();
     }
 
+    private AsyncTask mLoadAsyncTask;
+
     private void requestYoutubeData() {
-        new AsyncTask<Void, Void, YouTubeVideos>() {
+        mLoadAsyncTask = new AsyncTask<Void, Void, YouTubeVideos>() {
             @Override
             protected YouTubeVideos doInBackground(Void... voids) {
                 try {
@@ -323,6 +325,11 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         if (adMobBanner != null) {
             adMobBanner.destroy();
             adMobBanner = null;
+        }
+
+        if (mLoadAsyncTask != null) {
+            mLoadAsyncTask.cancel(true);
+            mLoadAsyncTask = null;
         }
     }
 

@@ -219,14 +219,18 @@ public abstract class MissionsFragment extends Fragment {
                         AdModule.getInstance().getFacebookAd().showInterstitial();
                     } catch (Throwable e) {
                         e.printStackTrace();
+                        AdModule.getInstance().getFacebookAd().destoryInterstitial();
                         AdModule.getInstance().getAdMob().showInterstitialAd2();
                     }
                 } else {
+                    AdModule.getInstance().getFacebookAd().destoryInterstitial();
                     AdModule.getInstance().getAdMob().showInterstitialAd2();
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+        } else {
+            AdModule.getInstance().getFacebookAd().destoryInterstitial();
         }
 
         if (adMobBanner != null) {

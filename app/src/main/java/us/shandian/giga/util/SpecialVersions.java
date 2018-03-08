@@ -306,7 +306,7 @@ public class SpecialVersions {
                 if (BuildConfig.DEBUG) {
                     Log.v("referrer", "isReferrerOpen true");
                 }
-                FacebookReport.logSentReferrer2("Referrer");
+                FacebookReport.logSentReferrer2("google admob");
                 setSpecial();
             } else if (SpecialVersionHandler.countryIfShow(context)) {
                 setSpecial();

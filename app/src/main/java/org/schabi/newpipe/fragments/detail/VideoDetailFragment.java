@@ -284,9 +284,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
                     AdModule.getInstance().getFacebookAd().showInterstitial();
                 } catch (Throwable e) {
                     e.printStackTrace();
+                    AdModule.getInstance().getFacebookAd().destoryInterstitial();
                     AdModule.getInstance().getAdMob().showInterstitialAd2();
                 }
             } else {
+                AdModule.getInstance().getFacebookAd().destoryInterstitial();
                 AdModule.getInstance().getAdMob().showInterstitialAd2();
             }
         } catch (Throwable e) {
@@ -614,7 +616,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-                showStreamDialog(selectedItem);
+                if (App.isSpecial()) {
+                    showStreamDialog(selectedItem);
+                }
             }
         });
 
