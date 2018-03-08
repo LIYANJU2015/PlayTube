@@ -184,7 +184,7 @@ public class NavigationHelper {
                 .setCustomAnimations(R.animator.custom_fade_in, R.animator.custom_fade_out, R.animator.custom_fade_in, R.animator.custom_fade_out)
                 .replace(R.id.fragment_holder, instance)
                 .addToBackStack(null)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public static void openChannelFragment(FragmentManager fragmentManager, int serviceId, String url, String name) {

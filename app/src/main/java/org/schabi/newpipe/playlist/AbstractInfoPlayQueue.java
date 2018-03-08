@@ -64,14 +64,18 @@ abstract class AbstractInfoPlayQueue<T extends ListInfo, U extends InfoItem> ext
 
             @Override
             public void onSuccess(@NonNull T result) {
-                isInitial = false;
-                if (!result.has_more_streams) isComplete = true;
-                nextUrl = result.next_streams_url;
+                try {
+                    isInitial = false;
+                    if (!result.has_more_streams) isComplete = true;
+                    nextUrl = result.next_streams_url;
 
-                append(extractListItems(result.related_streams));
+                    append(extractListItems(result.related_streams));
 
-                fetchReactor.dispose();
-                fetchReactor = null;
+                    fetchReactor.dispose();
+                    fetchReactor = null;
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -96,16 +100,20 @@ abstract class AbstractInfoPlayQueue<T extends ListInfo, U extends InfoItem> ext
 
             @Override
             public void onSuccess(@NonNull ListExtractor.NextItemsResult result) {
-                if (result == null) {
-                    return;
+                try {
+                    if (result == null) {
+                        return;
+                    }
+                    if (!result.hasMoreStreams()) isComplete = true;
+                    nextUrl = result.nextItemsUrl;
+
+                    append(extractListItems(result.nextItemsList));
+
+                    fetchReactor.dispose();
+                    fetchReactor = null;
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
-                if (!result.hasMoreStreams()) isComplete = true;
-                nextUrl = result.nextItemsUrl;
-
-                append(extractListItems(result.nextItemsList));
-
-                fetchReactor.dispose();
-                fetchReactor = null;
             }
 
             @Override

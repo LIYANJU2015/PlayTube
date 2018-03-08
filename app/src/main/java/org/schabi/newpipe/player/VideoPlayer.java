@@ -255,22 +255,26 @@ public abstract class VideoPlayer extends BasePlayer
     @Override
     public void sync(@NonNull final PlayQueueItem item, @Nullable final StreamInfo info) {
         super.sync(item, info);
-        qualityTextView.setVisibility(View.GONE);
-        playbackSpeedTextView.setVisibility(View.GONE);
+        try {
+            qualityTextView.setVisibility(View.GONE);
+            playbackSpeedTextView.setVisibility(View.GONE);
 
-        if (info != null) {
-            final List<VideoStream> videos = ListHelper.getSortedStreamVideosList(context, info.video_streams, info.video_only_streams, false);
-            availableStreams = new ArrayList<>(videos);
-            if (playbackQuality == null) {
-                selectedStreamIndex = getDefaultResolutionIndex(videos);
-            } else {
-                selectedStreamIndex = getOverrideResolutionIndex(videos, getPlaybackQuality());
+            if (info != null) {
+                final List<VideoStream> videos = ListHelper.getSortedStreamVideosList(context, info.video_streams, info.video_only_streams, false);
+                availableStreams = new ArrayList<>(videos);
+                if (playbackQuality == null) {
+                    selectedStreamIndex = getDefaultResolutionIndex(videos);
+                } else {
+                    selectedStreamIndex = getOverrideResolutionIndex(videos, getPlaybackQuality());
+                }
+
+                buildQualityMenu();
+                buildPlaybackSpeedMenu();
+                qualityTextView.setVisibility(View.VISIBLE);
+                playbackSpeedTextView.setVisibility(View.VISIBLE);
             }
-
-            buildQualityMenu();
-            buildPlaybackSpeedMenu();
-            qualityTextView.setVisibility(View.VISIBLE);
-            playbackSpeedTextView.setVisibility(View.VISIBLE);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
