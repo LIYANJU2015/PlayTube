@@ -107,8 +107,8 @@ public class App extends Application {
         isCoolStart = true;
         sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this);
 
         SpecialVersions.initSpecial();
         SpecialVersions.fetchDeferredAppLinkData(sContext);
