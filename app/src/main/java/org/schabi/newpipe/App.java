@@ -238,8 +238,8 @@ public class App extends Application {
                 if (checkThrowable(throwable)) return;
 
                 // Throw uncaught exception that will trigger the report system
-                Thread.currentThread().getUncaughtExceptionHandler()
-                        .uncaughtException(Thread.currentThread(), throwable);
+//                Thread.currentThread().getUncaughtExceptionHandler()
+//                        .uncaughtException(Thread.currentThread(), throwable);
             }
 
             private boolean checkThrowable(@NonNull Throwable throwable) {

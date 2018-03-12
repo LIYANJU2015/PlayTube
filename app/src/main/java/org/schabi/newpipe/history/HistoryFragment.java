@@ -154,9 +154,10 @@ public abstract class HistoryFragment<E extends HistoryEntry> extends BaseFragme
     @NonNull
     private Observer<List<E>> getHistoryListConsumer() {
         return new Observer<List<E>>() {
+            Disposable disposable;
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-
+                disposable = d;
             }
 
             @Override
@@ -173,11 +174,17 @@ public abstract class HistoryFragment<E extends HistoryEntry> extends BaseFragme
                     mHistoryAdapter.clear();
                     showEmptyHistory();
                 }
+                if (disposable != null) {
+                    disposable.dispose();
+                }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
                 // TODO: error handling like in (see e.g. subscription fragment)
+                if (disposable != null) {
+                    disposable.dispose();
+                }
             }
 
             @Override

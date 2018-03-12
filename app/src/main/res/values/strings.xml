@@ -328,6 +328,8 @@
     <string name="facebook_app_id">811681725685294</string>
     <string name="fb_login_protocol_scheme">fb811681725685294</string>
 
-    <string name="download_add_success">Download add success!</string>
+    <string name="download_add_success">Download add success</string>
     <string name="download_video_success">Download Finish</string>
+    <string name="share_content">%s Video is in Tube Player, Download as soon as possible https://play.google.com/store/apps/details?id=com.playtube.tubeplayer </string>
+
 </resources>

@@ -8,4 +8,9 @@
         android:title="@string/action_history"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_settings"
+        android:orderInCategory="990"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
+
 </menu>

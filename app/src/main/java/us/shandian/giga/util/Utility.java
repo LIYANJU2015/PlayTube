@@ -1,5 +1,6 @@
 package us.shandian.giga.util;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,7 +10,12 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.view.View;
 import android.widget.Toast;
+
+import com.admodule.AdModule;
+import com.admodule.adfb.IFacebookAd;
+import com.facebook.ads.NativeAd;
 
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
@@ -20,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -29,6 +36,41 @@ public class Utility {
         VIDEO,
         MUSIC,
         UNKNOWN
+    }
+
+    public static void showFBAdDialog(Activity activity) {
+        if (activity == null) {
+            return;
+        }
+        final WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
+        AdModule.getInstance().getFacebookAd().setLoadListener(new IFacebookAd.FacebookAdListener() {
+            @Override
+            public void onLoadedAd(View view) {
+                AdModule.getInstance().getFacebookAd().setLoadListener(null);
+                try {
+                    AdModule.getInstance().createMaterialDialog()
+                            .showAdDialog(activityWeakReference.get(), view);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onLoadedAd(NativeAd nativeAd) {
+
+            }
+
+            @Override
+            public void onStartLoadAd(View view) {
+
+            }
+
+            @Override
+            public void onLoadAdFailed(int i, String s) {
+                AdModule.getInstance().getFacebookAd().setLoadListener(null);
+            }
+        });
+        AdModule.getInstance().getFacebookAd().loadAd(false, "811681725685294_811682365685230");
     }
 
     private static Handler sHandler = new Handler(Looper.getMainLooper());

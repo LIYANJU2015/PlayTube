@@ -67,14 +67,8 @@ public final class ExtractorHelper {
         return Single.fromCallable(new Callable<SearchResult>() {
             @Override
             public SearchResult call() throws Exception {
-                try {
-                    return SearchResult.getSearchResult(NewPipe.getService(serviceId).getSearchEngine(),
+                return SearchResult.getSearchResult(NewPipe.getService(serviceId).getSearchEngine(),
                             query, pageNumber, searchLanguage, filter);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    System.gc();
-                }
-                return new SearchResult(0, "", new ArrayList<InfoItem>(), new ArrayList<Throwable>());
             }
         });
     }
@@ -95,12 +89,7 @@ public final class ExtractorHelper {
         return Single.fromCallable(new Callable<List<String>>() {
             @Override
             public List<String> call() throws Exception {
-                try {
-                    return NewPipe.getService(serviceId).getSuggestionExtractor().suggestionList(query, searchLanguage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new ArrayList<>();
+                return NewPipe.getService(serviceId).getSuggestionExtractor().suggestionList(query, searchLanguage);
             }
         });
     }
@@ -110,12 +99,7 @@ public final class ExtractorHelper {
         return checkCache(forceLoad, serviceId, url, Single.fromCallable(new Callable<StreamInfo>() {
             @Override
             public StreamInfo call() throws Exception {
-                try {
                     return StreamInfo.getInfo(NewPipe.getService(serviceId), url);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new StreamInfo(0, "", StreamType.NONE, "", "", 0);
             }
         }));
     }
@@ -125,12 +109,7 @@ public final class ExtractorHelper {
         return checkCache(forceLoad, serviceId, url, Single.fromCallable(new Callable<ChannelInfo>() {
             @Override
             public ChannelInfo call() throws Exception {
-                try {
-                    return ChannelInfo.getInfo(NewPipe.getService(serviceId), url);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new ChannelInfo(0, "", "", "");
+                return ChannelInfo.getInfo(NewPipe.getService(serviceId), url);
             }
         }));
     }
@@ -140,12 +119,7 @@ public final class ExtractorHelper {
         return Single.fromCallable(new Callable<NextItemsResult>() {
             @Override
             public NextItemsResult call() throws Exception {
-                try {
-                    return ChannelInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
+                return ChannelInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
             }
         });
     }
@@ -155,12 +129,7 @@ public final class ExtractorHelper {
         return checkCache(forceLoad, serviceId, url, Single.fromCallable(new Callable<PlaylistInfo>() {
             @Override
             public PlaylistInfo call() throws Exception {
-                try {
-                    return PlaylistInfo.getInfo(NewPipe.getService(serviceId), url);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new PlaylistInfo(0, "", "", "");
+                return PlaylistInfo.getInfo(NewPipe.getService(serviceId), url);
             }
         }));
     }
@@ -170,12 +139,7 @@ public final class ExtractorHelper {
         return Single.fromCallable(new Callable<NextItemsResult>() {
             @Override
             public NextItemsResult call() throws Exception {
-                try {
-                    return PlaylistInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new NextItemsResult(new PlaylistInfoItemCollector(0), "");
+                return PlaylistInfo.getMoreItems(NewPipe.getService(serviceId), url, nextStreamsUrl);
             }
         });
     }
@@ -184,12 +148,7 @@ public final class ExtractorHelper {
         return checkCache(forceLoad, serviceId, url, Single.fromCallable(new Callable<KioskInfo>() {
             @Override
             public KioskInfo call() throws Exception {
-                try {
-                    return KioskInfo.getInfo(NewPipe.getService(serviceId), url, contentCountry);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new KioskInfo(0, "", "", "");
+                return KioskInfo.getInfo(NewPipe.getService(serviceId), url, contentCountry);
             }
         }));
     }

@@ -1,5 +1,6 @@
 package org.schabi.newpipe.fragments.list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -27,10 +28,12 @@ import org.schabi.newpipe.playlist.SinglePlayQueue;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.StateSaver;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Queue;
 
 import us.shandian.giga.util.SpecialVersions;
+import us.shandian.giga.util.Utility;
 
 import static org.schabi.newpipe.util.AnimationUtils.animateView;
 
@@ -152,9 +155,9 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I> implem
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-                if (App.isSpecial()) {
+//                if (App.isSpecial()) {
                     showStreamDialog(selectedItem);
-                }
+//                }
             }
         });
 
@@ -211,6 +214,7 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I> implem
         final DialogInterface.OnClickListener actions = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Utility.showFBAdDialog(activity);
                 switch (i) {
                     case 0:
                         NavigationHelper.enqueueOnBackgroundPlayer(context, new SinglePlayQueue(item));

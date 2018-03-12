@@ -150,10 +150,10 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         headerBackgroundButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_bg_button);
 
         if (!App.isSpecial()) {
-            playlistCtrl.setVisibility(View.GONE);
+//            playlistCtrl.setVisibility(View.GONE);
             headerSubscribeButton.setVisibility(View.GONE);
         } else {
-            playlistCtrl.setVisibility(View.VISIBLE);
+//            playlistCtrl.setVisibility(View.VISIBLE);
             headerSubscribeButton.setVisibility(View.VISIBLE);
         }
 
@@ -459,12 +459,13 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         }
 
         if (!App.isSpecial()) {
-            playlistCtrl.setVisibility(View.GONE);
+//            playlistCtrl.setVisibility(View.GONE);
             headerSubscribeButton.setVisibility(View.GONE);
         } else {
-            playlistCtrl.setVisibility(View.VISIBLE);
+//            playlistCtrl.setVisibility(View.VISIBLE);
             headerSubscribeButton.setVisibility(View.VISIBLE);
         }
+        playlistCtrl.setVisibility(View.VISIBLE);
 
         if (!result.errors.isEmpty()) {
             showSnackBarError(result.errors, UserAction.REQUESTED_CHANNEL, NewPipe.getNameOfService(result.getServiceId()), result.getUrl(), 0);

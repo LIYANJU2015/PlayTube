@@ -91,6 +91,7 @@ import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PermissionHelper;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -103,6 +104,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import us.shandian.giga.util.Utility;
 
 import static org.schabi.newpipe.util.AnimationUtils.animateView;
 
@@ -555,14 +557,6 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         infoItemBuilder = new InfoItemBuilder(activity);
         setHeightThumbnail();
 
-        if (!App.isSpecial()) {
-            detailControlsPopup.setVisibility(View.GONE);
-            detailControlsBackground.setVisibility(View.GONE);
-        } else {
-            detailControlsPopup.setVisibility(View.VISIBLE);
-            detailControlsBackground.setVisibility(View.VISIBLE);
-        }
-
         NativeAd nativeAd = AdModule.getInstance().getFacebookAd().nextNativieAd();
         if (nativeAd != null && nativeAd.isAdLoaded()) {
             adFrameLayout.removeAllViews();
@@ -616,9 +610,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-                if (App.isSpecial()) {
+//                if (App.isSpecial()) {
                     showStreamDialog(selectedItem);
-                }
+//                }
             }
         });
 
@@ -649,6 +643,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         final DialogInterface.OnClickListener actions = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Utility.showFBAdDialog(activity);
                 switch (i) {
                     case 0:
                         NavigationHelper.enqueueOnBackgroundPlayer(context, new SinglePlayQueue(item));
@@ -777,7 +772,8 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             public void onActionSelected(int selectedStreamId) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, info.getUrl());
+                intent.putExtra(Intent.EXTRA_TEXT,
+                        String.format(getString(R.string.share_content), info.getUrl()));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, activity.getString(R.string.share_dialog_title)));
             }
@@ -1043,15 +1039,15 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     }
 
     private void openVideoPlayer() {
-        if (!App.isSpecial()) {
-            String vid = parseUrlGetVid(this.url);
-            if (vid != null) {
-                YouTubePlayerActivity.launch(activity, vid);
-            } else {
-                WebViewPlayerActivity.launch(activity, this.url, this.name);
-            }
-            return;
-        }
+//        if (!App.isSpecial()) {
+//            String vid = parseUrlGetVid(this.url);
+//            if (vid != null) {
+//                YouTubePlayerActivity.launch(activity, vid);
+//            } else {
+//                WebViewPlayerActivity.launch(activity, this.url, this.name);
+//            }
+//            return;
+//        }
 
         try {
             VideoStream selectedVideoStream = getSelectedVideoStream();
@@ -1404,11 +1400,11 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         }
         prepareDescription(info.getDescription());
 
-        if (!App.isSpecial()) {
-            spinnerToolbar.setVisibility(View.GONE);
-        } else {
+//        if (!App.isSpecial()) {
+//            spinnerToolbar.setVisibility(View.GONE);
+//        } else {
             animateView(spinnerToolbar, true, 500);
-        }
+//        }
 
         setupActionBarHandler(info);
         initThumbnailViews(info);

@@ -2,12 +2,14 @@ package org.schabi.newpipe.fragments;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,6 +35,7 @@ import com.facebook.ads.NativeAd;
 import com.google.android.gms.ads.AdListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.paginate.Paginate;
+import com.rating.SizeUtils;
 import com.tubewebplayer.WebViewPlayerActivity;
 import com.tubewebplayer.YouTubePlayerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -204,6 +207,14 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                     timeTV.setText(FilenameUtils.convertDuration(snippet.contentDetails.duration));
                 } else {
                     timeTV.setText("");
+                }
+
+                if (Build.VERSION.SDK_INT < 21) {
+                    ((RecyclerView.LayoutParams)holder.getView(R.id.card_view).getLayoutParams())
+                            .topMargin = SizeUtils.dp2px(mContext, 4);
+                } else {
+                    ((RecyclerView.LayoutParams)holder.getView(R.id.card_view).getLayoutParams())
+                            .topMargin = 0;
                 }
 
                 holder.setOnClickListener(R.id.card_view, new View.OnClickListener() {

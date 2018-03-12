@@ -36,6 +36,7 @@ import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PermissionHelper;
 
 import io.reactivex.Single;
+import us.shandian.giga.util.Utility;
 
 import static org.schabi.newpipe.util.AnimationUtils.animateView;
 
@@ -89,11 +90,11 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
         headerPopupButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_popup_button);
         headerBackgroundButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_bg_button);
 
-        if (!App.isSpecial()) {
-            playlistCtrl.setVisibility(View.GONE);
-        } else {
-            playlistCtrl.setVisibility(View.VISIBLE);
-        }
+//        if (!App.isSpecial()) {
+//            playlistCtrl.setVisibility(View.GONE);
+//        } else {
+//            playlistCtrl.setVisibility(View.VISIBLE);
+//        }
 
         return headerRootLayout;
     }
@@ -129,6 +130,7 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final int index = Math.max(infoListAdapter.getItemsList().indexOf(item), 0);
+                Utility.showFBAdDialog(activity);
                 switch (i) {
                     case 0:
                         NavigationHelper.enqueueOnBackgroundPlayer(context, new SinglePlayQueue(item));
@@ -204,11 +206,11 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
             }
         }
 
-        if (!App.isSpecial()) {
-            playlistCtrl.setVisibility(View.GONE);
-        } else {
+//        if (!App.isSpecial()) {
+//            playlistCtrl.setVisibility(View.GONE);
+//        } else {
             playlistCtrl.setVisibility(View.VISIBLE);
-        }
+//        }
 
         imageLoader.displayImage(result.getUploaderAvatarUrl(), headerUploaderAvatar, DISPLAY_AVATAR_OPTIONS);
         headerStreamCount.setText(getResources().getQuantityString(R.plurals.videos, (int) result.stream_count, (int) result.stream_count));
