@@ -155,9 +155,9 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I> implem
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-//                if (App.isSpecial()) {
+                if (App.isSpecial()) {
                     showStreamDialog(selectedItem);
-//                }
+                }
             }
         });
 

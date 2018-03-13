@@ -101,20 +101,10 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
 
         initHomeAD();
 
-        getWindow().getDecorView().post(new Runnable() {
-            @Override
-            public void run() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        FacebookReport.logSendMainPage();
-                        if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                            initFragments();
-                        }
-                    }
-                }, 500);
-            }
-        });
+        FacebookReport.logSendMainPage();
+        if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            initFragments();
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -322,6 +312,13 @@ public class MainActivity extends AppCompatActivity implements HistoryListener {
         switch (id) {
             case android.R.id.home:
                 NavigationHelper.gotoMainFragment(getSupportFragmentManager());
+                return true;
+            case R.id.menu_item_share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, String.format(getString(R.string.share_content), ""));
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, getString(R.string.share_dialog_title)));
                 return true;
             case R.id.action_settings:
                 NavigationHelper.openSettings(this);

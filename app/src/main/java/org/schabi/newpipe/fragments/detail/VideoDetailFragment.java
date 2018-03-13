@@ -565,6 +565,12 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             initAdMobBanner();
         }
 
+        if (App.isSpecial()) {
+            detailControlsBackground.setVisibility(View.VISIBLE);
+        } else {
+            detailControlsBackground.setVisibility(View.GONE);
+        }
+
         AdModule.getInstance().getAdMob().requestNewInterstitial();
         AdModule.getInstance().getAdMob().requestNewInterstitial2();
     }
@@ -610,9 +616,9 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
             @Override
             public void held(StreamInfoItem selectedItem) {
-//                if (App.isSpecial()) {
+                if (App.isSpecial()) {
                     showStreamDialog(selectedItem);
-//                }
+                }
             }
         });
 

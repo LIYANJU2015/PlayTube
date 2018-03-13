@@ -150,9 +150,11 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         headerBackgroundButton = headerRootLayout.findViewById(R.id.playlist_ctrl_play_bg_button);
 
         if (!App.isSpecial()) {
+            headerBackgroundButton.setVisibility(View.GONE);
 //            playlistCtrl.setVisibility(View.GONE);
             headerSubscribeButton.setVisibility(View.GONE);
         } else {
+            headerBackgroundButton.setVisibility(View.VISIBLE);
 //            playlistCtrl.setVisibility(View.VISIBLE);
             headerSubscribeButton.setVisibility(View.VISIBLE);
         }
@@ -239,7 +241,7 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
     private void shareChannelUri() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.putExtra(Intent.EXTRA_TEXT, String.format(getString(R.string.share_content), url));
         startActivity(Intent.createChooser(intent, getString(R.string.share_dialog_title)));
     }
 
@@ -459,10 +461,10 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         }
 
         if (!App.isSpecial()) {
-//            playlistCtrl.setVisibility(View.GONE);
+            headerBackgroundButton.setVisibility(View.GONE);
             headerSubscribeButton.setVisibility(View.GONE);
         } else {
-//            playlistCtrl.setVisibility(View.VISIBLE);
+            headerBackgroundButton.setVisibility(View.VISIBLE);
             headerSubscribeButton.setVisibility(View.VISIBLE);
         }
         playlistCtrl.setVisibility(View.VISIBLE);

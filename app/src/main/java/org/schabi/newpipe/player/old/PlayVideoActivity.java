@@ -216,7 +216,7 @@ public class PlayVideoActivity extends AppCompatActivity {
             case R.id.menu_item_share:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, videoUrl);
+                intent.putExtra(Intent.EXTRA_TEXT, String.format(getString(R.string.share_content), videoUrl));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, getString(R.string.share_dialog_title)));
                 break;

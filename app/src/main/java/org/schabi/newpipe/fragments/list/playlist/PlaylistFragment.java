@@ -206,11 +206,12 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
             }
         }
 
-//        if (!App.isSpecial()) {
-//            playlistCtrl.setVisibility(View.GONE);
-//        } else {
-            playlistCtrl.setVisibility(View.VISIBLE);
-//        }
+        playlistCtrl.setVisibility(View.VISIBLE);
+        if (!App.isSpecial()) {
+            headerBackgroundButton.setVisibility(View.GONE);
+        } else {
+            headerBackgroundButton.setVisibility(View.VISIBLE);
+        }
 
         imageLoader.displayImage(result.getUploaderAvatarUrl(), headerUploaderAvatar, DISPLAY_AVATAR_OPTIONS);
         headerStreamCount.setText(getResources().getQuantityString(R.plurals.videos, (int) result.stream_count, (int) result.stream_count));
