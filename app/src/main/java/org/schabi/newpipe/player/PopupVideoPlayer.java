@@ -632,6 +632,7 @@ public final class PopupVideoPlayer extends Service {
                     onRepeatClicked();
                     break;
                 case Intent.ACTION_SCREEN_ON:
+                    onVideoPlayPause();
                     enableVideoRenderer(true);
                     break;
                 case Intent.ACTION_SCREEN_OFF:

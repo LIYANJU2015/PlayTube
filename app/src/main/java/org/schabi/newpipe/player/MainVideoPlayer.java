@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import com.google.android.exoplayer2.Player;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.extractor.stream.VideoStream;
@@ -305,12 +306,28 @@ public final class MainVideoPlayer extends Activity {
             this.playNextButton = rootView.findViewById(R.id.playNextButton);
             this.moreOptionsButton = rootView.findViewById(R.id.moreOptionsButton);
             this.moreOptionsPopupMenu = new PopupMenu(context, moreOptionsButton);
-            this.moreOptionsPopupMenu.getMenuInflater().inflate(R.menu.menu_videooptions, moreOptionsPopupMenu.getMenu());
+            if (App.isSpecial()) {
+                this.moreOptionsPopupMenu.getMenuInflater().inflate(R.menu.menu_videooptions, moreOptionsPopupMenu.getMenu());
+            } else {
+                this.moreOptionsPopupMenu.getMenuInflater().inflate(R.menu.menu_videooptions2, moreOptionsPopupMenu.getMenu());
+            }
 
             titleTextView.setSelected(true);
             channelTextView.setSelected(true);
 
             getRootView().setKeepScreenOn(true);
+        }
+
+        @Override
+        public void onBroadcastReceived(Intent intent) {
+            super.onBroadcastReceived(intent);
+            if (intent == null || intent.getAction() == null) return;
+            if (DEBUG) Log.d(TAG, "onBroadcastReceived() called with: intent = [" + intent + "]");
+            switch (intent.getAction()) {
+                case Intent.ACTION_SCREEN_ON:
+                    onVideoPlayPause();
+                    break;
+            }
         }
 
         @Override

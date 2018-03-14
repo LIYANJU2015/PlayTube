@@ -32,6 +32,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.common.executors.UiThreadImmediateExecutorService;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -57,6 +66,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
+import com.rating.SizeUtils;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
@@ -245,6 +255,23 @@ public abstract class BasePlayer implements Player.EventListener, PlaybackListen
     public void initThumbnail(final String url) {
         if (DEBUG) Log.d(TAG, "initThumbnail() called");
         if (url == null || url.isEmpty()) return;
+        ImageRequestBuilder requestBuilder = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url));
+        requestBuilder.setResizeOptions(new ResizeOptions(SizeUtils.dp2px(context, 64), SizeUtils.dp2px(context, 64)));
+        ImageRequest imageRequest = requestBuilder.build();
+        com.facebook.datasource.DataSource<CloseableReference<CloseableImage>> dataSource = ImagePipelineFactory.getInstance()
+                .getImagePipeline().fetchDecodedImage(imageRequest, null);
+        dataSource.subscribe(new BaseBitmapDataSubscriber() {
+            @Override
+            protected void onNewResultImpl(@javax.annotation.Nullable Bitmap bitmap) {
+                if (simpleExoPlayer == null) return;
+                onThumbnailReceived(bitmap);
+            }
+
+            @Override
+            protected void onFailureImpl(com.facebook.datasource.DataSource<CloseableReference<CloseableImage>> dataSource) {
+
+            }
+        }, UiThreadImmediateExecutorService.getInstance());
 //        ImageLoader.getInstance().resume();
 //        ImageLoader.getInstance().loadImage(url, new SimpleImageLoadingListener() {
 //            @Override

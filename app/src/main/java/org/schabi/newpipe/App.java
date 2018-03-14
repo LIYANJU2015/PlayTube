@@ -15,7 +15,6 @@ import com.admodule.AdModule;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.tubewebplayer.YouTubePlayerActivity;
 import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
@@ -190,7 +189,7 @@ public class App extends Application {
 
         CrashReport.initCrashReport(getApplicationContext(), "5bf803957f", false);
 
-        YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
+//        YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
 
         AdModule.getInstance().getFacebookAd().loadAds("811681725685294_811682365685230");
 
