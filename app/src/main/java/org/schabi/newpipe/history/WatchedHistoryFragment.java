@@ -11,16 +11,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.schabi.newpipe.NewPipeDatabase;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.history.dao.HistoryDAO;
 import org.schabi.newpipe.database.history.model.WatchHistoryEntry;
-import org.schabi.newpipe.info_list.holder.StreamInfoItemHolder;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
 
@@ -82,8 +80,8 @@ public class WatchedHistoryFragment extends HistoryFragment<WatchHistoryEntry> {
         @Override
         public void onViewRecycled(ViewHolder holder) {
             holder.itemView.setOnClickListener(null);
-            ImageLoader.getInstance()
-                    .cancelDisplayTask(holder.thumbnailView);
+//            ImageLoader.getInstance()
+//                    .cancelDisplayTask(holder.thumbnailView);
         }
 
         @Override
@@ -92,15 +90,16 @@ public class WatchedHistoryFragment extends HistoryFragment<WatchHistoryEntry> {
             holder.streamTitle.setText(entry.getTitle());
             holder.uploader.setText(entry.getUploader());
             holder.duration.setText(Localization.getDurationString(entry.getDuration()));
-            ImageLoader.getInstance()
-                    .displayImage(entry.getThumbnailURL(), holder.thumbnailView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+//            ImageLoader.getInstance()
+//                    .displayImage(entry.getThumbnailURL(), holder.thumbnailView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+            holder.thumbnailView.setImageURI(entry.getThumbnailURL());
         }
     }
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView date;
         private final TextView streamTitle;
-        private final ImageView thumbnailView;
+        private final SimpleDraweeView thumbnailView;
         private final TextView uploader;
         private final TextView duration;
 

@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.ListExtractor;
@@ -50,7 +52,7 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
     private TextView headerTitleView;
     private View headerUploaderLayout;
     private TextView headerUploaderName;
-    private ImageView headerUploaderAvatar;
+    private SimpleDraweeView headerUploaderAvatar;
     private TextView headerStreamCount;
     private View playlistCtrl;
 
@@ -179,7 +181,6 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
         animateView(headerRootLayout, false, 200);
         animateView(itemsList, false, 100);
 
-        imageLoader.cancelDisplayTask(headerUploaderAvatar);
         animateView(headerUploaderLayout, false, 200);
     }
 
@@ -212,8 +213,8 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
         } else {
             headerBackgroundButton.setVisibility(View.VISIBLE);
         }
-
-        imageLoader.displayImage(result.getUploaderAvatarUrl(), headerUploaderAvatar, DISPLAY_AVATAR_OPTIONS);
+        headerUploaderAvatar.setImageURI(result.getUploaderAvatarUrl());
+//        imageLoader.displayImage(result.getUploaderAvatarUrl(), headerUploaderAvatar, DISPLAY_AVATAR_OPTIONS);
         headerStreamCount.setText(getResources().getQuantityString(R.plurals.videos, (int) result.stream_count, (int) result.stream_count));
 
         if (!result.getErrors().isEmpty()) {

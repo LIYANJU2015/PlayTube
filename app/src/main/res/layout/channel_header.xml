@@ -13,26 +13,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/channel_banner_image"
+            app:fadeDuration="300"
+            app:placeholderImage="@drawable/channel_banner"
+            app:placeholderImageScaleType="centerCrop"
+            app:actualImageScaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@android:color/black"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/channel_banner"
             tools:ignore="ContentDescription"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/channel_avatar_view"
+            app:roundAsCircle="true"
+            app:fadeDuration="300"
+            app:placeholderImage="@drawable/buddy"
+            app:roundingBorderColor="#ffffff"
+            app:roundingBorderWidth="2dp"
             android:layout_width="@dimen/channel_avatar_size"
             android:layout_height="@dimen/channel_avatar_size"
             android:layout_alignTop="@id/channel_banner_image"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/buddy"
-            app:civ_border_color="#ffffff"
-            app:civ_border_width="2dp"
             tools:ignore="RtlHardcoded"/>
 
         <TextView

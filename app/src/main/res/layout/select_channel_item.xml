@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,8 +9,13 @@
     android:clickable="true"
     android:padding="5dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/itemThumbnailView"
+        app:roundAsCircle="true"
+        app:fadeDuration="400"
+        app:placeholderImage="@drawable/buddy"
+        app:placeholderImageScaleType="centerCrop"
+        app:actualImageScaleType="centerCrop"
         android:layout_width="48dp"
         android:layout_height="42dp"
         android:layout_alignParentLeft="true"
@@ -17,7 +23,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dp"
         android:contentDescription="@string/list_thumbnail_view_description"
-        android:src="@drawable/buddy"
         tools:ignore="RtlHardcoded"/>
 
     <TextView

@@ -20,12 +20,14 @@
         android:layout_height="200dp"
         android:orientation="vertical">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/img"
-            android:background="@drawable/dummy_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop"/>
+            app:fadeDuration="400"
+            app:placeholderImage="@drawable/dummy_thumbnail"
+            app:placeholderImageScaleType="centerCrop"
+            app:actualImageScaleType="centerCrop"/>
 
         <TextView
             android:paddingStart="16dp"

@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admodule.AdModule;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import org.schabi.newpipe.App;
@@ -77,8 +79,8 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
     //////////////////////////////////////////////////////////////////////////*/
 
     private View headerRootLayout;
-    private ImageView headerChannelBanner;
-    private ImageView headerAvatarView;
+    private SimpleDraweeView headerChannelBanner;
+    private SimpleDraweeView headerAvatarView;
     private TextView headerTitleView;
     private TextView headerSubscribersTextView;
     private Button headerSubscribeButton;
@@ -437,9 +439,9 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
     @Override
     public void showLoading() {
         super.showLoading();
-
-        imageLoader.cancelDisplayTask(headerChannelBanner);
-        imageLoader.cancelDisplayTask(headerAvatarView);
+//        imageLoader.cancelDisplayTask(headerChannelBanner);
+//        imageLoader.cancelDisplayTask(headerAvatarView);
+        headerChannelBanner.setImageResource(R.drawable.channel_banner);
         animateView(headerSubscribeButton, false, 100);
     }
 
@@ -448,8 +450,10 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo> {
         super.handleResult(result);
 
         headerRootLayout.setVisibility(View.VISIBLE);
-        imageLoader.displayImage(result.banner_url, headerChannelBanner, DISPLAY_BANNER_OPTIONS);
-        imageLoader.displayImage(result.avatar_url, headerAvatarView, DISPLAY_AVATAR_OPTIONS);
+        headerAvatarView.setImageURI(result.avatar_url);
+        headerChannelBanner.setImageURI(result.banner_url);
+//        imageLoader.displayImage(result.banner_url, headerChannelBanner, DISPLAY_BANNER_OPTIONS);
+//        imageLoader.displayImage(result.avatar_url, headerAvatarView, DISPLAY_AVATAR_OPTIONS);
 
         if (result.getSubscriberCount() != -1) {
             headerSubscribersTextView.setText(Localization.localizeSubscribersCount(activity, result.getSubscriberCount()));

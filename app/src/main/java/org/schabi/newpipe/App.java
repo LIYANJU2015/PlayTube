@@ -12,14 +12,10 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.admodule.AdModule;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tubewebplayer.YouTubePlayerActivity;
-
 import org.schabi.newpipe.api.YoutubeApiService;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
@@ -127,8 +123,9 @@ public class App extends Application {
         initNotificationChannel();
 
         // Initialize image loader
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
+//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+//        ImageLoader.getInstance().init(config);
+        Fresco.initialize(this);
 
         configureRxJavaErrorHandler();
 

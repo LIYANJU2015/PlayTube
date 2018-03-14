@@ -6,15 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.subscription.SubscriptionEntity;
@@ -25,7 +23,6 @@ import org.schabi.newpipe.report.UserAction;
 import java.util.List;
 import java.util.Vector;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -53,7 +50,6 @@ import io.reactivex.schedulers.Schedulers;
 public class SelectChannelFragment extends DialogFragment {
     private SelectChannelAdapter channelAdapter;
     private SubscriptionService subscriptionService;
-    private ImageLoader imageLoader = ImageLoader.getInstance();
 
     private ProgressBar progressBar;
     private TextView emptyView;
@@ -188,7 +184,8 @@ public class SelectChannelFragment extends DialogFragment {
                     clickedItem(position);
                 }
             });
-            imageLoader.displayImage(entry.getAvatarUrl(), holder.thumbnailView, DISPLAY_IMAGE_OPTIONS);
+            holder.thumbnailView.setImageURI(entry.getAvatarUrl());
+//            imageLoader.displayImage(entry.getAvatarUrl(), holder.thumbnailView, DISPLAY_IMAGE_OPTIONS);
         }
 
         @Override
@@ -204,7 +201,7 @@ public class SelectChannelFragment extends DialogFragment {
                 titleView = v.findViewById(R.id.itemTitleView);
             }
             public View view;
-            public CircleImageView thumbnailView;
+            public SimpleDraweeView thumbnailView;
             public TextView titleView;
         }
     }
@@ -228,11 +225,11 @@ public class SelectChannelFragment extends DialogFragment {
     // ImageLoaderOptions
     //////////////////////////////////////////////////////////////////////////*/
 
-    /**
-     * Base display options
-     */
-    public static final DisplayImageOptions DISPLAY_IMAGE_OPTIONS =
-            new DisplayImageOptions.Builder()
-                    .cacheInMemory(true)
-                    .build();
+//    /**
+//     * Base display options
+//     */
+//    public static final DisplayImageOptions DISPLAY_IMAGE_OPTIONS =
+//            new DisplayImageOptions.Builder()
+//                    .cacheInMemory(true)
+//                    .build();
 }

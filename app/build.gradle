@@ -110,7 +110,7 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.2'
 
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.facebook.fresco:fresco:1.8.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.nirhart:ParallaxScroll:dd53d1f9d1'
     implementation 'com.nononsenseapps:filepicker:3.0.1'

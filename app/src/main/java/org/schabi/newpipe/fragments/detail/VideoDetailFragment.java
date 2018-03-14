@@ -48,12 +48,11 @@ import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.ads.AdListener;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.tubewebplayer.WebViewPlayerActivity;
-import com.tubewebplayer.YouTubePlayerActivity;
 
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
@@ -149,7 +148,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     private LinearLayout contentRootLayoutHiding;
 
     private View thumbnailBackgroundButton;
-    private ImageView thumbnailImageView;
+    private SimpleDraweeView thumbnailImageView;
     private ImageView thumbnailPlayButton;
 
     private View videoTitleRoot;
@@ -167,7 +166,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
 
     private View uploaderRootLayout;
     private TextView uploaderTextView;
-    private ImageView uploaderThumb;
+    private SimpleDraweeView uploaderThumb;
 
     private TextView thumbsUpTextView;
     private ImageView thumbsUpImageView;
@@ -686,18 +685,21 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
     }
 
     private void initThumbnailViews(StreamInfo info) {
-        thumbnailImageView.setImageResource(R.drawable.dummy_thumbnail_dark);
+        thumbnailImageView.setActualImageResource(R.drawable.dummy_thumbnail_dark);
         if (!TextUtils.isEmpty(info.getThumbnailUrl())) {
-            imageLoader.displayImage(info.getThumbnailUrl(), thumbnailImageView, DISPLAY_THUMBNAIL_OPTIONS, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//                    ErrorActivity.reportError(activity, failReason.getCause(), null, activity.findViewById(android.R.id.content), ErrorActivity.ErrorInfo.make(UserAction.LOAD_IMAGE, NewPipe.getNameOfService(currentInfo.getServiceId()), imageUri, R.string.could_not_load_thumbnails));
-                }
-            });
+            thumbnailImageView.setImageURI(info.getThumbnailUrl());
+//            imageLoader.displayImage(info.getThumbnailUrl(), thumbnailImageView, DISPLAY_THUMBNAIL_OPTIONS, new SimpleImageLoadingListener() {
+//                @Override
+//                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+////                    ErrorActivity.reportError(activity, failReason.getCause(), null, activity.findViewById(android.R.id.content), ErrorActivity.ErrorInfo.make(UserAction.LOAD_IMAGE, NewPipe.getNameOfService(currentInfo.getServiceId()), imageUri, R.string.could_not_load_thumbnails));
+//                }
+//            });
         }
-        
+
+        uploaderThumb.setActualImageResource(R.drawable.buddy);
         if (!TextUtils.isEmpty(info.getUploaderAvatarUrl())) {
-            imageLoader.displayImage(info.getUploaderAvatarUrl(), uploaderThumb, DISPLAY_AVATAR_OPTIONS);
+//            imageLoader.displayImage(info.getUploaderAvatarUrl(), uploaderThumb, DISPLAY_AVATAR_OPTIONS);
+            uploaderThumb.setImageURI(info.getUploaderAvatarUrl());
         }
     }
 
@@ -1094,24 +1096,6 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             activity.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage(R.string.no_player_found)
-                    .setPositiveButton(R.string.install, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent();
-                            intent.setAction(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse(activity.getString(R.string.fdroid_vlc_url)));
-                            activity.startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.i(TAG, "You unlocked a secret unicorn.");
-                        }
-                    });
-            builder.create().show();
             Log.e(TAG, "Either no Streaming player for audio was installed, or something important crashed:");
             e.printStackTrace();
         }
@@ -1146,19 +1130,6 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
             this.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setMessage(R.string.no_player_found)
-                    .setPositiveButton(R.string.install, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent()
-                                    .setAction(Intent.ACTION_VIEW)
-                                    .setData(Uri.parse(getString(R.string.fdroid_vlc_url)));
-                            startActivity(intent);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null);
-            builder.create().show();
         }
     }
 
@@ -1223,9 +1194,10 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         final DisplayMetrics metrics = getResources().getDisplayMetrics();
         boolean isPortrait = metrics.heightPixels > metrics.widthPixels;
         int height = isPortrait ? (int) (metrics.widthPixels / (16.0f / 9.0f)) : (int) (metrics.heightPixels / 2f);
-        thumbnailImageView.setScaleType(isPortrait ? ImageView.ScaleType.CENTER_CROP : ImageView.ScaleType.FIT_CENTER);
+//        thumbnailImageView.setScaleType(isPortrait ? ImageView.ScaleType.CENTER_CROP : ImageView.ScaleType.FIT_CENTER);
         thumbnailImageView.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height));
         thumbnailImageView.setMinimumHeight(height);
+        thumbnailImageView.getHierarchy().setActualImageScaleType(isPortrait ? ScalingUtils.ScaleType.CENTER_CROP : ScalingUtils.ScaleType.FIT_CENTER);
     }
 
     private void showContentWithAnimation(long duration, long delay, @FloatRange(from = 0.0f, to = 1.0f) float translationPercent) {
@@ -1312,8 +1284,8 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
         videoTitleToggleArrow.setVisibility(View.GONE);
         videoTitleRoot.setClickable(false);
 
-        imageLoader.cancelDisplayTask(thumbnailImageView);
-        imageLoader.cancelDisplayTask(uploaderThumb);
+//        imageLoader.cancelDisplayTask(thumbnailImageView);
+//        imageLoader.cancelDisplayTask(uploaderThumb);
         thumbnailImageView.setImageBitmap(null);
         uploaderThumb.setImageBitmap(null);
     }

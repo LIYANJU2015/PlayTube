@@ -31,8 +31,12 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/detail_thumbnail_image_view"
+                    app:fadeDuration="400"
+                    app:placeholderImage="@drawable/dummy_thumbnail"
+                    app:placeholderImageScaleType="centerCrop"
+                    app:actualImageScaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -40,7 +44,7 @@
                     android:scaleType="centerCrop"
                     tools:ignore="RtlHardcoded"
                     tools:layout_height="200dp"
-                    tools:src="@drawable/dummy_thumbnail"/>
+                    />
 
                 <ImageView
                     android:id="@+id/detail_thumbnail_play_button"
@@ -297,8 +301,11 @@
                         android:paddingTop="8dp">
 
 
-                        <de.hdodenhof.circleimageview.CircleImageView
+                        <com.facebook.drawee.view.SimpleDraweeView
                             android:id="@+id/detail_uploader_thumbnail_view"
+                            app:roundAsCircle="true"
+                            app:fadeDuration="200"
+                            app:placeholderImage="@drawable/buddy"
                             android:layout_width="@dimen/video_item_detail_uploader_image_size"
                             android:layout_height="@dimen/video_item_detail_uploader_image_size"
                             android:contentDescription="@string/detail_uploader_thumbnail_view_description"

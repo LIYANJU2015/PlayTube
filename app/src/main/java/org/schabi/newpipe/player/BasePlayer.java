@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
@@ -58,8 +57,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
@@ -248,15 +245,15 @@ public abstract class BasePlayer implements Player.EventListener, PlaybackListen
     public void initThumbnail(final String url) {
         if (DEBUG) Log.d(TAG, "initThumbnail() called");
         if (url == null || url.isEmpty()) return;
-        ImageLoader.getInstance().resume();
-        ImageLoader.getInstance().loadImage(url, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                if (simpleExoPlayer == null) return;
-                if (DEBUG) Log.d(TAG, "onLoadingComplete() called with: imageUri = [" + imageUri + "], view = [" + view + "], loadedImage = [" + loadedImage + "]");
-                onThumbnailReceived(loadedImage);
-            }
-        });
+//        ImageLoader.getInstance().resume();
+//        ImageLoader.getInstance().loadImage(url, new SimpleImageLoadingListener() {
+//            @Override
+//            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                if (simpleExoPlayer == null) return;
+//                if (DEBUG) Log.d(TAG, "onLoadingComplete() called with: imageUri = [" + imageUri + "], view = [" + view + "], loadedImage = [" + loadedImage + "]");
+//                onThumbnailReceived(loadedImage);
+//            }
+//        });
     }
 
     public void onThumbnailReceived(Bitmap thumbnail) {
@@ -802,7 +799,7 @@ public abstract class BasePlayer implements Player.EventListener, PlaybackListen
     }
 
     protected void clearThumbnailCache() {
-        ImageLoader.getInstance().clearMemoryCache();
+//        ImageLoader.getInstance().clearMemoryCache();
     }
 
     protected void startProgressLoop() {

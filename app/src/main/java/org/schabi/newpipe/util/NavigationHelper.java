@@ -11,10 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.tubewebplayer.WebViewPlayerActivity;
-import com.tubewebplayer.YouTubePlayerActivity;
-
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
@@ -23,9 +19,7 @@ import org.schabi.newpipe.download.DownloadActivity;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.ServiceList;
 import org.schabi.newpipe.extractor.StreamingService;
-import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
-import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.fragments.MainFragment;
 import org.schabi.newpipe.fragments.MainFragment2;
 import org.schabi.newpipe.fragments.detail.VideoDetailFragment;
@@ -118,7 +112,7 @@ public class NavigationHelper {
 
     public static void gotoMainFragment(FragmentManager fragmentManager) {
         try {
-            ImageLoader.getInstance().clearMemoryCache();
+//            ImageLoader.getInstance().clearMemoryCache();
 
             boolean popped = fragmentManager.popBackStackImmediate(MAIN_FRAGMENT_TAG, 0);
             if (!popped) openMainFragment(fragmentManager);

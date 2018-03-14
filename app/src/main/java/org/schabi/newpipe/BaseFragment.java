@@ -10,10 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-
 import icepick.Icepick;
 
 public abstract class BaseFragment extends Fragment {
@@ -21,7 +17,6 @@ public abstract class BaseFragment extends Fragment {
     protected boolean DEBUG = MainActivity.DEBUG;
 
     protected AppCompatActivity activity;
-    public static final ImageLoader imageLoader = ImageLoader.getInstance();
 
     /*//////////////////////////////////////////////////////////////////////////
     // Fragment's Lifecycle
@@ -92,30 +87,30 @@ public abstract class BaseFragment extends Fragment {
     // DisplayImageOptions default configurations
     //////////////////////////////////////////////////////////////////////////*/
 
-    public static final DisplayImageOptions BASE_OPTIONS =
-            new DisplayImageOptions.Builder().cacheInMemory(true).build();
-
-    public static final DisplayImageOptions DISPLAY_AVATAR_OPTIONS =
-            new DisplayImageOptions.Builder()
-                    .cloneFrom(BASE_OPTIONS)
-                    .showImageOnLoading(R.drawable.buddy)
-                    .showImageForEmptyUri(R.drawable.buddy)
-                    .showImageOnFail(R.drawable.buddy)
-                    .build();
-
-    public static final DisplayImageOptions DISPLAY_THUMBNAIL_OPTIONS =
-            new DisplayImageOptions.Builder()
-                    .cloneFrom(BASE_OPTIONS)
-                    .displayer(new FadeInBitmapDisplayer(250))
-                    .showImageForEmptyUri(R.drawable.dummy_thumbnail)
-                    .showImageOnFail(R.drawable.dummy_thumbnail)
-                    .build();
-
-    public static final DisplayImageOptions DISPLAY_BANNER_OPTIONS =
-            new DisplayImageOptions.Builder()
-                    .cloneFrom(BASE_OPTIONS)
-                    .showImageOnLoading(R.drawable.channel_banner)
-                    .showImageForEmptyUri(R.drawable.channel_banner)
-                    .showImageOnFail(R.drawable.channel_banner)
-                    .build();
+//    public static final DisplayImageOptions BASE_OPTIONS =
+//            new DisplayImageOptions.Builder().cacheInMemory(true).build();
+//
+//    public static final DisplayImageOptions DISPLAY_AVATAR_OPTIONS =
+//            new DisplayImageOptions.Builder()
+//                    .cloneFrom(BASE_OPTIONS)
+//                    .showImageOnLoading(R.drawable.buddy)
+//                    .showImageForEmptyUri(R.drawable.buddy)
+//                    .showImageOnFail(R.drawable.buddy)
+//                    .build();
+//
+//    public static final DisplayImageOptions DISPLAY_THUMBNAIL_OPTIONS =
+//            new DisplayImageOptions.Builder()
+//                    .cloneFrom(BASE_OPTIONS)
+//                    .displayer(new FadeInBitmapDisplayer(250))
+//                    .showImageForEmptyUri(R.drawable.dummy_thumbnail)
+//                    .showImageOnFail(R.drawable.dummy_thumbnail)
+//                    .build();
+//
+//    public static final DisplayImageOptions DISPLAY_BANNER_OPTIONS =
+//            new DisplayImageOptions.Builder()
+//                    .cloneFrom(BASE_OPTIONS)
+//                    .showImageOnLoading(R.drawable.channel_banner)
+//                    .showImageForEmptyUri(R.drawable.channel_banner)
+//                    .showImageOnFail(R.drawable.channel_banner)
+//                    .build();
 }

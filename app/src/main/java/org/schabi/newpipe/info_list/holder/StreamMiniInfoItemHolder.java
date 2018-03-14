@@ -3,10 +3,9 @@ package org.schabi.newpipe.info_list.holder;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.InfoItem;
@@ -17,7 +16,7 @@ import org.schabi.newpipe.util.Localization;
 
 public class StreamMiniInfoItemHolder extends InfoItemHolder {
 
-    public final ImageView itemThumbnailView;
+    public final SimpleDraweeView itemThumbnailView;
     public final TextView itemVideoTitleView;
     public final TextView itemUploaderView;
     public final TextView itemDurationView;
@@ -56,8 +55,9 @@ public class StreamMiniInfoItemHolder extends InfoItemHolder {
         }
 
         // Default thumbnail is shown on error, while loading and if the url is empty
-        itemBuilder.getImageLoader()
-                .displayImage(item.thumbnail_url, itemThumbnailView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+//        itemBuilder.getImageLoader()
+//                .displayImage(item.thumbnail_url, itemThumbnailView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+        itemThumbnailView.setImageURI(item.thumbnail_url);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,11 +104,11 @@ public class StreamMiniInfoItemHolder extends InfoItemHolder {
     /**
      * Display options for stream thumbnails
      */
-    public static final DisplayImageOptions DISPLAY_THUMBNAIL_OPTIONS =
-            new DisplayImageOptions.Builder()
-                    .cloneFrom(BASE_DISPLAY_IMAGE_OPTIONS)
-                    .showImageOnFail(R.drawable.dummy_thumbnail)
-                    .showImageForEmptyUri(R.drawable.dummy_thumbnail)
-                    .showImageOnLoading(R.drawable.dummy_thumbnail)
-                    .build();
+//    public static final DisplayImageOptions DISPLAY_THUMBNAIL_OPTIONS =
+//            new DisplayImageOptions.Builder()
+//                    .cloneFrom(BASE_DISPLAY_IMAGE_OPTIONS)
+//                    .showImageOnFail(R.drawable.dummy_thumbnail)
+//                    .showImageForEmptyUri(R.drawable.dummy_thumbnail)
+//                    .showImageOnLoading(R.drawable.dummy_thumbnail)
+//                    .build();
 }

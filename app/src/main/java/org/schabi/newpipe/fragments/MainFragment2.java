@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,18 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admodule.AdModule;
-import com.admodule.LogUtils;
-import com.admodule.Utils;
 import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.ads.AdListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.paginate.Paginate;
 import com.rating.SizeUtils;
-import com.tubewebplayer.WebViewPlayerActivity;
-import com.tubewebplayer.YouTubePlayerActivity;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -46,7 +41,6 @@ import org.schabi.newpipe.BaseFragment;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.api.YouTubeVideos;
 import org.schabi.newpipe.api.YoutubeApiService;
-import org.schabi.newpipe.info_list.holder.StreamInfoItemHolder;
 import org.schabi.newpipe.util.AdViewWrapperAdapter;
 import org.schabi.newpipe.util.FilenameUtils;
 import org.schabi.newpipe.util.NavigationHelper;
@@ -171,22 +165,13 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
         mCommonAdapter = new CommonAdapter<YouTubeVideos.Snippet>(activity, R.layout.home_video_item, mDatas) {
             @Override
             protected void convert(ViewHolder holder, final YouTubeVideos.Snippet snippet, int position) {
-                ImageView imageView = holder.getView(R.id.img);
+                SimpleDraweeView imageView = holder.getView(R.id.img);
                 if (snippet.thumbnails.getStandard() != null) {
-                    imageView.setTag(snippet.thumbnails.getStandard().getUrl());
-                    ImageLoader.getInstance()
-                            .displayImage(snippet.thumbnails.getStandard().getUrl(),
-                                    imageView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+                    imageView.setImageURI(snippet.thumbnails.getStandard().getUrl());
                 } else if (snippet.thumbnails.getHigh() != null) {
-                    imageView.setTag(snippet.thumbnails.getHigh().getUrl());
-                    ImageLoader.getInstance()
-                            .displayImage(snippet.thumbnails.getHigh().getUrl(),
-                                    imageView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+                    imageView.setImageURI(snippet.thumbnails.getHigh().getUrl());
                 } else if (snippet.thumbnails.getDefaultX() != null) {
-                    imageView.setTag(snippet.thumbnails.getDefaultX().getUrl());
-                    ImageLoader.getInstance()
-                            .displayImage(snippet.thumbnails.getDefaultX().getUrl(),
-                                    imageView, StreamInfoItemHolder.DISPLAY_THUMBNAIL_OPTIONS);
+                    imageView.setImageURI(snippet.thumbnails.getDefaultX().getUrl());
                 } else {
                     imageView.setImageResource(R.drawable.dummy_thumbnail);
                 }

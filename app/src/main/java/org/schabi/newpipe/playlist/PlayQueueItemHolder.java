@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.info_list.holder.InfoItemHolder;
@@ -32,7 +34,8 @@ import org.schabi.newpipe.info_list.holder.InfoItemHolder;
 public class PlayQueueItemHolder extends RecyclerView.ViewHolder {
 
     public final TextView itemVideoTitleView, itemDurationView, itemAdditionalDetailsView;
-    public final ImageView itemSelected, itemThumbnailView, itemHandle;
+    public final ImageView itemSelected, itemHandle;
+    public final SimpleDraweeView itemThumbnailView;
 
     public final View itemRoot;
 

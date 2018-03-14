@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
@@ -48,7 +47,6 @@ public class InfoItemBuilder {
     }
 
     private final Context context;
-    private ImageLoader imageLoader = ImageLoader.getInstance();
 
     private OnInfoItemSelectedListener<StreamInfoItem> onStreamSelectedListener;
     private OnInfoItemSelectedListener<ChannelInfoItem> onChannelSelectedListener;
@@ -84,10 +82,6 @@ public class InfoItemBuilder {
 
     public Context getContext() {
         return context;
-    }
-
-    public ImageLoader getImageLoader() {
-        return imageLoader;
     }
 
     public OnInfoItemSelectedListener<StreamInfoItem> getOnStreamSelectedListener() {
