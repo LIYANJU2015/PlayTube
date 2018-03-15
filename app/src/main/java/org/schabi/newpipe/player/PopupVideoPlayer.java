@@ -717,27 +717,24 @@ public final class PopupVideoPlayer extends Service {
         private int initialPopupX, initialPopupY;
         private boolean isMoving;
 
+        private int onDownPopupWidth = 0;
         private boolean isResizing;
+        private boolean isResizingRightSide;
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             if (DEBUG)
                 Log.d(TAG, "onDoubleTap() called with: e = [" + e + "]" + "rawXy = " + e.getRawX() + ", " + e.getRawY() + ", xy = " + e.getX() + ", " + e.getY());
-            if (playerImpl == null || !playerImpl.isPlaying() || !playerImpl.isPlayerReady()) return false;
-
-            if (e.getX() > popupWidth / 2) {
-                playerImpl.onFastForward();
-            } else {
-                playerImpl.onFastRewind();
-            }
-
+            if (!playerImpl.isPlaying()) return false;
+            if (e.getX() > popupWidth / 2) playerImpl.onFastForward();
+            else playerImpl.onFastRewind();
             return true;
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (DEBUG) Log.d(TAG, "onSingleTapConfirmed() called with: e = [" + e + "]");
-            if (playerImpl == null || playerImpl.getPlayer() == null) return false;
+            if (playerImpl.getPlayer() == null) return false;
             playerImpl.onVideoPlayPause();
             return true;
         }
@@ -749,20 +746,27 @@ public final class PopupVideoPlayer extends Service {
             initialPopupY = windowLayoutParams.y;
             popupWidth = windowLayoutParams.width;
             popupHeight = windowLayoutParams.height;
-            return super.onDown(e);
+            onDownPopupWidth = windowLayoutParams.width;
+            return false;
         }
 
         @Override
         public void onLongPress(MotionEvent e) {
             if (DEBUG) Log.d(TAG, "onLongPress() called with: e = [" + e + "]");
-            updateScreenSize();
-            checkPositionBounds();
-            updatePopupSize((int) screenWidth, -1);
+            playerImpl.showAndAnimateControl(-1, true);
+            playerImpl.getLoadingPanel().setVisibility(View.GONE);
+
+            playerImpl.hideControls(0, 0);
+            animateView(playerImpl.getCurrentDisplaySeek(), false, 0, 0);
+            animateView(playerImpl.getResizingIndicator(), true, 200, 0);
+
+            isResizing = true;
+            isResizingRightSide = e.getRawX() > windowLayoutParams.x + (windowLayoutParams.width / 2f);
         }
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (isResizing || playerImpl == null) return super.onScroll(e1, e2, distanceX, distanceY);
+            if (isResizing) return false;
 
             if (playerImpl.getCurrentState() != BasePlayer.STATE_BUFFERING
                     && (!isMoving || playerImpl.getControlsRoot().getAlpha() != 1f)) playerImpl.showControls(0);
@@ -793,50 +797,24 @@ public final class PopupVideoPlayer extends Service {
 
         private void onScrollEnd() {
             if (DEBUG) Log.d(TAG, "onScrollEnd() called");
-            if (playerImpl == null) return;
             if (playerImpl.isControlsVisible() && playerImpl.getCurrentState() == BasePlayer.STATE_PLAYING) {
                 playerImpl.hideControls(300, VideoPlayer.DEFAULT_CONTROLS_HIDE_TIME);
             }
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (DEBUG) Log.d(TAG, "Fling velocity: dX=[" + velocityX + "], dY=[" + velocityY + "]");
-            if (playerImpl == null) return false;
-
-            final float absVelocityX = Math.abs(velocityX);
-            final float absVelocityY = Math.abs(velocityY);
-            if (absVelocityX > shutdownFlingVelocity) {
-                onClose();
-                return true;
-            } else if (Math.max(absVelocityX, absVelocityY) > tossFlingVelocity) {
-                if (absVelocityX > tossFlingVelocity) windowLayoutParams.x = (int) velocityX;
-                if (absVelocityY > tossFlingVelocity) windowLayoutParams.y = (int) velocityY;
-                checkPositionBounds();
-                windowManager.updateViewLayout(playerImpl.getRootView(), windowLayoutParams);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
         public boolean onTouch(View v, MotionEvent event) {
             gestureDetector.onTouchEvent(event);
-            if (playerImpl == null) return false;
-            if (event.getPointerCount() == 2 && !isResizing) {
-                if (DEBUG) Log.d(TAG, "onTouch() 2 finger pointer detected, enabling resizing.");
-                playerImpl.showAndAnimateControl(-1, true);
-                playerImpl.getLoadingPanel().setVisibility(View.GONE);
-
-                playerImpl.hideControls(0, 0);
-                animateView(playerImpl.getCurrentDisplaySeek(), false, 0, 0);
-                animateView(playerImpl.getResizingIndicator(), true, 200, 0);
-                isResizing = true;
-            }
-
-            if (event.getAction() == MotionEvent.ACTION_MOVE && !isMoving && isResizing) {
-                if (DEBUG) Log.d(TAG, "onTouch() ACTION_MOVE > v = [" + v + "],  e1.getRaw = [" + event.getRawX() + ", " + event.getRawY() + "]");
-                return handleMultiDrag(event);
+            if (event.getAction() == MotionEvent.ACTION_MOVE && isResizing && !isMoving) {
+                //if (DEBUG) Log.d(TAG, "onTouch() ACTION_MOVE > v = [" + v + "],  e1.getRaw = [" + event.getRawX() + ", " + event.getRawY() + "]");
+                int width;
+                if (isResizingRightSide) width = (int) event.getRawX() - windowLayoutParams.x;
+                else {
+                    width = (int) (windowLayoutParams.width + (windowLayoutParams.x - event.getRawX()));
+                    if (width > minimumWidth) windowLayoutParams.x = initialPopupX - (width - onDownPopupWidth);
+                }
+                if (width <= maximumWidth && width >= minimumWidth) updatePopupSize(width, -1);
+                return true;
             }
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -854,35 +832,181 @@ public final class PopupVideoPlayer extends Service {
                 }
                 savePositionAndSize();
             }
-
-            v.performClick();
             return true;
         }
 
-        private boolean handleMultiDrag(final MotionEvent event) {
-            if (event.getPointerCount() != 2) return false;
-
-            final float firstPointerX = event.getX(0);
-            final float secondPointerX = event.getX(1);
-
-            final float diff = Math.abs(firstPointerX - secondPointerX);
-            if (firstPointerX > secondPointerX) {
-                // second pointer is the anchor (the leftmost pointer)
-                windowLayoutParams.x = (int) (event.getRawX() - diff);
-            } else {
-                // first pointer is the anchor
-                windowLayoutParams.x = (int) event.getRawX();
-            }
-
-            checkPositionBounds();
-            updateScreenSize();
-
-            final int width = (int) Math.min(screenWidth, diff);
-            updatePopupSize(width, -1);
-
-            return true;
-        }
     }
+
+//    private class MySimpleOnGestureListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
+//        private int initialPopupX, initialPopupY;
+//        private boolean isMoving;
+//
+//        private boolean isResizing;
+//
+//        @Override
+//        public boolean onDoubleTap(MotionEvent e) {
+//            if (DEBUG)
+//                Log.d(TAG, "onDoubleTap() called with: e = [" + e + "]" + "rawXy = " + e.getRawX() + ", " + e.getRawY() + ", xy = " + e.getX() + ", " + e.getY());
+//            if (playerImpl == null || !playerImpl.isPlaying() || !playerImpl.isPlayerReady()) return false;
+//
+//            if (e.getX() > popupWidth / 2) {
+//                playerImpl.onFastForward();
+//            } else {
+//                playerImpl.onFastRewind();
+//            }
+//
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onSingleTapConfirmed(MotionEvent e) {
+//            if (DEBUG) Log.d(TAG, "onSingleTapConfirmed() called with: e = [" + e + "]");
+//            if (playerImpl == null || playerImpl.getPlayer() == null) return false;
+//            playerImpl.onVideoPlayPause();
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onDown(MotionEvent e) {
+//            if (DEBUG) Log.d(TAG, "onDown() called with: e = [" + e + "]");
+//            initialPopupX = windowLayoutParams.x;
+//            initialPopupY = windowLayoutParams.y;
+//            popupWidth = windowLayoutParams.width;
+//            popupHeight = windowLayoutParams.height;
+//            return super.onDown(e);
+//        }
+//
+//        @Override
+//        public void onLongPress(MotionEvent e) {
+//            if (DEBUG) Log.d(TAG, "onLongPress() called with: e = [" + e + "]");
+//            updateScreenSize();
+//            checkPositionBounds();
+//            updatePopupSize((int) screenWidth, -1);
+//        }
+//
+//        @Override
+//        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//            if (isResizing || playerImpl == null) return super.onScroll(e1, e2, distanceX, distanceY);
+//
+//            if (playerImpl.getCurrentState() != BasePlayer.STATE_BUFFERING
+//                    && (!isMoving || playerImpl.getControlsRoot().getAlpha() != 1f)) playerImpl.showControls(0);
+//            isMoving = true;
+//
+//            float diffX = (int) (e2.getRawX() - e1.getRawX()), posX = (int) (initialPopupX + diffX);
+//            float diffY = (int) (e2.getRawY() - e1.getRawY()), posY = (int) (initialPopupY + diffY);
+//
+//            if (posX > (screenWidth - popupWidth)) posX = (int) (screenWidth - popupWidth);
+//            else if (posX < 0) posX = 0;
+//
+//            if (posY > (screenHeight - popupHeight)) posY = (int) (screenHeight - popupHeight);
+//            else if (posY < 0) posY = 0;
+//
+//            windowLayoutParams.x = (int) posX;
+//            windowLayoutParams.y = (int) posY;
+//
+//            //noinspection PointlessBooleanExpression
+//            if (DEBUG && false) Log.d(TAG, "PopupVideoPlayer.onScroll = " +
+//                    ", e1.getRaw = [" + e1.getRawX() + ", " + e1.getRawY() + "]" +
+//                    ", e2.getRaw = [" + e2.getRawX() + ", " + e2.getRawY() + "]" +
+//                    ", distanceXy = [" + distanceX + ", " + distanceY + "]" +
+//                    ", posXy = [" + posX + ", " + posY + "]" +
+//                    ", popupWh = [" + popupWidth + " x " + popupHeight + "]");
+//            windowManager.updateViewLayout(playerImpl.getRootView(), windowLayoutParams);
+//            return true;
+//        }
+//
+//        private void onScrollEnd() {
+//            if (DEBUG) Log.d(TAG, "onScrollEnd() called");
+//            if (playerImpl == null) return;
+//            if (playerImpl.isControlsVisible() && playerImpl.getCurrentState() == BasePlayer.STATE_PLAYING) {
+//                playerImpl.hideControls(300, VideoPlayer.DEFAULT_CONTROLS_HIDE_TIME);
+//            }
+//        }
+//
+//        @Override
+//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//            if (DEBUG) Log.d(TAG, "Fling velocity: dX=[" + velocityX + "], dY=[" + velocityY + "]");
+//            if (playerImpl == null) return false;
+//
+//            final float absVelocityX = Math.abs(velocityX);
+//            final float absVelocityY = Math.abs(velocityY);
+//            if (absVelocityX > shutdownFlingVelocity) {
+//                onClose();
+//                return true;
+//            } else if (Math.max(absVelocityX, absVelocityY) > tossFlingVelocity) {
+//                if (absVelocityX > tossFlingVelocity) windowLayoutParams.x = (int) velocityX;
+//                if (absVelocityY > tossFlingVelocity) windowLayoutParams.y = (int) velocityY;
+//                checkPositionBounds();
+//                windowManager.updateViewLayout(playerImpl.getRootView(), windowLayoutParams);
+//                return true;
+//            }
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onTouch(View v, MotionEvent event) {
+//            gestureDetector.onTouchEvent(event);
+//            if (playerImpl == null) return false;
+//            if (event.getPointerCount() == 2 && !isResizing) {
+//                if (DEBUG) Log.d(TAG, "onTouch() 2 finger pointer detected, enabling resizing.");
+//                playerImpl.showAndAnimateControl(-1, true);
+//                playerImpl.getLoadingPanel().setVisibility(View.GONE);
+//
+//                playerImpl.hideControls(0, 0);
+//                animateView(playerImpl.getCurrentDisplaySeek(), false, 0, 0);
+//                animateView(playerImpl.getResizingIndicator(), true, 200, 0);
+//                isResizing = true;
+//            }
+//
+//            if (event.getAction() == MotionEvent.ACTION_MOVE && !isMoving && isResizing) {
+//                if (DEBUG) Log.d(TAG, "onTouch() ACTION_MOVE > v = [" + v + "],  e1.getRaw = [" + event.getRawX() + ", " + event.getRawY() + "]");
+//                return handleMultiDrag(event);
+//            }
+//
+//            if (event.getAction() == MotionEvent.ACTION_UP) {
+//                if (DEBUG)
+//                    Log.d(TAG, "onTouch() ACTION_UP > v = [" + v + "],  e1.getRaw = [" + event.getRawX() + ", " + event.getRawY() + "]");
+//                if (isMoving) {
+//                    isMoving = false;
+//                    onScrollEnd();
+//                }
+//
+//                if (isResizing) {
+//                    isResizing = false;
+//                    animateView(playerImpl.getResizingIndicator(), false, 100, 0);
+//                    playerImpl.changeState(playerImpl.getCurrentState());
+//                }
+//                savePositionAndSize();
+//            }
+//
+//            v.performClick();
+//            return true;
+//        }
+//
+//        private boolean handleMultiDrag(final MotionEvent event) {
+//            if (event.getPointerCount() != 2) return false;
+//
+//            final float firstPointerX = event.getX(0);
+//            final float secondPointerX = event.getX(1);
+//
+//            final float diff = Math.abs(firstPointerX - secondPointerX);
+//            if (firstPointerX > secondPointerX) {
+//                // second pointer is the anchor (the leftmost pointer)
+//                windowLayoutParams.x = (int) (event.getRawX() - diff);
+//            } else {
+//                // first pointer is the anchor
+//                windowLayoutParams.x = (int) event.getRawX();
+//            }
+//
+//            checkPositionBounds();
+//            updateScreenSize();
+//
+//            final int width = (int) Math.min(screenWidth, diff);
+//            updatePopupSize(width, -1);
+//
+//            return true;
+//        }
+//    }
 
     /**
      * Fetcher handler used if open by a link out of NewPipe

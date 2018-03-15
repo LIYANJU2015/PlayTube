@@ -1,8 +1,10 @@
 package us.shandian.giga.get;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.facebook.stetho.common.LogUtil;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -166,7 +168,7 @@ public class DownloadManagerImpl implements DownloadManager {
 
                         DownloadMission mis = new Gson().fromJson(str, DownloadMission.class);
 
-                        if (mis.finished) {
+                        if (mis.finished || TextUtils.isEmpty(mis.location)) {
                             if (!sub.delete()) {
                                 Log.w(TAG, "Unable to delete .giga file: " + sub.getPath());
                             }

@@ -1,4 +1,4 @@
-package org.schabi.newpipe.download;
+package org.schabi.newpipe.videoinfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,18 +28,15 @@ import com.facebook.ads.NativeAd;
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
-import org.schabi.newpipe.extractor.MediaFormat;
 import org.schabi.newpipe.extractor.stream.AudioStream;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
 import org.schabi.newpipe.extractor.stream.VideoStream;
-import org.schabi.newpipe.fragments.MainFragment2;
 import org.schabi.newpipe.fragments.detail.SpinnerToolbarAdapter;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.util.FacebookReport;
 import org.schabi.newpipe.util.FilenameUtils;
 import org.schabi.newpipe.util.ListHelper;
 import org.schabi.newpipe.util.PermissionHelper;
-import org.schabi.newpipe.util.ThemeHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,7 +45,7 @@ import java.util.List;
 import us.shandian.giga.service.DownloadManagerService;
 import us.shandian.giga.util.Utility;
 
-public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+public class GetVideoInfoDialog extends DialogFragment implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = "DialogFragment";
     private static final boolean DEBUG = MainActivity.DEBUG;
 
@@ -68,8 +65,8 @@ public class DownloadDialog extends DialogFragment implements RadioGroup.OnCheck
     private TextView threadsCountTextView;
     private SeekBar threadsSeekBar;
 
-    public static DownloadDialog newInstance(StreamInfo info, ArrayList<VideoStream> sortedStreamVideosList, int selectedVideoIndex) {
-        DownloadDialog dialog = new DownloadDialog();
+    public static GetVideoInfoDialog newInstance(StreamInfo info, ArrayList<VideoStream> sortedStreamVideosList, int selectedVideoIndex) {
+        GetVideoInfoDialog dialog = new GetVideoInfoDialog();
         dialog.setInfo(info, sortedStreamVideosList, selectedVideoIndex);
         dialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         return dialog;

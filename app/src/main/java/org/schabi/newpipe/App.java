@@ -13,9 +13,8 @@ import android.util.Log;
 
 import com.admodule.AdModule;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
-import org.schabi.newpipe.api.YoutubeApiService;
+
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.settings.SettingsActivity;
 import org.schabi.newpipe.util.ExtractorHelper;
@@ -192,13 +191,6 @@ public class App extends Application {
 //        YouTubePlayerActivity.setDeveloperKey(YoutubeApiService.DEVOTE_KEY);
 
         AdModule.getInstance().getFacebookAd().loadAds("811681725685294_811682365685230");
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
     }
 
     public static void setSpecial() {

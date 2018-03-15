@@ -23,7 +23,7 @@ import com.rating.RatingActivity;
 
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
-import org.schabi.newpipe.download.DownloadActivity;
+import org.schabi.newpipe.videoinfo.GetVideoInfoActivity;
 import org.schabi.newpipe.settings.NewPipeSettings;
 import org.schabi.newpipe.util.FacebookReport;
 
@@ -93,7 +93,7 @@ public class DownloadManagerService extends Service {
             }
         }
 
-        Intent openDownloadListIntent = new Intent(this, DownloadActivity.class)
+        Intent openDownloadListIntent = new Intent(this, GetVideoInfoActivity.class)
                 .setAction(Intent.ACTION_MAIN);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,

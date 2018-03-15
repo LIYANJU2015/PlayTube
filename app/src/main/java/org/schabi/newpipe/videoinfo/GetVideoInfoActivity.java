@@ -1,4 +1,4 @@
-package org.schabi.newpipe.download;
+package org.schabi.newpipe.videoinfo;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -12,10 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
-import com.admodule.AdModule;
-import com.admodule.adfb.IFacebookAd;
-import com.facebook.ads.Ad;
-
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.settings.SettingsActivity;
 import org.schabi.newpipe.util.ThemeHelper;
@@ -24,7 +20,7 @@ import us.shandian.giga.service.DownloadManagerService;
 import us.shandian.giga.ui.fragment.AllMissionsFragment;
 import us.shandian.giga.ui.fragment.MissionsFragment;
 
-public class DownloadActivity extends AppCompatActivity {
+public class GetVideoInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

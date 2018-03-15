@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.facebook.stetho.common.LogUtil;
 
 import us.shandian.giga.get.DownloadMission;
 
@@ -94,6 +98,7 @@ public class DownloadMissionSQLiteHelper extends SQLiteOpenHelper {
         String name = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME));
         String location = cursor.getString(cursor.getColumnIndexOrThrow(KEY_LOCATION));
         String url = cursor.getString(cursor.getColumnIndexOrThrow(KEY_URL));
+        Log.v("XX", "name :: " + name + " location :" + location + " url::" + url);
         DownloadMission mission = new DownloadMission(name, url, location);
         mission.done = cursor.getLong(cursor.getColumnIndexOrThrow(KEY_DONE));
         mission.timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(KEY_TIMESTAMP));

@@ -15,7 +15,7 @@ import org.schabi.newpipe.App;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.about.AboutActivity;
-import org.schabi.newpipe.download.DownloadActivity;
+import org.schabi.newpipe.videoinfo.GetVideoInfoActivity;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.ServiceList;
 import org.schabi.newpipe.extractor.StreamingService;
@@ -274,7 +274,7 @@ public class NavigationHelper {
         if (!PermissionHelper.checkStoragePermissions(activity)) {
             return false;
         }
-        Intent intent = new Intent(activity, DownloadActivity.class);
+        Intent intent = new Intent(activity, GetVideoInfoActivity.class);
         activity.startActivity(intent);
         return true;
     }

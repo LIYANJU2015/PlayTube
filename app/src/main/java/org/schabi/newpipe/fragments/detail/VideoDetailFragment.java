@@ -36,7 +36,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +47,6 @@ import com.admodule.admob.AdMobBanner;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.NativeAd;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.ads.AdListener;
@@ -57,7 +55,7 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import org.schabi.newpipe.App;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.ReCaptchaActivity;
-import org.schabi.newpipe.download.DownloadDialog;
+import org.schabi.newpipe.videoinfo.GetVideoInfoDialog;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException;
@@ -78,7 +76,6 @@ import org.schabi.newpipe.player.helper.PlayerHelper;
 import org.schabi.newpipe.player.old.PlayVideoActivity;
 import org.schabi.newpipe.playlist.PlayQueue;
 import org.schabi.newpipe.playlist.SinglePlayQueue;
-import org.schabi.newpipe.report.ErrorActivity;
 import org.schabi.newpipe.report.UserAction;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.ExtractorHelper;
@@ -90,7 +87,6 @@ import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PermissionHelper;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -820,7 +816,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo> implement
                 }
 
                 try {
-                    DownloadDialog downloadDialog = DownloadDialog.newInstance(info, sortedStreamVideosList, selectedStreamId);
+                    GetVideoInfoDialog downloadDialog = GetVideoInfoDialog.newInstance(info, sortedStreamVideosList, selectedStreamId);
                     downloadDialog.show(activity.getSupportFragmentManager(), "downloadDialog");
                 } catch (Exception e) {
                     Toast.makeText(activity, R.string.could_not_setup_download_menu, Toast.LENGTH_LONG).show();

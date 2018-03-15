@@ -289,6 +289,13 @@ public class SpecialVersions {
             if (referrer == null) {
                 return;
             }
+
+            boolean result = App.sPreferences.getBoolean("handler_referrer", false);
+            if (result) {
+                return;
+            }
+            App.sPreferences.edit().putBoolean("handler_referrer", true).apply();
+
             Log.e("Referrer:::::", referrer);
             FacebookReport.logSentReferrer(referrer);
 

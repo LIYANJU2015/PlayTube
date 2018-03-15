@@ -116,7 +116,7 @@
 
         <!-- giga get related -->
         <activity
-            android:name=".download.DownloadActivity"
+            android:name=".videoinfo.GetVideoInfoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"/>
 
