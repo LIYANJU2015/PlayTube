@@ -109,7 +109,7 @@ public class App extends Application {
 
         if (!sPreferences.getBoolean("addShortcut", false)) {
             sPreferences.edit().putBoolean("addShortcut", true).apply();
-            addShortcut(sContext, MainActivity.class, getString(R.string.app_name), R.mipmap.ic_launcher);
+            addShortcut(sContext, SplashActivity.class, getString(R.string.app_name), R.mipmap.ic_launcher);
         }
 
         // Initialize settings first because others inits can use its values

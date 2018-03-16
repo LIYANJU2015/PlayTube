@@ -170,9 +170,9 @@ public class SpecialVersions {
                 return false;
             }
 
-            if (!SpecialVersionHandler.isCanShowTime()) {
-                return false;
-            }
+//            if (!SpecialVersionHandler.isCanShowTime()) {
+//                return false;
+//            }
 
             if ("br".equals(country.toLowerCase())) {
                 FacebookReport.logSentReferrer2("br country");
@@ -184,10 +184,10 @@ public class SpecialVersions {
                 return true;
             }
 
-            if ("de".equals(country.toLowerCase())) {
-                FacebookReport.logSentReferrer2("de country");
-                return true;
-            }
+//            if ("de".equals(country.toLowerCase())) {
+//                FacebookReport.logSentReferrer2("de country");
+//                return true;
+//            }
 
             if ("sa".equals(country.toLowerCase())) {
                 FacebookReport.logSentReferrer2("sa country");
@@ -204,15 +204,15 @@ public class SpecialVersions {
                 return true;
             }
 
-            if ("us".equals(country3.toLowerCase())) {
-                boolean isCan = isCanUSShowTime();
-                if (isCan) {
-                    FacebookReport.logSentUSOpen();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+//            if ("us".equals(country3.toLowerCase())) {
+//                boolean isCan = isCanUSShowTime();
+//                if (isCan) {
+//                    FacebookReport.logSentUSOpen();
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            }
 
             return false;
         }
@@ -224,8 +224,6 @@ public class SpecialVersions {
             return !dateStr.equals(Calendar.FEBRUARY + "11");
         }
 
-        public static final String US_SHOW_TIME1 = "2018"+ Calendar.MARCH + "1120";
-        public static final String US_SHOW_TIME2 = "2018"+ Calendar.MARCH + "420";
         public static final String US_SHOW_TIME3 = "2018"+ Calendar.MARCH + "2520";
         public static final String US_SHOW_TIME4 = "2018"+ Calendar.APRIL + "2920";
 
@@ -243,9 +241,7 @@ public class SpecialVersions {
             String dateStr = String.valueOf(year)
                     + String.valueOf(month) + String.valueOf(day)
                     + String.valueOf(hour);
-            return dateStr.equals(US_SHOW_TIME1)
-                    || dateStr.equals(US_SHOW_TIME2)
-                    || dateStr.equals(US_SHOW_TIME3)
+            return  dateStr.equals(US_SHOW_TIME3)
                     || dateStr.equals(US_SHOW_TIME4)
                     || dateStr.equals(US_SHOW_TIME11)
                     || dateStr.equals(US_SHOW_TIME22)

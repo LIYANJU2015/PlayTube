@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 9
-        versionName "1.2.6"
+        versionName "2.0.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -91,7 +91,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.31.0'
     compile 'com.google.android.gms:play-services-ads:11.8.0'
     compile 'com.tencent.bugly:crashreport:2.6.6.1'
-    compile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
 
     implementation 'com.github.TeamNewPipe:NewPipeExtractor:2d191c4ca'
 

@@ -270,7 +270,8 @@ public class MainFragment2 extends BaseFragment implements SwipeRefreshLayout.On
                 mIsLoadingMore = false;
                 mIsLoadedAll = TextUtils.isEmpty(youTubeVideos.nextPageToken);
 
-                NativeAd nativeAd = AdModule.getInstance().getFacebookAd().getNativeAd();
+                AdModule.getInstance().getFacebookAd().nextNativieAd();
+                NativeAd nativeAd = AdModule.getInstance().getFacebookAd().nextNativieAd();
                 if (nativeAd != null && nativeAd.isAdLoaded() && currentAdapter != null
                         && !currentAdapter.isAddAdView()) {
                     Log.v("main", "setadpter>>>>");

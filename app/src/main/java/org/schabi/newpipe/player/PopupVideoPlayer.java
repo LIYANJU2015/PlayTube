@@ -54,6 +54,7 @@ import android.widget.Toast;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 
+import org.schabi.newpipe.App;
 import org.schabi.newpipe.BuildConfig;
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
@@ -632,10 +633,12 @@ public final class PopupVideoPlayer extends Service {
                     onRepeatClicked();
                     break;
                 case Intent.ACTION_SCREEN_ON:
-                    onVideoPlayPause();
                     enableVideoRenderer(true);
                     break;
                 case Intent.ACTION_SCREEN_OFF:
+                    if (!App.isSpecial()) {
+                        onVideoPlayPause();
+                    }
                     enableVideoRenderer(false);
                     break;
             }

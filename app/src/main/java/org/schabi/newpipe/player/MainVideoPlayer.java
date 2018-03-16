@@ -324,8 +324,10 @@ public final class MainVideoPlayer extends Activity {
             if (intent == null || intent.getAction() == null) return;
             if (DEBUG) Log.d(TAG, "onBroadcastReceived() called with: intent = [" + intent + "]");
             switch (intent.getAction()) {
-                case Intent.ACTION_SCREEN_ON:
-                    onVideoPlayPause();
+                case Intent.ACTION_SCREEN_OFF:
+                    if (!App.isSpecial()) {
+                        onVideoPlayPause();
+                    }
                     break;
             }
         }

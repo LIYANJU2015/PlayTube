@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.stetho.common.LogUtil;
 import com.google.gson.Gson;
 
 import java.io.File;

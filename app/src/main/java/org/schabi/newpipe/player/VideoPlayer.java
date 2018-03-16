@@ -181,7 +181,8 @@ public abstract class VideoPlayer extends BasePlayer
         this.qualityPopupMenu = new PopupMenu(context, qualityTextView);
         this.playbackSpeedPopupMenu = new PopupMenu(context, playbackSpeedTextView);
 
-        ((ProgressBar) this.loadingPanel.findViewById(R.id.progressBarLoadingPanel)).getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        ((ProgressBar) this.loadingPanel.findViewById(R.id.progressBarLoadingPanel))
+                .getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
     }
 

@@ -5,10 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
 import android.util.Log;
-
-import com.facebook.stetho.common.LogUtil;
 
 import us.shandian.giga.get.DownloadMission;
 
