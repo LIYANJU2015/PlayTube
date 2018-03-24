@@ -512,14 +512,18 @@ public abstract class VideoPlayer extends BasePlayer
 
     public void onQualitySelectorClicked() {
         if (DEBUG) Log.d(TAG, "onQualitySelectorClicked() called");
-        qualityPopupMenu.show();
-        isSomePopupMenuVisible = true;
-        showControls(300);
+        try {
+            qualityPopupMenu.show();
+            isSomePopupMenuVisible = true;
+            showControls(300);
 
-        final VideoStream videoStream = getSelectedVideoStream();
-        final String qualityText = MediaFormat.getNameById(videoStream.format) + " " + videoStream.resolution;
-        qualityTextView.setText(qualityText);
-        wasPlaying = simpleExoPlayer.getPlayWhenReady();
+            final VideoStream videoStream = getSelectedVideoStream();
+            final String qualityText = MediaFormat.getNameById(videoStream.format) + " " + videoStream.resolution;
+            qualityTextView.setText(qualityText);
+            wasPlaying = simpleExoPlayer.getPlayWhenReady();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void onPlaybackSpeedClicked() {

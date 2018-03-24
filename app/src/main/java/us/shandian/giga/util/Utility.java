@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Utility {
 
@@ -74,6 +76,16 @@ public class Utility {
     }
 
     private static Handler sHandler = new Handler(Looper.getMainLooper());
+
+    private static ExecutorService sExecuteBackgroundTask = Executors.newSingleThreadExecutor();
+
+    public static void runBackgroudThread(Runnable runnable) {
+        sExecuteBackgroundTask.execute(runnable);
+    }
+
+    public static void runUIThread(Runnable runnable) {
+        sHandler.post(runnable);
+    }
 
     public static void showLongToastSafe(final @StringRes int resId) {
         sHandler.post(new Runnable() {

@@ -70,6 +70,7 @@ import com.rating.SizeUtils;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.extractor.stream.StreamInfo;
+import org.schabi.newpipe.extractor.utils.Utils;
 import org.schabi.newpipe.player.helper.AudioReactor;
 import org.schabi.newpipe.player.helper.CacheFactory;
 import org.schabi.newpipe.player.helper.LoadController;
@@ -87,6 +88,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
+import us.shandian.giga.util.Utility;
 
 import static org.schabi.newpipe.player.helper.PlayerHelper.getTimeString;
 
@@ -262,9 +264,31 @@ public abstract class BasePlayer implements Player.EventListener, PlaybackListen
                 .getImagePipeline().fetchDecodedImage(imageRequest, null);
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
             @Override
-            protected void onNewResultImpl(@javax.annotation.Nullable Bitmap bitmap) {
+            protected void onNewResultImpl(final @javax.annotation.Nullable Bitmap bitmap) {
                 if (simpleExoPlayer == null) return;
-                onThumbnailReceived(bitmap);
+
+                if (bitmap != null && !bitmap.isRecycled()) {
+                    Utility.runBackgroudThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final Bitmap resultBitmap = bitmap.copy(bitmap.getConfig(),
+                                        bitmap.isMutable());
+
+                                Utility.runUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (resultBitmap != null && !resultBitmap.isRecycled()) {
+                                            onThumbnailReceived(resultBitmap);
+                                        }
+                                    }
+                                });
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
             }
 
             @Override

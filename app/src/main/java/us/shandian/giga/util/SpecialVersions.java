@@ -267,7 +267,7 @@ public class SpecialVersions {
                                     String deepLinkStr = appLinkData.getTargetUri().toString();
                                     FacebookReport.logSentReferrer4(deepLinkStr);
                                     if (App.DEEPLINK.equals(deepLinkStr)) {
-                                        FacebookReport.logSentReferrer2("facebook");
+                                        FacebookReport.logSentBuyUser("facebook");
                                         App.setSpecial();
                                     }
                                 }
@@ -309,7 +309,7 @@ public class SpecialVersions {
                 if (BuildConfig.DEBUG) {
                     Log.v("referrer", "isReferrerOpen true");
                 }
-                FacebookReport.logSentReferrer2("google admob");
+                FacebookReport.logSentBuyUser("google admob");
                 setSpecial();
             } else if (SpecialVersionHandler.countryIfShow(context)) {
                 setSpecial();

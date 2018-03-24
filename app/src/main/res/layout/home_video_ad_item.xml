@@ -75,7 +75,7 @@
                         android:ellipsize="end"
                         android:fontFamily="sans-serif-medium"
                         android:maxLines="1"
-                        android:textColor="@color/C1_H2"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/dp_14" />
 
                     <TextView
@@ -87,7 +87,7 @@
                         android:ellipsize="end"
                         android:fontFamily="sans-serif"
                         android:maxLines="2"
-                        android:textColor="@color/C1_H5"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/dp_12" />
                 </LinearLayout>
             </LinearLayout>

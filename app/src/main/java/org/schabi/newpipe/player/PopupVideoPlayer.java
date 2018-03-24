@@ -291,10 +291,16 @@ public final class PopupVideoPlayer extends Service {
      * @param drawableId if != -1, sets the drawable with that id on the play/pause button
      */
     private void updateNotification(int drawableId) {
-        if (DEBUG) Log.d(TAG, "updateNotification() called with: drawableId = [" + drawableId + "]");
-        if (notBuilder == null || notRemoteView == null) return;
-        if (drawableId != -1) notRemoteView.setImageViewResource(R.id.notificationPlayPause, drawableId);
-        notificationManager.notify(NOTIFICATION_ID, notBuilder.build());
+        try {
+            if (DEBUG)
+                Log.d(TAG, "updateNotification() called with: drawableId = [" + drawableId + "]");
+            if (notBuilder == null || notRemoteView == null) return;
+            if (drawableId != -1)
+                notRemoteView.setImageViewResource(R.id.notificationPlayPause, drawableId);
+            notificationManager.notify(NOTIFICATION_ID, notBuilder.build());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -756,15 +762,22 @@ public final class PopupVideoPlayer extends Service {
         @Override
         public void onLongPress(MotionEvent e) {
             if (DEBUG) Log.d(TAG, "onLongPress() called with: e = [" + e + "]");
-            playerImpl.showAndAnimateControl(-1, true);
-            playerImpl.getLoadingPanel().setVisibility(View.GONE);
+            if (playerImpl == null) {
+                return;
+            }
+            try {
+                playerImpl.showAndAnimateControl(-1, true);
+                playerImpl.getLoadingPanel().setVisibility(View.GONE);
 
-            playerImpl.hideControls(0, 0);
-            animateView(playerImpl.getCurrentDisplaySeek(), false, 0, 0);
-            animateView(playerImpl.getResizingIndicator(), true, 200, 0);
+                playerImpl.hideControls(0, 0);
+                animateView(playerImpl.getCurrentDisplaySeek(), false, 0, 0);
+                animateView(playerImpl.getResizingIndicator(), true, 200, 0);
 
-            isResizing = true;
-            isResizingRightSide = e.getRawX() > windowLayoutParams.x + (windowLayoutParams.width / 2f);
+                isResizing = true;
+                isResizingRightSide = e.getRawX() > windowLayoutParams.x + (windowLayoutParams.width / 2f);
+            } catch (Throwable e1) {
+                e1.printStackTrace();
+            }
         }
 
         @Override

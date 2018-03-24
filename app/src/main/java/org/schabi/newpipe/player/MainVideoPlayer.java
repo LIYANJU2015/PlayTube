@@ -832,12 +832,21 @@ public final class MainVideoPlayer extends Activity {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (DEBUG) Log.d(TAG, "onSingleTapConfirmed() called with: e = [" + e + "]");
-            if (playerImpl.getCurrentState() == BasePlayer.STATE_BLOCKED) return true;
 
-            if (playerImpl.isControlsVisible()) playerImpl.hideControls(150, 0);
-            else {
-                playerImpl.showControlsThenHide();
-                showSystemUi();
+            if (playerImpl == null) {
+                return true;
+            }
+
+            try {
+                if (playerImpl.getCurrentState() == BasePlayer.STATE_BLOCKED) return true;
+
+                if (playerImpl.isControlsVisible()) playerImpl.hideControls(150, 0);
+                else {
+                    playerImpl.showControlsThenHide();
+                    showSystemUi();
+                }
+            } catch (Exception ee) {
+                ee.printStackTrace();
             }
             return true;
         }

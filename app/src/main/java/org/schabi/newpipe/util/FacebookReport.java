@@ -19,6 +19,13 @@ public class FacebookReport {
         logger.logEvent("ReferrerReceiver",bundle);
     }
 
+    public static void logSentBuyUser(String from) {
+        AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
+        Bundle bundle = new Bundle();
+        bundle.putString("from", from);
+        logger.logEvent("SentBuyUser",bundle);
+    }
+
     public static void logSentCountry(String country)  {
         AppEventsLogger logger = AppEventsLogger.newLogger(App.sContext);
         Bundle bundle = new Bundle();
